@@ -1,0 +1,4 @@
+.vscode
+build
+shaders/myCompile.bat
+shaders/*.spv
