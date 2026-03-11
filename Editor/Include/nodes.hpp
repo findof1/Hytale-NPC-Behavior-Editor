@@ -79,7 +79,7 @@ public:
   }
 };
 
-namespace SceneNodes
+namespace SensorNodes
 {
   class AdjustPositionNode : public NodeItem
   {
@@ -1830,7 +1830,7 @@ namespace SceneNodes
     }
   };
 
-  class ValueProviderWrapperNode : public NodeItem
+  class ValueProviderWrapperNode : public NodeItem // TODO: Figure out how to edit values to pass in
   {
   public:
     QCheckBox *onceBox;
@@ -1839,9 +1839,9 @@ namespace SceneNodes
 
     ValueProviderWrapperNode(NodeScene *scene) : NodeItem("ValueProviderWrapper", true)
     {
-      fieldsHeight = 100;
+      fieldsHeight = 130;
       addInputSocket("In", scene);
-      addOutputSocket("Sensor", scene);
+      addOutputSocket("Sensor", scene); // TODO: serialize this
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
       auto *formContainer = new QWidget;
@@ -1852,11 +1852,32 @@ namespace SceneNodes
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+
       enabledBox = new QCheckBox;
       form->addRow("Enabled:", enabledBox);
+      label = form->labelForField(enabledBox);
+      label->setStyleSheet("color: gray;");
 
       passValuesBox = new QCheckBox;
       form->addRow("Pass Values:", passValuesBox);
+      label = form->labelForField(passValuesBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Sensor::ValueProviderWrapper serialize()
+    {
+      General::Sensor::ValueProviderWrapper data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (enabledBox->isChecked())
+        data.enabled = true;
+
+      if (passValuesBox->isChecked())
+        data.passValues = true;
+
+      return data;
     }
   };
 
@@ -1869,7 +1890,7 @@ namespace SceneNodes
 
     WeatherNode(NodeScene *scene) : NodeItem("Weather", true)
     {
-      fieldsHeight = 120;
+      fieldsHeight = 130;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -1877,16 +1898,41 @@ namespace SceneNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      weathersEdit = new QLineEdit;
+      weathersEdit->setPlaceholderText("comma-separated assets");
+      form->addRow("Weathers:", weathersEdit);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+
       enabledBox = new QCheckBox;
       form->addRow("Enabled:", enabledBox);
+      label = form->labelForField(enabledBox);
+      label->setStyleSheet("color: gray;");
+    }
 
-      weathersEdit = new QLineEdit;
-      weathersEdit->setPlaceholderText("comma-separated assets");
-      form->addRow("Weathers:", weathersEdit);
+    General::Sensor::Weather serialize()
+    {
+      General::Sensor::Weather data;
+
+      std::string marker = weathersEdit->text().toStdString();
+      std::string item;
+      std::stringstream ss(marker);
+
+      while (std::getline(ss, item, ','))
+      {
+        data.weathers.push_back(item);
+      }
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (enabledBox->isChecked())
+        data.enabled = true;
+
+      return data;
     }
   };
 };
@@ -1894,35 +1940,45 @@ namespace SceneNodes
 namespace ActionNodes
 {
 
-  class AddToHostileTargetMemoryNode : public NodeItem
+  class WeightedAction : public NodeItem
   {
   public:
-    QCheckBox *onceBox;
+    QDoubleSpinBox *weightSpin;
 
-    AddToHostileTargetMemoryNode(NodeScene *scene) : NodeItem("AddToHostileTargetMemory", true)
+    WeightedAction(NodeScene *scene) : NodeItem("WeightedAction", true)
     {
-      fieldsHeight = 40;
+      fieldsHeight = 60;
       addInputSocket("In", scene);
+      addOutputSocket("Action", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
       auto *formContainer = new QWidget;
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
-      onceBox = new QCheckBox;
-      form->addRow("Once:", onceBox);
-      auto *label = form->labelForField(onceBox);
-      label->setStyleSheet("color: gray;");
+      weightSpin = new QDoubleSpinBox;
+      weightSpin->setMinimum(0);
+      weightSpin->setMaximum(999999);
+      weightSpin->setValue(20.0);
+      form->addRow("Weight:", weightSpin);
+    }
+
+    General::Action::WeightedAction serialize() // TODO: Add serialization for actions
+    {
+      General::Action::WeightedAction data;
+
+      data.weight = weightSpin->value();
+
+      return data;
     }
   };
 
-  class AppearanceNode : public NodeItem
+  class AddToHostileTargetMemoryNode : public NodeItem
   {
   public:
     QCheckBox *onceBox;
-    QLineEdit *appearanceEdit;
 
-    AppearanceNode(NodeScene *scene) : NodeItem("Appearance", true)
+    AddToHostileTargetMemoryNode(NodeScene *scene) : NodeItem("AddToHostileTargetMemory", true)
     {
       fieldsHeight = 60;
       addInputSocket("In", scene);
@@ -1936,9 +1992,55 @@ namespace ActionNodes
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::AddToHostileTargetMemory serialize()
+    {
+      General::Action::AddToHostileTargetMemory data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
+    }
+  };
+
+  class AppearanceNode : public NodeItem
+  {
+  public:
+    QCheckBox *onceBox;
+    QLineEdit *appearanceEdit;
+
+    AppearanceNode(NodeScene *scene) : NodeItem("Appearance", true)
+    {
+      fieldsHeight = 100;
+      addInputSocket("In", scene);
+
+      auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
+      auto *formContainer = new QWidget;
+      auto *form = new QFormLayout(formContainer);
+      layout->addWidget(formContainer);
 
       appearanceEdit = new QLineEdit;
       form->addRow("Appearance:", appearanceEdit);
+
+      onceBox = new QCheckBox;
+      form->addRow("Once:", onceBox);
+      auto *label = form->labelForField(onceBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::Appearance serialize()
+    {
+      General::Action::Appearance data;
+
+      std::string marker = appearanceEdit->text().toStdString();
+      data.appearance = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -1951,7 +2053,7 @@ namespace ActionNodes
 
     ApplyEntityEffectNode(NodeScene *scene) : NodeItem("ApplyEntityEffect", true)
     {
-      fieldsHeight = 80;
+      fieldsHeight = 130;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -1959,16 +2061,34 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      entityEffectEdit = new QLineEdit;
+      form->addRow("Entity Effect:", entityEffectEdit);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
 
-      entityEffectEdit = new QLineEdit;
-      form->addRow("Entity Effect:", entityEffectEdit);
-
       useTargetBox = new QCheckBox;
       form->addRow("Use Target:", useTargetBox);
+      label = form->labelForField(useTargetBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::ApplyEntityEffect serialize()
+    {
+      General::Action::ApplyEntityEffect data;
+
+      std::string marker = entityEffectEdit->text().toStdString();
+      data.entityEffect = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (useTargetBox->isChecked())
+        data.useTarget = true;
+
+      return data;
     }
   };
 
@@ -1979,7 +2099,7 @@ namespace ActionNodes
 
     CombatAbilityNode(NodeScene *scene) : NodeItem("CombatAbility", true)
     {
-      fieldsHeight = 40;
+      fieldsHeight = 60;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -1991,6 +2111,16 @@ namespace ActionNodes
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::CombatAbility serialize()
+    {
+      General::Action::CombatAbility data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2002,9 +2132,9 @@ namespace ActionNodes
     QLineEdit *animationEdit;
     QCheckBox *playAnimationBox;
 
-    CompleteTaskNode(NodeScene *scene) : NodeItem("CompleteTask", true)
+    CompleteTaskNode(NodeScene *scene) : NodeItem("CompleteTask", true, 230)
     {
-      fieldsHeight = 100;
+      fieldsHeight = 160;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2012,20 +2142,55 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      slotCombo = new QComboBox;
+      slotCombo->addItems({"Status", "Action", "Face"});
+      form->addRow("Slot:", slotCombo);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
 
-      slotCombo = new QComboBox;
-      slotCombo->addItems({"Status", "Action", "Face"});
-      form->addRow("Slot:", slotCombo);
-
       animationEdit = new QLineEdit;
       form->addRow("Animation:", animationEdit);
+      label = form->labelForField(animationEdit);
+      label->setStyleSheet("color: gray;");
 
       playAnimationBox = new QCheckBox;
       form->addRow("Play Animation:", playAnimationBox);
+      label = form->labelForField(playAnimationBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::CompleteTask serialize()
+    {
+      General::Action::CompleteTask data;
+
+      std::string marker = slotCombo->currentText().toStdString();
+      if (marker == "Status")
+      {
+        data.slot = General::Action::CompleteTask::CompleteTaskFlag::Status;
+      }
+      else if (marker == "Action")
+      {
+        data.slot = General::Action::CompleteTask::CompleteTaskFlag::Action;
+      }
+      else if (marker == "Face")
+      {
+        data.slot = General::Action::CompleteTask::CompleteTaskFlag::Face;
+      }
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (playAnimationBox->isChecked())
+        data.playAnimation = true;
+
+      marker = animationEdit->text().toStdString();
+      if (data.playAnimation && !marker.empty())
+        data.animation = marker;
+
+      return data;
     }
   };
 
@@ -2037,7 +2202,7 @@ namespace ActionNodes
 
     CrouchNode(NodeScene *scene) : NodeItem("Crouch", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2052,6 +2217,21 @@ namespace ActionNodes
 
       crouchBox = new QCheckBox;
       form->addRow("Crouch:", crouchBox);
+      label = form->labelForField(crouchBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::Crouch serialize()
+    {
+      General::Action::Crouch data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (crouchBox->isChecked())
+        data.crouch = true;
+
+      return data;
     }
   };
 
@@ -2064,7 +2244,7 @@ namespace ActionNodes
 
     DelayDespawnNode(NodeScene *scene) : NodeItem("DelayDespawn", true)
     {
-      fieldsHeight = 80;
+      fieldsHeight = 130;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2072,19 +2252,36 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
-      onceBox = new QCheckBox;
-      form->addRow("Once:", onceBox);
-      auto *label = form->labelForField(onceBox);
-      label->setStyleSheet("color: gray;");
-
       timeSpin = new QDoubleSpinBox;
       timeSpin->setMinimum(0.001);
       timeSpin->setMaximum(999999);
       timeSpin->setValue(1.0);
       form->addRow("Time:", timeSpin);
 
+      onceBox = new QCheckBox;
+      form->addRow("Once:", onceBox);
+      auto *label = form->labelForField(onceBox);
+      label->setStyleSheet("color: gray;");
+
       shortenBox = new QCheckBox;
       form->addRow("Shorten:", shortenBox);
+      label = form->labelForField(shortenBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::DelayDespawn serialize()
+    {
+      General::Action::DelayDespawn data;
+
+      data.time = timeSpin->value();
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (shortenBox->isChecked())
+        data.shorten = true;
+
+      return data;
     }
   };
 
@@ -2096,7 +2293,7 @@ namespace ActionNodes
 
     DespawnNode(NodeScene *scene) : NodeItem("Despawn", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2111,6 +2308,21 @@ namespace ActionNodes
 
       forceBox = new QCheckBox;
       form->addRow("Force:", forceBox);
+      label = form->labelForField(forceBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::Despawn serialize()
+    {
+      General::Action::Despawn data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (forceBox->isChecked())
+        data.force = true;
+
+      return data;
     }
   };
 
@@ -2120,29 +2332,6 @@ namespace ActionNodes
     QCheckBox *onceBox;
 
     DieNode(NodeScene *scene) : NodeItem("Die", true)
-    {
-      fieldsHeight = 40;
-      addInputSocket("In", scene);
-
-      auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
-      auto *formContainer = new QWidget;
-      auto *form = new QFormLayout(formContainer);
-      layout->addWidget(formContainer);
-
-      onceBox = new QCheckBox;
-      form->addRow("Once:", onceBox);
-      auto *label = form->labelForField(onceBox);
-      label->setStyleSheet("color: gray;");
-    }
-  };
-
-  class DisplayNameNode : public NodeItem
-  {
-  public:
-    QCheckBox *onceBox;
-    QLineEdit *displayNameEdit;
-
-    DisplayNameNode(NodeScene *scene) : NodeItem("DisplayName", true)
     {
       fieldsHeight = 60;
       addInputSocket("In", scene);
@@ -2156,9 +2345,55 @@ namespace ActionNodes
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::Die serialize()
+    {
+      General::Action::Die data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
+    }
+  };
+
+  class DisplayNameNode : public NodeItem
+  {
+  public:
+    QCheckBox *onceBox;
+    QLineEdit *displayNameEdit;
+
+    DisplayNameNode(NodeScene *scene) : NodeItem("DisplayName", true)
+    {
+      fieldsHeight = 100;
+      addInputSocket("In", scene);
+
+      auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
+      auto *formContainer = new QWidget;
+      auto *form = new QFormLayout(formContainer);
+      layout->addWidget(formContainer);
 
       displayNameEdit = new QLineEdit;
       form->addRow("Display Name:", displayNameEdit);
+
+      onceBox = new QCheckBox;
+      form->addRow("Once:", onceBox);
+      auto *label = form->labelForField(onceBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::DisplayName serialize()
+    {
+      General::Action::DisplayName data;
+
+      std::string marker = displayNameEdit->text().toStdString();
+      data.displayName = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2177,7 +2412,7 @@ namespace ActionNodes
     QDoubleSpinBox *dropSectorMaxSpin;
     QCheckBox *pitchHighBox;
 
-    DropItemNode(NodeScene *scene) : NodeItem("DropItem", true)
+    DropItemNode(NodeScene *scene) : NodeItem("DropItem", true, 295)
     {
       fieldsHeight = 280;
       addInputSocket("In", scene);
@@ -2200,16 +2435,24 @@ namespace ActionNodes
       delayLayout->addWidget(delayMinSpin);
       delayLayout->addWidget(delayMaxSpin);
       form->addRow("Delay:", delayWidget);
+      label = form->labelForField(delayWidget);
+      label->setStyleSheet("color: gray;");
 
       itemEdit = new QLineEdit;
       form->addRow("Item:", itemEdit);
+      label = form->labelForField(itemEdit);
+      label->setStyleSheet("color: gray;");
 
       dropListEdit = new QLineEdit;
       form->addRow("Drop List:", dropListEdit);
+      label = form->labelForField(dropListEdit);
+      label->setStyleSheet("color: gray;");
 
       throwSpeedSpin = new QDoubleSpinBox;
       throwSpeedSpin->setMaximum(999999);
       form->addRow("Throw Speed:", throwSpeedSpin);
+      label = form->labelForField(throwSpeedSpin);
+      label->setStyleSheet("color: gray;");
 
       auto *distanceWidget = new QWidget;
       auto *distanceLayout = new QHBoxLayout(distanceWidget);
@@ -2219,6 +2462,8 @@ namespace ActionNodes
       distanceLayout->addWidget(distanceMinSpin);
       distanceLayout->addWidget(distanceMaxSpin);
       form->addRow("Distance:", distanceWidget);
+      label = form->labelForField(distanceWidget);
+      label->setStyleSheet("color: gray;");
 
       auto *dropSectorWidget = new QWidget;
       auto *dropSectorLayout = new QHBoxLayout(dropSectorWidget);
@@ -2228,9 +2473,59 @@ namespace ActionNodes
       dropSectorLayout->addWidget(dropSectorMinSpin);
       dropSectorLayout->addWidget(dropSectorMaxSpin);
       form->addRow("Drop Sector:", dropSectorWidget);
+      label = form->labelForField(dropSectorWidget);
+      label->setStyleSheet("color: gray;");
 
       pitchHighBox = new QCheckBox;
       form->addRow("Pitch High:", pitchHighBox);
+      label = form->labelForField(pitchHighBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::DropItem serialize()
+    {
+      General::Action::DropItem data;
+
+      if (delayMinSpin->value() != 0 || delayMaxSpin->value() != 0)
+      {
+        data.delay.emplace(delayMinSpin->value());
+        data.delay.emplace(delayMaxSpin->value());
+      }
+
+      if (distanceMinSpin->value() != 0 || distanceMaxSpin->value() != 0)
+      {
+        data.distance.emplace(distanceMinSpin->value());
+        data.distance.emplace(distanceMaxSpin->value());
+      }
+
+      if (dropSectorMinSpin->value() != 0 || dropSectorMaxSpin->value() != 0)
+      {
+        data.dropSector.emplace(dropSectorMinSpin->value());
+        data.dropSector.emplace(dropSectorMaxSpin->value());
+      }
+
+      std::string marker = itemEdit->text().toStdString();
+      if (!marker.empty())
+      {
+        data.item = marker;
+      }
+
+      marker = dropListEdit->text().toStdString();
+      if (!marker.empty())
+      {
+        data.dropList = marker;
+      }
+
+      if (throwSpeedSpin->value() != 0)
+        data.throwSpeed = throwSpeedSpin->value();
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (pitchHighBox->isChecked())
+        data.pitchHigh = true;
+
+      return data;
     }
   };
 
@@ -2242,7 +2537,7 @@ namespace ActionNodes
 
     FlockStateNode(NodeScene *scene) : NodeItem("FlockState", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2250,13 +2545,26 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      stateEdit = new QLineEdit;
+      form->addRow("State:", stateEdit);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
 
-      stateEdit = new QLineEdit;
-      form->addRow("State:", stateEdit);
+    General::Action::FlockState serialize()
+    {
+      General::Action::FlockState data;
+
+      std::string marker = stateEdit->text().toStdString();
+      data.state = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2269,7 +2577,7 @@ namespace ActionNodes
 
     FlockTargetNode(NodeScene *scene) : NodeItem("FlockTarget", true)
     {
-      fieldsHeight = 80;
+      fieldsHeight = 130;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2284,9 +2592,29 @@ namespace ActionNodes
 
       clearBox = new QCheckBox;
       form->addRow("Clear:", clearBox);
+      label = form->labelForField(clearBox);
+      label->setStyleSheet("color: gray;");
 
       targetSlotEdit = new QLineEdit;
       form->addRow("Target Slot:", targetSlotEdit);
+      label = form->labelForField(targetSlotEdit);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::FlockTarget serialize()
+    {
+      General::Action::FlockTarget data;
+
+      std::string marker = targetSlotEdit->text().toStdString();
+      if (!marker.empty())
+        data.targetSlot = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+      if (clearBox->isChecked())
+        data.clear = true;
+
+      return data;
     }
   };
 
@@ -2298,7 +2626,7 @@ namespace ActionNodes
 
     IgnoreForAvoidanceNode(NodeScene *scene) : NodeItem("IgnoreForAvoidance", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2306,13 +2634,26 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      targetSlotEdit = new QLineEdit;
+      form->addRow("Target Slot:", targetSlotEdit);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
 
-      targetSlotEdit = new QLineEdit;
-      form->addRow("Target Slot:", targetSlotEdit);
+    General::Action::IgnoreForAvoidance serialize()
+    {
+      General::Action::IgnoreForAvoidance data;
+
+      std::string marker = targetSlotEdit->text().toStdString();
+      data.targetSlot = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2326,9 +2667,9 @@ namespace ActionNodes
     QCheckBox *useTargetBox;
     QSpinBox *slotSpin;
 
-    InventoryNode(NodeScene *scene) : NodeItem("Inventory", true)
+    InventoryNode(NodeScene *scene) : NodeItem("Inventory", true, 230)
     {
-      fieldsHeight = 160;
+      fieldsHeight = 250;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2342,24 +2683,99 @@ namespace ActionNodes
       label->setStyleSheet("color: gray;");
 
       operationCombo = new QComboBox;
-      operationCombo->addItems({"Add", "RemoveHeldItem", "SetHotbar", "Equip", "ClearHeldItem", "EquipOffHand", "Remove", "EquipHotbar", "SetOffHand"});
+      operationCombo->addItems({"", "Add", "RemoveHeldItem", "SetHotbar", "Equip", "ClearHeldItem", "EquipOffHand", "Remove", "EquipHotbar", "SetOffHand"});
       form->addRow("Operation:", operationCombo);
+      label = form->labelForField(operationCombo);
+      label->setStyleSheet("color: gray;");
 
       countSpin = new QSpinBox;
       countSpin->setMinimum(0);
       countSpin->setMaximum(999999);
       form->addRow("Count:", countSpin);
+      label = form->labelForField(countSpin);
+      label->setStyleSheet("color: gray;");
 
       itemEdit = new QLineEdit;
       form->addRow("Item:", itemEdit);
+      label = form->labelForField(itemEdit);
+      label->setStyleSheet("color: gray;");
 
       useTargetBox = new QCheckBox;
       form->addRow("Use Target:", useTargetBox);
+      label = form->labelForField(useTargetBox);
+      label->setStyleSheet("color: gray;");
 
       slotSpin = new QSpinBox;
       slotSpin->setMinimum(0);
       slotSpin->setMaximum(999);
       form->addRow("Slot:", slotSpin);
+      label = form->labelForField(slotSpin);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::Inventory serialize()
+    {
+      General::Action::Inventory data;
+
+      std::string marker = operationCombo->currentText().toStdString();
+      if (!marker.empty())
+      {
+        if (marker == "Add")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::Add;
+        }
+        else if (marker == "RemoveHeldItem")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::RemoveHeldItem;
+        }
+        else if (marker == "SetHotbar")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::SetHotbar;
+        }
+        else if (marker == "Equip")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::Equip;
+        }
+        else if (marker == "ClearHeldItem")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::ClearHeldItem;
+        }
+        else if (marker == "EquipOffHand")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::EquipOffHand;
+        }
+        else if (marker == "Remove")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::Remove;
+        }
+        else if (marker == "EquipHotbar")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::EquipHotbar;
+        }
+        else if (marker == "SetOffHand")
+        {
+          data.operation = General::Action::Inventory::OperationFlag::SetOffHand;
+        }
+      }
+
+      marker = itemEdit->text().toStdString();
+      if (!marker.empty())
+      {
+        data.item = marker;
+      }
+
+      if (countSpin->value() != 0)
+        data.count = countSpin->value();
+      if (slotSpin->value() != 0)
+        data.slot = slotSpin->value();
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (useTargetBox->isChecked())
+        data.useTarget = true;
+
+      return data;
     }
   };
 
@@ -2371,7 +2787,7 @@ namespace ActionNodes
 
     JoinFlockNode(NodeScene *scene) : NodeItem("JoinFlock", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2386,6 +2802,21 @@ namespace ActionNodes
 
       forceJoinBox = new QCheckBox;
       form->addRow("Force Join:", forceJoinBox);
+      label = form->labelForField(forceJoinBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::JoinFlock serialize()
+    {
+      General::Action::JoinFlock data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      if (forceJoinBox->isChecked())
+        data.forceJoin = true;
+
+      return data;
     }
   };
 
@@ -2396,7 +2827,7 @@ namespace ActionNodes
 
     LeaveFlockNode(NodeScene *scene) : NodeItem("LeaveFlock", true)
     {
-      fieldsHeight = 40;
+      fieldsHeight = 60;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2408,6 +2839,16 @@ namespace ActionNodes
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::LeaveFlock serialize()
+    {
+      General::Action::LeaveFlock data;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2419,7 +2860,7 @@ namespace ActionNodes
 
     LockOnInteractionTargetNode(NodeScene *scene) : NodeItem("LockOnInteractionTarget", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2427,13 +2868,26 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      targetSlotEdit = new QLineEdit;
+      form->addRow("Target Slot:", targetSlotEdit);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
 
-      targetSlotEdit = new QLineEdit;
-      form->addRow("Target Slot:", targetSlotEdit);
+    General::Action::LockOnInteractionTarget serialize()
+    {
+      General::Action::LockOnInteractionTarget data;
+
+      std::string marker = targetSlotEdit->text().toStdString();
+      data.targetSlot = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2445,7 +2899,7 @@ namespace ActionNodes
 
     LogNode(NodeScene *scene) : NodeItem("Log", true)
     {
-      fieldsHeight = 60;
+      fieldsHeight = 100;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2453,13 +2907,26 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
+      messageEdit = new QLineEdit;
+      form->addRow("Message:", messageEdit);
+
       onceBox = new QCheckBox;
       form->addRow("Once:", onceBox);
       auto *label = form->labelForField(onceBox);
       label->setStyleSheet("color: gray;");
+    }
 
-      messageEdit = new QLineEdit;
-      form->addRow("Message:", messageEdit);
+    General::Action::Log serialize()
+    {
+      General::Action::Log data;
+
+      std::string marker = messageEdit->text().toStdString();
+      data.message = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2472,7 +2939,7 @@ namespace ActionNodes
 
     ModelAttachmentNode(NodeScene *scene) : NodeItem("ModelAttachment", true)
     {
-      fieldsHeight = 80;
+      fieldsHeight = 130;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
@@ -2480,16 +2947,32 @@ namespace ActionNodes
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
 
-      onceBox = new QCheckBox;
-      form->addRow("Once:", onceBox);
-      auto *label = form->labelForField(onceBox);
-      label->setStyleSheet("color: gray;");
-
       slotEdit = new QLineEdit;
       form->addRow("Slot:", slotEdit);
 
       attachmentEdit = new QLineEdit;
       form->addRow("Attachment:", attachmentEdit);
+
+      onceBox = new QCheckBox;
+      form->addRow("Once:", onceBox);
+      auto *label = form->labelForField(onceBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::ModelAttachment serialize()
+    {
+      General::Action::ModelAttachment data;
+
+      std::string marker = attachmentEdit->text().toStdString();
+      data.attachment = marker;
+
+      marker = slotEdit->text().toStdString();
+      data.slot = marker;
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 
@@ -2502,20 +2985,15 @@ namespace ActionNodes
     QDoubleSpinBox *anchorZSpin;
     QLineEdit *movementConfigEdit;
 
-    MountNode(NodeScene *scene) : NodeItem("Mount", true)
+    MountNode(NodeScene *scene) : NodeItem("Mount", true, 260)
     {
-      fieldsHeight = 120;
+      fieldsHeight = 180;
       addInputSocket("In", scene);
 
       auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
       auto *formContainer = new QWidget;
       auto *form = new QFormLayout(formContainer);
       layout->addWidget(formContainer);
-
-      onceBox = new QCheckBox;
-      form->addRow("Once:", onceBox);
-      auto *label = form->labelForField(onceBox);
-      label->setStyleSheet("color: gray;");
 
       anchorXSpin = new QDoubleSpinBox;
       anchorXSpin->setRange(-999999, 999999);
@@ -2531,6 +3009,28 @@ namespace ActionNodes
 
       movementConfigEdit = new QLineEdit;
       form->addRow("Movement Config:", movementConfigEdit);
+
+      onceBox = new QCheckBox;
+      form->addRow("Once:", onceBox);
+      auto *label = form->labelForField(onceBox);
+      label->setStyleSheet("color: gray;");
+    }
+
+    General::Action::Mount serialize()
+    {
+      General::Action::Mount data;
+
+      std::string marker = movementConfigEdit->text().toStdString();
+      data.movementConfig = marker;
+
+      data.anchorX = anchorXSpin->value();
+      data.anchorY = anchorYSpin->value();
+      data.anchorZ = anchorZSpin->value();
+
+      if (onceBox->isChecked())
+        data.once = true;
+
+      return data;
     }
   };
 

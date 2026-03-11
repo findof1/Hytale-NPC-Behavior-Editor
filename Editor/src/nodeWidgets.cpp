@@ -129,7 +129,7 @@ void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
   {
     p->setBrush(QColor(35, 35, 38));
     p->setPen(Qt::NoPen);
-    p->drawRoundedRect(2, 60 + std::max(inputs.size(), outputs.size()) * 20, 196, 2, 1, 1);
+    p->drawRoundedRect(2, 60 + std::max(inputs.size(), outputs.size()) * 20, baseWidth - 4, 2, 1, 1);
 
     proxy->setPos(2, 80 + std::max(inputs.size(), outputs.size()) * 20);
   }

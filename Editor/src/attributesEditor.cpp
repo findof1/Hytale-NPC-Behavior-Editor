@@ -304,247 +304,247 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
 
     scene->nodeFactory["Sensors/Adjust Position"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::AdjustPositionNode>(s);
+      return std::make_shared<SensorNodes::AdjustPositionNode>(s);
     };
 
     scene->nodeFactory["Sensors/Age"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::AgeNode>(s);
+      return std::make_shared<SensorNodes::AgeNode>(s);
     };
 
     scene->nodeFactory["Sensors/Alarm"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::AlarmNode>(s);
+      return std::make_shared<SensorNodes::AlarmNode>(s);
     };
 
     scene->nodeFactory["Sensors/And"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::AndNode>(s);
+      return std::make_shared<SensorNodes::AndNode>(s);
     };
 
     scene->nodeFactory["Sensors/Animation"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::AnimationNode>(s);
+      return std::make_shared<SensorNodes::AnimationNode>(s);
     };
 
     scene->nodeFactory["Sensors/Any"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::AnyNode>(s);
+      return std::make_shared<SensorNodes::AnyNode>(s);
     };
 
     scene->nodeFactory["Sensors/Beacon"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::BeaconNode>(s);
+      return std::make_shared<SensorNodes::BeaconNode>(s);
     };
 
     scene->nodeFactory["Sensors/Block Change"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::BlockChangeNode>(s);
+      return std::make_shared<SensorNodes::BlockChangeNode>(s);
     };
 
     scene->nodeFactory["Sensors/Block Type"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::BlockTypeNode>(s);
+      return std::make_shared<SensorNodes::BlockTypeNode>(s);
     };
 
     scene->nodeFactory["Sensors/Can Interact"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::CanInteractNode>(s);
+      return std::make_shared<SensorNodes::CanInteractNode>(s);
     };
 
     scene->nodeFactory["Sensors/Can Place Block"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::CanPlaceBlockNode>(s);
+      return std::make_shared<SensorNodes::CanPlaceBlockNode>(s);
     };
 
     scene->nodeFactory["Sensors/Combat Action Evaluator"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::CombatActionEvaluatorNode>(s);
+      return std::make_shared<SensorNodes::CombatActionEvaluatorNode>(s);
     };
 
     scene->nodeFactory["Sensors/Count"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::CountNode>(s);
+      return std::make_shared<SensorNodes::CountNode>(s);
     };
 
     scene->nodeFactory["Sensors/Damage"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::DamageNode>(s);
+      return std::make_shared<SensorNodes::DamageNode>(s);
     };
 
     scene->nodeFactory["Sensors/Dropped Item"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::DroppedItemNode>(s);
+      return std::make_shared<SensorNodes::DroppedItemNode>(s);
     };
 
     scene->nodeFactory["Sensors/Entity Event"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::EntityEventNode>(s);
+      return std::make_shared<SensorNodes::EntityEventNode>(s);
     };
 
     scene->nodeFactory["Sensors/Flag"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::FlagNode>(s);
+      return std::make_shared<SensorNodes::FlagNode>(s);
     };
 
     scene->nodeFactory["Sensors/Flock Combat Damage"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::FlockCombatDamageNode>(s);
+      return std::make_shared<SensorNodes::FlockCombatDamageNode>(s);
     };
 
     scene->nodeFactory["Sensors/Flock Leader"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::FlockLeaderNode>(s);
+      return std::make_shared<SensorNodes::FlockLeaderNode>(s);
     };
 
     scene->nodeFactory["Sensors/Has Hostile Target Memory"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::HasHostileTargetMemoryNode>(s);
+      return std::make_shared<SensorNodes::HasHostileTargetMemoryNode>(s);
     };
 
     scene->nodeFactory["Sensors/Has Interacted"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::HasInteractedNode>(s);
+      return std::make_shared<SensorNodes::HasInteractedNode>(s);
     };
 
     scene->nodeFactory["Sensors/Has Task"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::HasTaskNode>(s);
+      return std::make_shared<SensorNodes::HasTaskNode>(s);
     };
 
     scene->nodeFactory["Sensors/In Air"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::InAirNode>(s);
+      return std::make_shared<SensorNodes::InAirNode>(s);
     };
 
     scene->nodeFactory["Sensors/In Water"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::InWaterNode>(s);
+      return std::make_shared<SensorNodes::InWaterNode>(s);
     };
 
     scene->nodeFactory["Sensors/Inflicted Damage"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::InflictedDamageNode>(s);
+      return std::make_shared<SensorNodes::InflictedDamageNode>(s);
     };
 
     scene->nodeFactory["Sensors/Interaction Context"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::InteractionContextNode>(s);
+      return std::make_shared<SensorNodes::InteractionContextNode>(s);
     };
 
     scene->nodeFactory["Sensors/Is Backing Away"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::IsBackingAwayNode>(s);
+      return std::make_shared<SensorNodes::IsBackingAwayNode>(s);
     };
 
     scene->nodeFactory["Sensors/Is Busy"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::IsBusyNode>(s);
+      return std::make_shared<SensorNodes::IsBusyNode>(s);
     };
 
     scene->nodeFactory["Sensors/Kill"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::KillNode>(s);
+      return std::make_shared<SensorNodes::KillNode>(s);
     };
 
     scene->nodeFactory["Sensors/Leash"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::LeashNode>(s);
+      return std::make_shared<SensorNodes::LeashNode>(s);
     };
 
     scene->nodeFactory["Sensors/Light"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::LightNode>(s);
+      return std::make_shared<SensorNodes::LightNode>(s);
     };
 
     scene->nodeFactory["Sensors/Mob"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::MobNode>(s);
+      return std::make_shared<SensorNodes::MobNode>(s);
     };
 
     scene->nodeFactory["Sensors/Nav"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::NavNode>(s);
+      return std::make_shared<SensorNodes::NavNode>(s);
     };
 
     scene->nodeFactory["Sensors/Not"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::NotNode>(s);
+      return std::make_shared<SensorNodes::NotNode>(s);
     };
 
     scene->nodeFactory["Sensors/On Ground"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::OnGroundNode>(s);
+      return std::make_shared<SensorNodes::OnGroundNode>(s);
     };
 
     scene->nodeFactory["Sensors/Or"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::OrNode>(s);
+      return std::make_shared<SensorNodes::OrNode>(s);
     };
 
     scene->nodeFactory["Sensors/Path"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::PathNode>(s);
+      return std::make_shared<SensorNodes::PathNode>(s);
     };
 
     scene->nodeFactory["Sensors/Player"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::PlayerNode>(s);
+      return std::make_shared<SensorNodes::PlayerNode>(s);
     };
 
     scene->nodeFactory["Sensors/Random"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::RandomNode>(s);
+      return std::make_shared<SensorNodes::RandomNode>(s);
     };
 
     scene->nodeFactory["Sensors/Read Position"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::ReadPositionNode>(s);
+      return std::make_shared<SensorNodes::ReadPositionNode>(s);
     };
 
     scene->nodeFactory["Sensors/Search Ray"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::SearchRayNode>(s);
+      return std::make_shared<SensorNodes::SearchRayNode>(s);
     };
 
     scene->nodeFactory["Sensors/Self"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::SelfNode>(s);
+      return std::make_shared<SensorNodes::SelfNode>(s);
     };
 
     scene->nodeFactory["Sensors/State"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::StateNode>(s);
+      return std::make_shared<SensorNodes::StateNode>(s);
     };
 
     scene->nodeFactory["Sensors/Switch"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::SwitchNode>(s);
+      return std::make_shared<SensorNodes::SwitchNode>(s);
     };
 
     scene->nodeFactory["Sensors/Target"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::TargetNode>(s);
+      return std::make_shared<SensorNodes::TargetNode>(s);
     };
 
     scene->nodeFactory["Sensors/Time"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::TimeNode>(s);
+      return std::make_shared<SensorNodes::TimeNode>(s);
     };
 
     scene->nodeFactory["Sensors/Timer"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::TimerNode>(s);
+      return std::make_shared<SensorNodes::TimerNode>(s);
     };
 
     scene->nodeFactory["Sensors/Value Provider Wrapper"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::ValueProviderWrapperNode>(s);
+      return std::make_shared<SensorNodes::ValueProviderWrapperNode>(s);
     };
 
     scene->nodeFactory["Sensors/Weather"] = [](NodeScene *s)
     {
-      return std::make_shared<SceneNodes::WeatherNode>(s);
+      return std::make_shared<SensorNodes::WeatherNode>(s);
     };
 
     scene->nodeFactory["Actions/Add To Hostile Target Memory"] = [](NodeScene *s)
@@ -851,6 +851,11 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
     {
       return std::make_shared<ActionNodes::TriggerSpawnersNode>(s);
     };
+
+    scene->nodeFactory["Actions/Weighted Action"] = [](NodeScene *s)
+    {
+      return std::make_shared<ActionNodes::WeightedAction>(s);
+    };
     //
 
     auto *topBar = new QWidget;
@@ -875,6 +880,37 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
       scene->addItem(node.get());
       scene->nodes.emplace_back(node);
     }
+
+    // Code to diplsay all nodes of a certain type easily
+    /*
+    int x = 50;
+    int y = 50;
+    int w = 300;
+    int h = 325;
+    int nW = 10;
+    int indexX = 0;
+    int indexY = 0;
+    for (auto it = scene->nodeFactory.begin(); it != scene->nodeFactory.end(); ++it)
+    {
+      const QString &key = it.key();
+      auto &factory = it.value();
+
+      if (!key.contains("Actions"))
+        continue;
+
+      auto node = factory(scene);
+      node->setPos(x + indexX * w, y + indexY * h);
+      scene->addItem(node.get());
+      scene->nodes.emplace_back(node);
+
+      indexX++;
+
+      if (indexX > nW)
+      {
+        indexY++;
+        indexX = 0;
+      }
+    }*/
 
     auto *view = new NodeView();
     view->setScene(scene);
