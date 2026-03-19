@@ -882,21 +882,21 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
     }
 
     // Code to diplsay all nodes of a certain type easily
-    /*
+
     int x = 50;
     int y = 50;
-    int w = 300;
-    int h = 325;
-    int nW = 10;
-    int indexX = 0;
+    int w = 325;
+    int h = 700;
+    int nW = 14;
+    int indexX = 1;
     int indexY = 0;
     for (auto it = scene->nodeFactory.begin(); it != scene->nodeFactory.end(); ++it)
     {
       const QString &key = it.key();
       auto &factory = it.value();
 
-      if (!key.contains("Actions"))
-        continue;
+      // if (!key.contains("Sensors"))
+      //   continue;
 
       auto node = factory(scene);
       node->setPos(x + indexX * w, y + indexY * h);
@@ -910,7 +910,7 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
         indexY++;
         indexX = 0;
       }
-    }*/
+    }
 
     auto *view = new NodeView();
     view->setScene(scene);

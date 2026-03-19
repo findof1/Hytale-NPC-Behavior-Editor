@@ -304,15 +304,14 @@ namespace General
       std::vector<double> ageRange; // Temporal Amount is the type in the wiki???
     };
 
-    enum class AlarmFlag
-    {
-      Set,
-      Unset,
-      Passed
-    };
-
     struct Alarm : Sensor
     {
+      enum class AlarmFlag
+      {
+        Set,
+        Unset,
+        Passed
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::string name;
@@ -328,15 +327,14 @@ namespace General
       std::optional<std::string> autoUnlockTargetSlot;
     };
 
-    enum class AnimationFlag
-    {
-      Status,
-      Action,
-      Face
-    };
-
     struct Animation : Sensor
     {
+      enum class AnimationFlag
+      {
+        Status,
+        Action,
+        Face
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       AnimationFlag slot;
@@ -365,18 +363,17 @@ namespace General
     //   std::optional<bool> enabled;
     // };
 
-    enum class BlockChangeEventTypeFlag
-    {
-      Destruction,
-      Interaction,
-      Damage
-    };
-
     // Provides:
     // Player target
     // NPC target
     struct BlockChange : Sensor
     {
+      enum class BlockChangeEventTypeFlag
+      {
+        Destruction,
+        Interaction,
+        Damage
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       double range;
@@ -402,15 +399,14 @@ namespace General
       std::vector<AttitudeFlag> attitudes;
     };
 
-    enum class CanPlaceBlockFlag
-    {
-      BodyPosition,
-      FootPosition,
-      HeadPosition
-    };
-
     struct CanPlaceBlock : Sensor
     {
+      enum class CanPlaceBlockFlag
+      {
+        BodyPosition,
+        FootPosition,
+        HeadPosition
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       DirectionFlag direction;
@@ -457,19 +453,18 @@ namespace General
       std::optional<std::string> targetSlot;
     };
 
-    enum class DroppedItemFlag
-    {
-      Neutral,
-      Ignore,
-      Like,
-      Love,
-      Dislike
-    };
-
     // Provides:
     // Dropped item target
     struct DroppedItem : Sensor
     {
+      enum class DroppedItemFlag
+      {
+        Neutral,
+        Ignore,
+        Like,
+        Love,
+        Dislike
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       double range;
@@ -479,18 +474,17 @@ namespace General
       std::optional<std::vector<DroppedItemFlag>> attitudes;
     };
 
-    enum class EntityEventFlag
-    {
-      Death,
-      Interaction,
-      Damage
-    };
-
     // Provides:
     // Player target
     // NPC target
     struct EntityEvent : Sensor
     {
+      enum class EntityEventFlag
+      {
+        Death,
+        Interaction,
+        Damage
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       double range;
@@ -566,17 +560,17 @@ namespace General
       std::optional<bool> enabled;
     };
 
-    enum class InflictedDamageFlag
-    {
-      FlockLeader,
-      Self,
-      Flock
-    };
     // Provides:
     // Player target
     // NPC target
     struct InflictedDamage : Sensor // return true if an individual or the flock it belongs to inflicted combat damage. Target position is entity which received most damage.
     {
+      enum class InflictedDamageFlag
+      {
+        FlockLeader,
+        Self,
+        Flock
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<InflictedDamageFlag> target;
@@ -663,18 +657,17 @@ namespace General
     //   std::optional<bool> enabled;
     // };
 
-    enum class NavStatesFlag
-    {
-      Progressing,
-      Init,
-      At_Goal,
-      Blocked,
-      Aborted,
-      Defer
-    };
-
     struct Nav : Sensor
     {
+      enum class NavStatesFlag
+      {
+        Progressing,
+        Init,
+        At_Goal,
+        Blocked,
+        Aborted,
+        Defer
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<std::vector<NavStatesFlag>> navStates;
@@ -705,18 +698,18 @@ namespace General
       std::optional<std::string> autoUnlockTargetSlot;
     };
 
-    enum class PathTypeFlag
-    {
-      CurrentPrefabPath,
-      TransientPath,
-      AnyPrefabPath,
-      WorldPath
-    };
     // Provides:
     // Vector position
     // Path
     struct Path : Sensor // if PathType is WorldPath, the following must apply to Path: String must be not empty
     {
+      enum class PathTypeFlag
+      {
+        CurrentPrefabPath,
+        TransientPath,
+        AnyPrefabPath,
+        WorldPath
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<std::string> path;
@@ -785,7 +778,7 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      // std::optional<std::vector<IEntityFilter>> filters;
+      std::optional<std::vector<IEntityFilter::IEntityFilter>> filters;
     };
 
     struct State : Sensor
@@ -813,7 +806,7 @@ namespace General
       std::optional<std::string> targetSlot;
       double range;
       std::optional<bool> autoUnlockTarget;
-      // std::optional<std::vector<IEntityFilter>> filters;
+      std::optional<std::vector<IEntityFilter::IEntityFilter>> filters;
     };
 
     struct Time : Sensor
@@ -826,15 +819,15 @@ namespace General
       std::optional<bool> scaleDayTimeRange;
     };
 
-    enum class TimerStateFlag
-    {
-      Paused,
-      Running,
-      Stopped,
-      Any
-    };
     struct Timer : Sensor
     {
+      enum class TimerStateFlag
+      {
+        Paused,
+        Running,
+        Stopped,
+        Any
+      };
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::string name;
