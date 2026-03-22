@@ -854,7 +854,7 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
 
     scene->nodeFactory["Actions/Weighted Action"] = [](NodeScene *s)
     {
-      return std::make_shared<ActionNodes::WeightedAction>(s);
+      return std::make_shared<ActionNodes::WeightedActionNode>(s);
     };
     //
 

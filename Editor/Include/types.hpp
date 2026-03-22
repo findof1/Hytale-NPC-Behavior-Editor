@@ -90,26 +90,53 @@ namespace General
 
   namespace IEntityFilter
   {
+    enum class Type
+    {
+      Altitude,
+      And,
+      Attitude,
+      Combat,
+      Flock,
+      HeightDifference,
+      InsideBlock,
+      Inventory,
+      ItemInHand,
+      LineOfSight,
+      MovementState,
+      NPCGroup,
+      Not,
+      Or,
+      SpotsMe,
+      StandingOnBlock,
+      Stat,
+      ViewSector
+    };
+
     struct IEntityFilter
     {
+      Type type;
+      IEntityFilter(Type t) : type(t) {}
     };
 
     struct Altitude : IEntityFilter
     {
       std::optional<bool> enabled;
       std::vector<double> altitudeRange;
+      Altitude() : IEntityFilter(Type::Altitude) {}
     };
 
     struct And : IEntityFilter
     {
       std::optional<bool> enabled;
       std::vector<IEntityFilter> filters;
+      And() : IEntityFilter(Type::And) {}
     };
 
     struct Attitude : IEntityFilter
     {
       std::optional<bool> enabled;
       std::vector<AttitudeFlag> attitudes;
+      Attitude() : IEntityFilter(Type::Attitude) {}
     };
 
     enum class CombatModeFlag
@@ -130,6 +157,7 @@ namespace General
       std::optional<std::string> sequence; // asset
       std::optional<std::vector<double>> timeElapsedRange;
       std::optional<CombatModeFlag> mode;
+      Combat() : IEntityFilter(Type::Combat) {}
     };
 
     enum class FlockStatusFlag
@@ -155,6 +183,7 @@ namespace General
       std::optional<FlockPlayerStatusFlag> flockPlayerStatus;
       std::optional<std::vector<int>> size;
       std::optional<bool> checkCanJoin;
+      Flock() : IEntityFilter(Type::Flock) {}
     };
 
     struct HeightDifference : IEntityFilter
@@ -162,12 +191,14 @@ namespace General
       std::optional<bool> enabled;
       std::optional<std::vector<double>> heightDifference;
       std::optional<bool> useEyePosition;
+      HeightDifference() : IEntityFilter(Type::HeightDifference) {}
     };
 
     struct InsideBlock : IEntityFilter
     {
       std::optional<bool> enabled;
       std::string blockSet; // asset
+      InsideBlock() : IEntityFilter(Type::InsideBlock) {}
     };
 
     struct Inventory : IEntityFilter
@@ -176,6 +207,7 @@ namespace General
       std::optional<std::vector<std::string>> items; // asset array
       std::optional<std::vector<int>> countRange;
       std::optional<std::vector<int>> freeSlotRange;
+      Inventory() : IEntityFilter(Type::Inventory) {}
     };
 
     enum class ItemInHandFlag
@@ -190,11 +222,13 @@ namespace General
       std::optional<bool> enabled;
       std::optional<std::vector<std::string>> items; // asset array
       std::optional<ItemInHandFlag> hand;
+      ItemInHand() : IEntityFilter(Type::ItemInHand) {}
     };
 
     struct LineOfSight : IEntityFilter
     {
       std::optional<bool> enabled;
+      LineOfSight() : IEntityFilter(Type::LineOfSight) {}
     };
 
     enum class MovementStateFlag
@@ -215,6 +249,7 @@ namespace General
     {
       std::optional<bool> enabled;
       MovementStateFlag state;
+      MovementState() : IEntityFilter(Type::MovementState) {}
     };
 
     struct NPCGroup : IEntityFilter
@@ -222,18 +257,21 @@ namespace General
       std::optional<bool> enabled;
       std::optional<std::vector<std::string>> includeGroups; // asset array
       std::optional<std::vector<std::string>> excludeGroups; // asset array
+      NPCGroup() : IEntityFilter(Type::NPCGroup) {}
     };
 
     struct Not : IEntityFilter
     {
       std::optional<bool> enabled;
       IEntityFilter filter;
+      Not() : IEntityFilter(Type::Not), filter(Type::Not) {} // placeholder inner type; caller should assign
     };
 
     struct Or : IEntityFilter
     {
       std::optional<bool> enabled;
       std::vector<IEntityFilter> filters;
+      Or() : IEntityFilter(Type::Or) {}
     };
 
     enum class ViewTestFlag
@@ -249,12 +287,14 @@ namespace General
       std::optional<double> viewAngle; //(0-360)
       std::optional<ViewTestFlag> viewTest;
       std::optional<bool> testLineOfSight;
+      SpotsMe() : IEntityFilter(Type::SpotsMe) {}
     };
 
     struct StandingOnBlock : IEntityFilter
     {
       std::optional<bool> enabled;
       std::optional<std::string> blockSet; // asset
+      StandingOnBlock() : IEntityFilter(Type::StandingOnBlock) {}
     };
 
     enum class StatFlag
@@ -272,19 +312,76 @@ namespace General
       std::string relativeTo; // asset
       StatFlag relativeToTarget;
       std::vector<double> valueRange;
+      Stat() : IEntityFilter(Type::Stat) {}
     };
 
     struct ViewSector : IEntityFilter
     {
       std::optional<bool> enabled;
       std::optional<double> viewSector; //(0-360)
+      ViewSector() : IEntityFilter(Type::ViewSector) {}
     };
   };
 
   namespace Sensor
   {
+    enum class Type
+    {
+      AdjustPosition,
+      Age,
+      Alarm,
+      And,
+      Animation,
+      Any,
+      Beacon,
+      BlockChange,
+      BlockType,
+      CanInteract,
+      CanPlaceBlock,
+      CombatActionEvaluator,
+      Count,
+      Damage,
+      DroppedItem,
+      EntityEvent,
+      Flag,
+      FlockCombatDamage,
+      FlockLeader,
+      HasHostileTargetMemory,
+      HasInteracted,
+      HasTask,
+      InAir,
+      InWater,
+      InflictedDamage,
+      InteractionContext,
+      IsBackingAway,
+      IsBusy,
+      Kill,
+      Leash,
+      Light,
+      Mob,
+      Nav,
+      Not,
+      OnGround,
+      Or,
+      Path,
+      Player,
+      Random,
+      ReadPosition,
+      SearchRay,
+      Self,
+      State,
+      Switch,
+      Target,
+      Time,
+      Timer,
+      ValueProviderWrapper,
+      Weather
+    };
+
     struct Sensor
     {
+      Type type;
+      Sensor(Type t) : type(t) {}
     };
 
     // Provides:
@@ -295,6 +392,7 @@ namespace General
       std::optional<bool> enabled;
       Sensor sensor;
       std::vector<double> offset;
+      AdjustPosition() : Sensor(Type::AdjustPosition), sensor(Type::Any) {} // placeholder inner sensor
     };
 
     struct Age : Sensor
@@ -302,6 +400,7 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::vector<double> ageRange; // Temporal Amount is the type in the wiki???
+      Age() : Sensor(Type::Age) {}
     };
 
     struct Alarm : Sensor
@@ -317,6 +416,7 @@ namespace General
       std::string name;
       AlarmFlag state;
       std::optional<bool> clear;
+      Alarm() : Sensor(Type::Alarm) {}
     };
 
     struct And : Sensor
@@ -325,6 +425,7 @@ namespace General
       std::optional<bool> enabled;
       std::vector<Sensor> sensors;
       std::optional<std::string> autoUnlockTargetSlot;
+      And() : Sensor(Type::And) {}
     };
 
     struct Animation : Sensor
@@ -339,12 +440,14 @@ namespace General
       std::optional<bool> enabled;
       AnimationFlag slot;
       std::string animation;
+      Animation() : Sensor(Type::Animation) {}
     };
 
     struct Any : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      Any() : Sensor(Type::Any) {}
     };
 
     struct Beacon : Sensor
@@ -355,13 +458,8 @@ namespace General
       std::optional<double> range; //(greater than 0)
       std::optional<std::string> targetSlot;
       std::optional<bool> consumeMessage;
+      Beacon() : Sensor(Type::Beacon) {}
     };
-
-    // struct Block : Sensor
-    //{
-    //   std::optional<bool> once;
-    //   std::optional<bool> enabled;
-    // };
 
     // Provides:
     // Player target
@@ -381,6 +479,7 @@ namespace General
       std::optional<std::string> targetSlot;
       std::string blockSet; // asset
       std::optional<BlockChangeEventTypeFlag> eventType;
+      BlockChange() : Sensor(Type::BlockChange) {}
     };
 
     struct BlockType : Sensor
@@ -388,7 +487,8 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       Sensor sensor;
-      std::string blockSet; // asset
+      std::string blockSet;                                       // asset
+      BlockType() : Sensor(Type::BlockType), sensor(Type::Any) {} // placeholder inner sensor
     };
 
     struct CanInteract : Sensor
@@ -397,6 +497,7 @@ namespace General
       std::optional<bool> enabled;
       double viewSector; //(0-360)
       std::vector<AttitudeFlag> attitudes;
+      CanInteract() : Sensor(Type::CanInteract) {}
     };
 
     struct CanPlaceBlock : Sensor
@@ -413,18 +514,20 @@ namespace General
       std::optional<CanPlaceBlockFlag> offset;
       std::optional<double> retryDelay;
       std::optional<bool> allowEmptyMaterials;
+      CanPlaceBlock() : Sensor(Type::CanPlaceBlock) {}
     };
 
     // Experimental
-    //  Provides:
-    //  Player target
-    //  NPC target
+    // Provides:
+    // Player target
+    // NPC target
     struct CombatActionEvaluator : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
       bool targetInRange;                       // whether to match on target being in or out of range.
       std::optional<double> allowableDeviation; // the allowable deviation from the desired attack range
+      CombatActionEvaluator() : Sensor(Type::CombatActionEvaluator) {}
     };
 
     struct Count : Sensor // check if there is a certain number of NPCs or players within a specific range
@@ -435,6 +538,7 @@ namespace General
       std::vector<double> range;
       std::optional<std::vector<std::string>> includeGroups; // asset array
       std::optional<std::vector<std::string>> excludeGroups; // asset array
+      Count() : Sensor(Type::Count) {}
     };
 
     // Provides:
@@ -451,6 +555,7 @@ namespace General
       std::optional<bool> environment;
       std::optional<bool> other;
       std::optional<std::string> targetSlot;
+      Damage() : Sensor(Type::Damage) {}
     };
 
     // Provides:
@@ -472,6 +577,7 @@ namespace General
       std::optional<bool> lineOfSight;
       std::optional<std::vector<std::string>> items; // asset array
       std::optional<std::vector<DroppedItemFlag>> attitudes;
+      DroppedItem() : Sensor(Type::DroppedItem) {}
     };
 
     // Provides:
@@ -493,14 +599,8 @@ namespace General
       std::string npcGroup;
       EntityEventFlag eventType;
       std::optional<bool> flockOnly;
+      EntityEvent() : Sensor(Type::EntityEvent) {}
     };
-
-    // Experimental
-    // struct Eval : Sensor
-    //{
-    //   std::optional<bool> once;
-    //   std::optional<bool> enabled;
-    // };
 
     struct Flag : Sensor
     {
@@ -508,6 +608,7 @@ namespace General
       std::optional<bool> enabled;
       std::string name;
       std::optional<bool> set;
+      Flag() : Sensor(Type::Flag) {}
     };
 
     // Provides:
@@ -518,6 +619,7 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<bool> leaderOnly;
+      FlockCombatDamage() : Sensor(Type::FlockCombatDamage) {}
     };
 
     // Provides:
@@ -527,18 +629,21 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      FlockLeader() : Sensor(Type::FlockLeader) {}
     };
 
     struct HasHostileTargetMemory : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      HasHostileTargetMemory() : Sensor(Type::HasHostileTargetMemory) {}
     };
 
     struct HasInteracted : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      HasInteracted() : Sensor(Type::HasInteracted) {}
     };
 
     struct HasTask : Sensor
@@ -546,18 +651,21 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::vector<std::string> taskById;
+      HasTask() : Sensor(Type::HasTask) {}
     };
 
     struct InAir : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      InAir() : Sensor(Type::InAir) {}
     };
 
     struct InWater : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      InWater() : Sensor(Type::InWater) {}
     };
 
     // Provides:
@@ -575,6 +683,7 @@ namespace General
       std::optional<bool> enabled;
       std::optional<InflictedDamageFlag> target;
       std::optional<bool> friendlyFire;
+      InflictedDamage() : Sensor(Type::InflictedDamage) {}
     };
 
     struct InteractionContext : Sensor
@@ -582,18 +691,21 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::string context;
+      InteractionContext() : Sensor(Type::InteractionContext) {}
     };
 
     struct IsBackingAway : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      IsBackingAway() : Sensor(Type::IsBackingAway) {}
     };
 
     struct IsBusy : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      IsBusy() : Sensor(Type::IsBusy) {}
     };
 
     // Provides:
@@ -603,6 +715,7 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<std::string> targetSlot;
+      Kill() : Sensor(Type::Kill) {}
     };
 
     // Provides:
@@ -612,6 +725,7 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       double range;
+      Leash() : Sensor(Type::Leash) {}
     };
 
     struct Light : Sensor
@@ -625,6 +739,7 @@ namespace General
       std::optional<std::vector<double>> greenLightRange;
       std::optional<std::vector<double>> blueLightRange;
       std::optional<std::string> targetSlot;
+      Light() : Sensor(Type::Light) {}
     };
 
     // Provides:
@@ -648,14 +763,8 @@ namespace General
       std::optional<bool> getPlayers;
       std::optional<bool> getNPCs;
       std::optional<bool> excludeOwnType;
+      Mob() : Sensor(Type::Mob) {}
     };
-
-    // Experimental
-    // struct MotionController : Sensor
-    //{
-    //   std::optional<bool> once;
-    //   std::optional<bool> enabled;
-    // };
 
     struct Nav : Sensor
     {
@@ -673,6 +782,7 @@ namespace General
       std::optional<std::vector<NavStatesFlag>> navStates;
       std::optional<double> throttleDuration; // minimum time in seconds the path finder isn't able to reach target or 0 to ignore
       std::optional<double> targetDelta;      // minimum distance target has moved since path was computed or 0 to ignore
+      Nav() : Sensor(Type::Nav) {}
     };
 
     struct Not : Sensor
@@ -682,12 +792,14 @@ namespace General
       Sensor sensor;
       std::optional<std::string> useTargetSlot;
       std::optional<std::string> autoUnlockTargetSlot;
+      Not() : Sensor(Type::Not), sensor(Type::Any) {} // placeholder inner sensor
     };
 
     struct OnGround : Sensor
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      OnGround() : Sensor(Type::OnGround) {}
     };
 
     struct Or : Sensor
@@ -696,6 +808,7 @@ namespace General
       std::optional<bool> enabled;
       std::vector<Sensor> sensor;
       std::optional<std::string> autoUnlockTargetSlot;
+      Or() : Sensor(Type::Or) {}
     };
 
     // Provides:
@@ -715,6 +828,7 @@ namespace General
       std::optional<std::string> path;
       std::optional<double> range;
       std::optional<PathTypeFlag> pathType;
+      Path() : Sensor(Type::Path) {}
     };
 
     // Provides:
@@ -735,6 +849,7 @@ namespace General
       std::optional<ISensorEntityPrioritiser::ISensorEntityPrioritiser> prioritizer;
       std::optional<ISensorEntityCollector::ISensorEntityCollector> collector;
       std::optional<std::vector<IEntityFilter::IEntityFilter>> filters;
+      Player() : Sensor(Type::Player) {}
     };
 
     struct Random : Sensor
@@ -743,6 +858,7 @@ namespace General
       std::optional<bool> enabled;
       std::vector<double> trueDurationRange;
       std::vector<double> falseDurationRange;
+      Random() : Sensor(Type::Random) {}
     };
 
     // Provides:
@@ -755,6 +871,7 @@ namespace General
       std::optional<double> minRange;
       double range;
       std::optional<bool> useMarkedTarget;
+      ReadPosition() : Sensor(Type::ReadPosition) {}
     };
 
     // Provides:
@@ -770,6 +887,7 @@ namespace General
       std::optional<double> minRetestAngle;
       std::optional<double> minRetestMove;
       std::optional<double> throttleTime;
+      SearchRay() : Sensor(Type::SearchRay) {}
     };
 
     // Provides:
@@ -779,6 +897,7 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<std::vector<IEntityFilter::IEntityFilter>> filters;
+      Self() : Sensor(Type::Self) {}
     };
 
     struct State : Sensor
@@ -787,6 +906,7 @@ namespace General
       std::optional<bool> enabled;
       std::string state;
       std::optional<bool> ignoreMissingSetState;
+      State() : Sensor(Type::State) {}
     };
 
     struct Switch : Sensor
@@ -794,6 +914,7 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       bool switchCheck; // actual name is just switch, but I can't use that
+      Switch() : Sensor(Type::Switch) {}
     };
 
     // Provides:
@@ -807,6 +928,7 @@ namespace General
       double range;
       std::optional<bool> autoUnlockTarget;
       std::optional<std::vector<IEntityFilter::IEntityFilter>> filters;
+      Target() : Sensor(Type::Target) {}
     };
 
     struct Time : Sensor
@@ -817,6 +939,7 @@ namespace General
       std::optional<bool> checkDay;
       std::optional<bool> checkYear;
       std::optional<bool> scaleDayTimeRange;
+      Time() : Sensor(Type::Time) {}
     };
 
     struct Timer : Sensor
@@ -833,6 +956,7 @@ namespace General
       std::string name;
       std::optional<TimerStateFlag> state;
       std::optional<std::vector<double>> timeRemainingRange;
+      Timer() : Sensor(Type::Timer) {}
     };
 
     struct ValueProviderWrapper : Sensor
@@ -842,6 +966,7 @@ namespace General
       std::optional<bool> passValues;
       Sensor sensor;
       std::vector<ValueToParameterMapping> valueToParameterMappings;
+      ValueProviderWrapper() : Sensor(Type::ValueProviderWrapper), sensor(Type::Any) {} // placeholder inner sensor
     };
 
     struct Weather : Sensor
@@ -849,19 +974,88 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::vector<std::string> weathers; // asset array
+      Weather() : Sensor(Type::Weather) {}
     };
   };
 
   namespace Action
   {
+    enum class Type
+    {
+      AddToHostileTargetMemory,
+      Appearance,
+      ApplyEntityEffect,
+      CombatAbility,
+      CompleteTask,
+      Crouch,
+      DelayDespawn,
+      Despawn,
+      Die,
+      DisplayName,
+      DropItem,
+      FlockState,
+      FlockTarget,
+      IgnoreForAvoidance,
+      Inventory,
+      JoinFlock,
+      LeaveFlock,
+      LockOnInteractionTarget,
+      Log,
+      ModelAttachment,
+      Mount,
+      Nothing,
+      Notify,
+      OpenBarterShop,
+      OpenShop,
+      OverrideAltitude,
+      OverrideAttitude,
+      ParentState,
+      PickUpItem,
+      PlaceBlock,
+      PlaySound,
+      Random,
+      RecomputePath,
+      ReleaseTarget,
+      Remove,
+      ResetBlockSensors,
+      ResetInstructions,
+      ResetPath,
+      ResetSearchRays,
+      Role,
+      Sequence,
+      SetAlarm,
+      SetBlockToPlace,
+      SetFlag,
+      SetInteractable,
+      SetLeashPosition,
+      SetMarkedTarget,
+      SetStat,
+      StartObjective,
+      State,
+      StorePosition,
+      Timeout,
+      TimerContinue,
+      TimerModify,
+      TimerPause,
+      TimerRestart,
+      TimerStart,
+      TimerStop,
+      ToggleStateEvaluator,
+      TriggerSpawnBeacon,
+      TriggerSpawners
+    };
+
     struct Action
     {
+      Type type;
+      Action(Type t) : type(t) {}
     };
 
     struct WeightedAction
     {
       Action action;
       double weight;
+      WeightedAction() : action(Type::Nothing) {} // placeholder
     };
 
     struct ActionList
@@ -872,12 +1066,14 @@ namespace General
     struct AddToHostileTargetMemory : Action // must be attached to a sensor that provides one of player target, NPC target
     {
       std::optional<bool> once;
+      AddToHostileTargetMemory() : Action(Type::AddToHostileTargetMemory) {}
     };
 
     struct Appearance : Action
     {
       std::optional<bool> once;
       std::string appearance;
+      Appearance() : Action(Type::Appearance) {}
     };
 
     struct ApplyEntityEffect : Action // if UseTarget is true, must be attached to a sensor that provides one of player target, NPC target
@@ -885,19 +1081,13 @@ namespace General
       std::optional<bool> once;
       std::string entityEffect;
       std::optional<bool> useTarget;
+      ApplyEntityEffect() : Action(Type::ApplyEntityEffect) {}
     };
-
-    // struct Attack : Action //experimental
-    //{
-    // };
-
-    // struct Beacon : Action //experimental
-    //{
-    // };
 
     struct CombatAbility : Action // starts the combat ability selected by the combat action evaluator.
     {
       std::optional<bool> once;
+      CombatAbility() : Action(Type::CombatAbility) {}
     };
 
     struct CompleteTask : Action // complete a task. Tasks are picked based on those provided to SensorCanInteract.
@@ -913,12 +1103,14 @@ namespace General
       CompleteTaskFlag slot;
       std::optional<std::string> animation;
       std::optional<bool> playAnimation;
+      CompleteTask() : Action(Type::CompleteTask) {}
     };
 
     struct Crouch : Action
     {
       std::optional<bool> once;
       std::optional<bool> crouch;
+      Crouch() : Action(Type::Crouch) {}
     };
 
     struct DelayDespawn : Action
@@ -926,23 +1118,27 @@ namespace General
       std::optional<bool> once;
       double time;                 // (greater than 0)
       std::optional<bool> shorten; // set the delay to either the current delay or the given time. Whatever is smaller.
+      DelayDespawn() : Action(Type::DelayDespawn) {}
     };
 
     struct Despawn : Action // trigger the NPC to start the despawning cycle. If the script contains a despawn sensor it will run that action/motion before removing.
     {
       std::optional<bool> once;
       std::optional<bool> force;
+      Despawn() : Action(Type::Despawn) {}
     };
 
     struct Die : Action
     {
       std::optional<bool> once;
+      Die() : Action(Type::Die) {}
     };
 
     struct DisplayName : Action
     {
       std::optional<bool> once;
       std::string displayName;
+      DisplayName() : Action(Type::DisplayName) {}
     };
 
     struct DropItem : Action
@@ -955,16 +1151,14 @@ namespace General
       std::optional<std::vector<double>> distance;
       std::optional<std::vector<double>> dropSector;
       std::optional<bool> pitchHigh;
+      DropItem() : Action(Type::DropItem) {}
     };
-
-    // struct FlockBeacon : Action
-    //{
-    // };
 
     struct FlockState : Action
     {
       std::optional<bool> once;
       std::string state; // string must be a valid state string. A main state must be included before the period (e.g. Main.Test). State strings consist of a main state and a sub state (e.g. Main.Test). If nested within a substate, the main state may be omitted (e.g. .Test) when referencing.
+      FlockState() : Action(Type::FlockState) {}
     };
 
     struct FlockTarget : Action // must be attached to a sensor that provides one of player target, NPC target
@@ -972,12 +1166,14 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> clear;
       std::optional<std::string> targetSlot;
+      FlockTarget() : Action(Type::FlockTarget) {}
     };
 
     struct IgnoreForAvoidance : Action
     {
       std::optional<bool> once;
       std::string targetSlot;
+      IgnoreForAvoidance() : Action(Type::IgnoreForAvoidance) {}
     };
 
     struct Inventory : Action // if UseTarget is true, must be attached to a sensor that provides one of player target, NPC target
@@ -1001,41 +1197,43 @@ namespace General
       std::optional<std::string> item;
       std::optional<bool> useTarget;
       std::optional<int> slot;
+      Inventory() : Action(Type::Inventory) {}
     };
 
-    // Tries to build/join flock with target. Fails if both NPC and target are in a flock. If either NPC or target are in a flock, the one not in flock tries to join existing flock.If NPC and target are both not in a flock, a new flock with NPC is created and target is tried to be joined.Joining the flock can be rejected if the joining entity does have the correct type or the flock is full. This can be overridden by setting the ForceJoin flag to true.
+    // Tries to build/join flock with target. Fails if both NPC and target are in a flock. If either NPC or target are in a flock, the one not in flock tries to join existing flock. If NPC and target are both not in a flock, a new flock with NPC is created and target is tried to be joined. Joining the flock can be rejected if the joining entity does have the correct type or the flock is full. This can be overridden by setting the ForceJoin flag to true.
     struct JoinFlock : Action // must be attached to a sensor that provides one of player target, NPC target
     {
       std::optional<bool> once;
       std::optional<bool> forceJoin;
+      JoinFlock() : Action(Type::JoinFlock) {}
     };
 
     struct LeaveFlock : Action
     {
       std::optional<bool> once;
+      LeaveFlock() : Action(Type::LeaveFlock) {}
     };
 
     struct LockOnInteractionTarget : Action
     {
       std::optional<bool> once;
       std::string targetSlot;
+      LockOnInteractionTarget() : Action(Type::LockOnInteractionTarget) {}
     };
 
     struct Log : Action
     {
       std::optional<bool> once;
       std::string message;
+      Log() : Action(Type::Log) {}
     };
-
-    // struct MakePath : Action
-    //{
-    // };
 
     struct ModelAttachment : Action
     {
       std::optional<bool> once;
       std::string slot;
       std::string attachment;
+      ModelAttachment() : Action(Type::ModelAttachment) {}
     };
 
     struct Mount : Action
@@ -1045,10 +1243,12 @@ namespace General
       double anchorY;
       double anchorZ;
       std::string movementConfig;
+      Mount() : Action(Type::Mount) {}
     };
 
     struct Nothing : Action
     {
+      Nothing() : Action(Type::Nothing) {}
     };
 
     struct Notify : Action // If slot is null, must be attached to a sensor that provides NPC target
@@ -1056,24 +1256,28 @@ namespace General
       std::optional<bool> once;
       std::string message;
       std::string slot;
+      Notify() : Action(Type::Notify) {}
     };
 
     struct OpenBarterShop : Action
     {
       std::optional<bool> once;
       std::string shop; // asset
+      OpenBarterShop() : Action(Type::OpenBarterShop) {}
     };
 
     struct OpenShop : Action
     {
       std::optional<bool> once;
       std::string shop; // asset
+      OpenShop() : Action(Type::OpenShop) {}
     };
 
     struct OverrideAltitude : Action
     {
       std::optional<bool> once;
       std::vector<double> desiredAltitudeRange;
+      OverrideAltitude() : Action(Type::OverrideAltitude) {}
     };
 
     struct OverrideAttitude : Action // must be attached to a sensor that provides one of player target, NPC target
@@ -1081,12 +1285,14 @@ namespace General
       std::optional<bool> once;
       AttitudeFlag attitude;
       double duration;
+      OverrideAttitude() : Action(Type::OverrideAttitude) {}
     };
 
     struct ParentState : Action // may only be included within a component
     {
       std::optional<bool> once;
       std::string state;
+      ParentState() : Action(Type::ParentState) {}
     };
 
     struct PickUpItem : Action // if Hoover is false, must be attached to a sensor that provides dropped item target
@@ -1096,6 +1302,7 @@ namespace General
       double range;                             // pickup range
       std::optional<bool> hoover;
       std::vector<std::string> items;
+      PickUpItem() : Action(Type::PickUpItem) {}
     };
 
     struct PlaceBlock : Action // whether it should be possible to replace blocks that have empty material
@@ -1103,62 +1310,68 @@ namespace General
       std::optional<bool> once;
       double range;
       std::optional<bool> allowEmptyMaterials;
+      PlaceBlock() : Action(Type::PlaceBlock) {}
     };
-
-    // struct PlayAnimation : Action
-    //{
-    // };
 
     struct PlaySound : Action
     {
       std::optional<bool> once;
       std::string soundEventId; // asset
+      PlaySound() : Action(Type::PlaySound) {}
     };
 
     struct Random : Action
     {
       std::optional<bool> once;
       std::vector<WeightedAction> actions;
+      Random() : Action(Type::Random) {}
     };
 
     struct RecomputePath : Action
     {
       std::optional<bool> once;
+      RecomputePath() : Action(Type::RecomputePath) {}
     };
 
     struct ReleaseTarget : Action
     {
       std::optional<bool> once;
       std::string targetSlot;
+      ReleaseTarget() : Action(Type::ReleaseTarget) {}
     };
 
     struct Remove : Action // if UseTarget is true, must be attached to a sensor that provides one of player target, NPC target
     {
       std::optional<bool> once;
       std::optional<bool> useTarget;
+      Remove() : Action(Type::Remove) {}
     };
 
     struct ResetBlockSensors : Action
     {
       std::optional<bool> once;
       std::vector<std::string> blockSets; // asset array
+      ResetBlockSensors() : Action(Type::ResetBlockSensors) {}
     };
 
     struct ResetInstructions : Action
     {
       std::optional<bool> once;
       std::optional<std::vector<std::string>> instructions; // the instructionList to reset. If left empty, will reset all instructionList
+      ResetInstructions() : Action(Type::ResetInstructions) {}
     };
 
     struct ResetPath : Action
     {
       std::optional<bool> once;
+      ResetPath() : Action(Type::ResetPath) {}
     };
 
     struct ResetSearchRays : Action
     {
       std::optional<bool> once;
       std::vector<std::string> names;
+      ResetSearchRays() : Action(Type::ResetSearchRays) {}
     };
 
     struct Role : Action
@@ -1167,6 +1380,7 @@ namespace General
       std::string role; // asset
       std::optional<bool> changeAppearance;
       std::optional<std::string> state;
+      Role() : Action(Type::Role) {}
     };
 
     struct Sequence : Action
@@ -1175,6 +1389,7 @@ namespace General
       std::optional<bool> blocking;
       std::optional<bool> atomic;
       ActionList actions;
+      Sequence() : Action(Type::Sequence) {}
     };
 
     struct SetAlarm : Action
@@ -1182,12 +1397,14 @@ namespace General
       std::optional<bool> once;
       std::string name;
       std::vector<double> durationRange; // TemporalAmount is the type for this one??? The duration range from which to pick a duration to set the alarm for. [ "P0D", "P0D" ] will unset the alarm
+      SetAlarm() : Action(Type::SetAlarm) {}
     };
 
     struct SetBlockToPlace : Action
     {
       std::optional<bool> once;
       std::string block; // asset
+      SetBlockToPlace() : Action(Type::SetBlockToPlace) {}
     };
 
     struct SetFlag : Action
@@ -1195,6 +1412,7 @@ namespace General
       std::optional<bool> once;
       std::string name;
       std::optional<bool> setTo;
+      SetFlag() : Action(Type::SetFlag) {}
     };
 
     struct SetInteractable : Action
@@ -1203,6 +1421,7 @@ namespace General
       std::optional<bool> interactable;
       std::optional<std::string> hint;
       std::optional<bool> showPrompt;
+      SetInteractable() : Action(Type::SetInteractable) {}
     };
 
     struct SetLeashPosition : Action // At least one of ToCurrent, ToTarget must be true. If ToTarget is true, must be attached to a sensor that provides one of player target, NPC target, dropped item target
@@ -1210,12 +1429,14 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> toCurrent;
       std::optional<bool> toTarget;
+      SetLeashPosition() : Action(Type::SetLeashPosition) {}
     };
 
     struct SetMarkedTarget : Action // must be attached to a sensor that provides one of player target, NPC target
     {
       std::optional<bool> once;
       std::string targetSlot;
+      SetMarkedTarget() : Action(Type::SetMarkedTarget) {}
     };
 
     struct SetStat : Action
@@ -1224,20 +1445,14 @@ namespace General
       std::string stat; // asset
       double value;
       std::optional<bool> add;
+      SetStat() : Action(Type::SetStat) {}
     };
-
-    // struct Spawn : Action
-    //{
-    // };
-
-    // struct SpawnParticles : Action
-    //{
-    // };
 
     struct StartObjective : Action
     {
       std::optional<bool> once;
       std::string objective; // asset
+      StartObjective() : Action(Type::StartObjective) {}
     };
 
     struct State : Action
@@ -1245,17 +1460,15 @@ namespace General
       std::optional<bool> once;
       std::string state;
       std::optional<bool> clearState;
+      State() : Action(Type::State) {}
     };
 
     struct StorePosition : Action
     {
       std::optional<bool> once;
       std::string slot;
+      StorePosition() : Action(Type::StorePosition) {}
     };
-
-    // struct Test : Action //DO NOT USE (idk, wiki said so)
-    //{
-    // };
 
     struct Timeout : Action
     {
@@ -1263,12 +1476,14 @@ namespace General
       std::vector<double> delay;
       std::optional<bool> delayAfter;
       Action action;
+      Timeout() : Action(Type::Timeout), action(Type::Nothing) {} // placeholder inner action
     };
 
     struct TimerContinue : Action
     {
       std::optional<bool> once;
       std::string name;
+      TimerContinue() : Action(Type::TimerContinue) {}
     };
 
     struct TimerModify : Action
@@ -1280,18 +1495,21 @@ namespace General
       std::optional<double> rate;
       std::optional<double> setValue;
       std::optional<bool> repeating;
+      TimerModify() : Action(Type::TimerModify) {}
     };
 
     struct TimerPause : Action
     {
       std::optional<bool> once;
       std::string name;
+      TimerPause() : Action(Type::TimerPause) {}
     };
 
     struct TimerRestart : Action
     {
       std::optional<bool> once;
       std::string name;
+      TimerRestart() : Action(Type::TimerRestart) {}
     };
 
     struct TimerStart : Action
@@ -1302,18 +1520,21 @@ namespace General
       std::optional<std::vector<double>> restartValueRange;
       std::optional<double> rate;
       std::optional<bool> repeating;
+      TimerStart() : Action(Type::TimerStart) {}
     };
 
     struct TimerStop : Action
     {
       std::optional<bool> once;
       std::string name;
+      TimerStop() : Action(Type::TimerStop) {}
     };
 
     struct ToggleStateEvaluator : Action
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
+      ToggleStateEvaluator() : Action(Type::ToggleStateEvaluator) {}
     };
 
     struct TriggerSpawnBeacon : Action
@@ -1322,6 +1543,7 @@ namespace General
       std::string beaconSpawn; // asset
       int range;
       std::optional<std::string> targetSlot;
+      TriggerSpawnBeacon() : Action(Type::TriggerSpawnBeacon) {}
     };
 
     struct TriggerSpawners : Action
@@ -1330,6 +1552,7 @@ namespace General
       std::optional<std::string> spawnMarker;
       int range;
       std::optional<int> count;
+      TriggerSpawners() : Action(Type::TriggerSpawners) {}
     };
   };
 
@@ -1360,29 +1583,31 @@ namespace General
 
   namespace BodyMotion
   {
+    enum class Type
+    {
+      AimCharge,
+      MaintainDistance,
+      MatchLook,
+      Nothing,
+      Path,
+      Sequence,
+      Timer,
+      Wander,
+      WanderInCircle,
+      WanderInRect
+    };
+
     struct BodyMotion
     {
+      Type type;
+      BodyMotion(Type t) : type(t) {}
     };
 
     struct AimCharge : BodyMotion // must be attached to a sensor that provides one of player target, NPC target, dropped item target, vector position
     {
       std::optional<double> relativeTurnSpeed; // the relative turn speed modifier (0-2)
+      AimCharge() : BodyMotion(Type::AimCharge) {}
     };
-
-    // struct Flee : BodyMotion
-    //{
-    // };
-
-    // struct Flock : BodyMotion{
-    // };
-
-    // struct Land : BodyMotion
-    //{
-    // };
-
-    // struct Leave : BodyMotion
-    //{
-    // };
 
     struct MaintainDistance : BodyMotion // must be attached to a sensor that provides one of player target, NPC target, dropped item target, vector position
     {
@@ -1394,14 +1619,17 @@ namespace General
       std::optional<double> moveTowardsSlowdownThreshold;        // 0 or larger
       std::optional<std::vector<double>> strafingDurationRange;  // how long to strafe for (moving left or right around the target). If set to [ 0, 0 ], will not move horizontally at all. (0-inf, weakly ascending order)
       std::optional<std::vector<double>> strafingFrequencyRange; // how frequently to execute strafing (0-inf, weakly ascending order)
+      MaintainDistance() : BodyMotion(Type::MaintainDistance) {}
     };
 
     struct MatchLook : BodyMotion
     {
+      MatchLook() : BodyMotion(Type::MatchLook) {}
     };
 
     struct Nothing : BodyMotion
     {
+      Nothing() : BodyMotion(Type::Nothing) {}
     };
 
     enum class MovementFlag
@@ -1434,33 +1662,21 @@ namespace General
       std::optional<std::vector<double>> nodePauseExtraPercentRange; // (0-1, weakly ascending order)
       std::optional<bool> pickRandomAngle;
       std::optional<unsigned int> viewSegments; // greater than 0
+      Path() : BodyMotion(Type::Path) {}
     };
-
-    // struct Seek : BodyMotion
-    //{
-    // };
 
     struct Sequence : BodyMotion
     {
       std::optional<bool> looped;
       std::vector<BodyMotion> motions; // array must not be empty
+      Sequence() : BodyMotion(Type::Sequence) {}
     };
-
-    // struct TakeOff : BodyMotion
-    //{
-    // };
-
-    // struct Teleport : BodyMotion
-    //{
-    // };
-
-    // struct TestProbe : BodyMotion{
-    // };
 
     struct Timer : BodyMotion
     {
       std::optional<std::vector<double>> time; // range of time from which the random timer length can be chosen
       BodyMotion motion;
+      Timer() : BodyMotion(Type::Timer), motion(Type::Nothing) {} // placeholder inner motion
     };
 
     struct Wander : BodyMotion
@@ -1477,6 +1693,7 @@ namespace General
       std::optional<bool> avoidBlockDamage;
       std::optional<bool> relaxedMoveConstraints;
       std::optional<double> desiredAltitudeWeight; // how much this NPC prefers being within the desired height range. 0 means it doesn't care much, 1 means it will do its best to get there fast. Values below 0 mean the default in the motion controller will be used. (-1 to 1)
+      Wander() : BodyMotion(Type::Wander) {}
     };
 
     struct WanderInCircle : BodyMotion
@@ -1495,6 +1712,7 @@ namespace General
       std::optional<double> desiredAltitudeWeight; // how much this NPC prefers being within the desired height range. 0 means it doesn't care much, 1 means it will do its best to get there fast. Values below 0 mean the default in the motion controller will be used. (-1 to 1)
       std::optional<double> radius;                // greater than 0
       std::optional<bool> useSphere;               // use a sphere instead of circle cylinder
+      WanderInCircle() : BodyMotion(Type::WanderInCircle) {}
     };
 
     struct WanderInRect : BodyMotion
@@ -1513,22 +1731,37 @@ namespace General
       std::optional<double> desiredAltitudeWeight; // how much this NPC prefers being within the desired height range. 0 means it doesn't care much, 1 means it will do its best to get there fast. Values below 0 mean the default in the motion controller will be used. (-1 to 1)
       std::optional<double> width;                 // greater than 0
       std::optional<double> depth;                 // greater than 0
+      WanderInRect() : BodyMotion(Type::WanderInRect) {}
     };
   };
 
   namespace HeadMotion
   {
+    enum class Type
+    {
+      Aim,
+      Nothing,
+      Observe,
+      Sequence,
+      Timer,
+      Watch
+    };
+
     struct HeadMotion
     {
+      Type type;
+      HeadMotion(Type t) : type(t) {}
     };
 
     struct Aim : HeadMotion
     {
       std::optional<double> relativeTurnSpeed; // the relative turn speed modifier (0-2)
+      Aim() : HeadMotion(Type::Aim) {}
     };
 
     struct Nothing : HeadMotion
     {
+      Nothing() : HeadMotion(Type::Nothing) {}
     };
 
     struct Observe : HeadMotion
@@ -1538,23 +1771,27 @@ namespace General
       std::optional<bool> pickRandomAngle;               // whether to pick random angles within the range. If false, will instead sweep across the range, pausing at either end.
       std::optional<unsigned int> viewSegments;          // the number of distinct segments to stop at when sweeping from left to right
       std::optional<double> relativeTurnSpeed;           // the relative turn speed modifier (0-2)
+      Observe() : HeadMotion(Type::Observe) {}
     };
 
     struct Sequence : HeadMotion
     {
       std::optional<bool> looped;
       std::vector<HeadMotion> motions; // array must not be empty
+      Sequence() : HeadMotion(Type::Sequence) {}
     };
 
     struct Timer : HeadMotion
     {
       std::optional<std::vector<double>> time; // range of time from which the random timer length can be chosen
       HeadMotion motion;
+      Timer() : HeadMotion(Type::Timer), motion(Type::Nothing) {} // placeholder inner motion
     };
 
     struct Watch : HeadMotion
     {
       std::optional<double> relativeTurnSpeed; // the relative turn speed modifier (0-2)
+      Watch() : HeadMotion(Type::Watch) {}
     };
   };
 
@@ -1573,8 +1810,8 @@ namespace General
     std::vector<Instruction> instructions;
     std::optional<bool> cont; // continue
     std::optional<unsigned int> weight;
-    // std::optional<bool> treeMode; //if true, continue must be false
-    // std::optional<bool> invertTreeModeResult;
+
+    Instruction() : sensor(Sensor::Type::Any) {} // placeholder sensor
   };
 
   struct StateTransition
@@ -1625,11 +1862,9 @@ namespace General
     std::optional<Instruction> interactionInstruction;            // an instruction designed to evaluate and set which players can interact with an NPC, along with setting correct states upon interaction
     std::optional<Instruction> deathInstruction;                  // an instruction which will run only when the NPC is dead until they are removed
     std::optional<std::vector<StateTransition>> stateTransitions; // a set of state transitions and the actions that will be executed during them
-    // std::optional<StateEvaluator> stateEvaluator; // A state evaluator
-    // std::optional<std::vector<Var>> interactionVars; // interaction vars to be used in interactions.
-    std::optional<bool> isMemory;                    // used to define if the NPC has a Memory to record.
-    std::optional<std::string> memoriesCategory;     // category to put the NPC in, as part of the Memories Plugin
-    std::optional<std::string> memoriesNameOverride; // overrides the Memory name when set
-    std::optional<double> spawnLockTime;             // how long the NPC should be locked and unable to perform behavior when first spawned (greater than or equal to 0)
+    std::optional<bool> isMemory;                                 // used to define if the NPC has a Memory to record.
+    std::optional<std::string> memoriesCategory;                  // category to put the NPC in, as part of the Memories Plugin
+    std::optional<std::string> memoriesNameOverride;              // overrides the Memory name when set
+    std::optional<double> spawnLockTime;                          // how long the NPC should be locked and unable to perform behavior when first spawned (greater than or equal to 0)
   };
 }

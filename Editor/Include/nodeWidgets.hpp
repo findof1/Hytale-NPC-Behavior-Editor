@@ -124,6 +124,8 @@ public:
   std::vector<std::unique_ptr<SocketItem>> inputs;
   std::vector<std::unique_ptr<SocketItem>> outputs;
 
+  virtual QString nodeType() const = 0;
+
   NodeItem(QString title, bool hasFields = false, int baseWidth = 200) : title(title), hasFields(hasFields), baseWidth(baseWidth)
   {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);

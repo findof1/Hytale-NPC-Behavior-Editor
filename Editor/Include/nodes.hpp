@@ -3,10 +3,12 @@
 #include <QFormLayout>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QVariantMap>
 
 class RootNode : public NodeItem
 {
 public:
+  QString nodeType() const override { return "Root"; }
   RootNode(NodeScene *scene) : NodeItem("Root")
   {
     deletable = false;
@@ -17,6 +19,7 @@ public:
 class InstructionNode : public NodeItem
 {
 public:
+  QString nodeType() const override { return "Instruction"; }
   QLineEdit *nameEdit;
   QLineEdit *commentEdit;
   QCheckBox *enabledBox;
@@ -107,6 +110,7 @@ public:
 class CommentNode : public NodeItem
 {
 public:
+  QString nodeType() const override { return "Comment"; }
   QLineEdit *nameEdit;
 
   CommentNode(NodeScene *scene) : NodeItem("Comment", true)
@@ -126,6 +130,7 @@ namespace SensorNodes
   class AdjustPositionNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "AdjustPosition"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -186,6 +191,7 @@ namespace SensorNodes
   class AgeNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Age"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *ageMin;
@@ -239,6 +245,7 @@ namespace SensorNodes
   class AlarmNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Alarm"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -313,6 +320,7 @@ namespace SensorNodes
   class AndNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "And"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *autoUnlockTargetSlotEdit;
@@ -365,6 +373,7 @@ namespace SensorNodes
   class AnimationNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Animation"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QComboBox *slotCombo;
@@ -430,6 +439,7 @@ namespace SensorNodes
   class AnyNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Any"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -471,6 +481,7 @@ namespace SensorNodes
   class BeaconNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Beacon"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *messageEdit;
@@ -547,6 +558,7 @@ namespace SensorNodes
   class BlockChangeNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "BlockChange"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -656,6 +668,7 @@ namespace SensorNodes
   class BlockTypeNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "BlockType"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *blockSetEdit;
@@ -705,6 +718,7 @@ namespace SensorNodes
   class CanInteractNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "CanInteract"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *viewSectorSpin;
@@ -791,6 +805,7 @@ namespace SensorNodes
   class CanPlaceBlockNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "CanPlaceBlock"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QComboBox *directionCombo;
@@ -900,6 +915,7 @@ namespace SensorNodes
   class CombatActionEvaluatorNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "CombatActionEvaluator"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *targetInRangeBox;
@@ -959,6 +975,7 @@ namespace SensorNodes
   class CountNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Count"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QSpinBox *countMin;
@@ -1063,6 +1080,7 @@ namespace SensorNodes
   class DamageNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Damage"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *combatBox;
@@ -1161,6 +1179,7 @@ namespace SensorNodes
   class DroppedItemNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "DroppedItem"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -1285,6 +1304,7 @@ namespace SensorNodes
   class EntityEventNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "EntityEvent"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -1408,6 +1428,7 @@ namespace SensorNodes
   class FlagNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Flag"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -1465,6 +1486,7 @@ namespace SensorNodes
   class FlockCombatDamageNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "FlockCombatDamage"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *leaderOnlyBox;
@@ -1515,6 +1537,7 @@ namespace SensorNodes
   class FlockLeaderNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "FlockLeader"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1556,6 +1579,7 @@ namespace SensorNodes
   class HasHostileTargetMemoryNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "HasHostileTargetMemory"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1597,6 +1621,7 @@ namespace SensorNodes
   class HasInteractedNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "HasInteracted"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1638,6 +1663,7 @@ namespace SensorNodes
   class HasTaskNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "HasTask"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *taskByIdEdit;
@@ -1693,6 +1719,7 @@ namespace SensorNodes
   class InAirNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "InAir"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1734,6 +1761,7 @@ namespace SensorNodes
   class InWaterNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "InWater"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1775,6 +1803,7 @@ namespace SensorNodes
   class InflictedDamageNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "InflictedDamage"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QComboBox *targetCombo;
@@ -1849,6 +1878,7 @@ namespace SensorNodes
   class InteractionContextNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "InteractionContext"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *contextEdit;
@@ -1897,6 +1927,7 @@ namespace SensorNodes
   class IsBackingAwayNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "IsBackingAway"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1938,6 +1969,7 @@ namespace SensorNodes
   class IsBusyNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "IsBusy"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1979,6 +2011,7 @@ namespace SensorNodes
   class KillNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Kill"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *targetSlotEdit;
@@ -2032,6 +2065,7 @@ namespace SensorNodes
   class LeashNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Leash"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -2080,6 +2114,7 @@ namespace SensorNodes
   class LightNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Light"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *lightMin, *lightMax;
@@ -2196,6 +2231,7 @@ namespace SensorNodes
   class MobNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Mob"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *minRangeSpin;
@@ -2342,6 +2378,7 @@ namespace SensorNodes
   class NavNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Nav"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QListWidget *navStatesList;
@@ -2452,6 +2489,7 @@ namespace SensorNodes
   class NotNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Not"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *useTargetSlotEdit;
@@ -2514,6 +2552,7 @@ namespace SensorNodes
   class OnGroundNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "OnGround"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -2555,6 +2594,7 @@ namespace SensorNodes
   class OrNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Or"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *autoUnlockTargetSlotEdit;
@@ -2607,6 +2647,7 @@ namespace SensorNodes
   class PathNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Path"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *pathEdit;
@@ -2698,6 +2739,7 @@ namespace SensorNodes
   class PlayerNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Player"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *minRangeSpin;
@@ -2817,6 +2859,7 @@ namespace SensorNodes
   class RandomNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Random"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *trueDurMin;
@@ -2882,6 +2925,7 @@ namespace SensorNodes
   class ReadPositionNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ReadPosition"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *slotEdit;
@@ -2958,6 +3002,7 @@ namespace SensorNodes
   class SearchRayNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SearchRay"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -3062,6 +3107,7 @@ namespace SensorNodes
   class SelfNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Self"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -3104,6 +3150,7 @@ namespace SensorNodes
   class StateNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "State"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *stateEdit;
@@ -3161,6 +3208,7 @@ namespace SensorNodes
   class SwitchNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Switch"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *switchCheckBox;
@@ -3208,6 +3256,7 @@ namespace SensorNodes
   class TargetNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Target"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *targetSlotEdit;
@@ -3276,6 +3325,7 @@ namespace SensorNodes
   class TimeNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Time"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *periodMin;
@@ -3356,6 +3406,7 @@ namespace SensorNodes
   class TimerNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Timer"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -3451,6 +3502,7 @@ namespace SensorNodes
   class ValueProviderWrapperNode : public NodeItem // TODO: Figure out how to edit values to pass in
   {
   public:
+    QString nodeType() const override { return "ValueProviderWrapper"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *passValuesBox;
@@ -3502,6 +3554,7 @@ namespace SensorNodes
   class WeatherNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Weather"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *weathersEdit;
@@ -3558,12 +3611,13 @@ namespace SensorNodes
 namespace ActionNodes
 {
 
-  class WeightedAction : public NodeItem
+  class WeightedActionNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "WeightedAction"; }
     QDoubleSpinBox *weightSpin;
 
-    WeightedAction(NodeScene *scene) : NodeItem("WeightedAction", true)
+    WeightedActionNode(NodeScene *scene) : NodeItem("WeightedAction", true)
     {
       fieldsHeight = 60;
       addInputSocket("In", scene);
@@ -3594,6 +3648,7 @@ namespace ActionNodes
   class AddToHostileTargetMemoryNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "AddToHostileTargetMemory"; }
     QCheckBox *onceBox;
 
     AddToHostileTargetMemoryNode(NodeScene *scene) : NodeItem("AddToHostileTargetMemory", true)
@@ -3626,6 +3681,7 @@ namespace ActionNodes
   class AppearanceNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Appearance"; }
     QCheckBox *onceBox;
     QLineEdit *appearanceEdit;
 
@@ -3665,6 +3721,7 @@ namespace ActionNodes
   class ApplyEntityEffectNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ApplyEntityEffect"; }
     QCheckBox *onceBox;
     QLineEdit *entityEffectEdit;
     QCheckBox *useTargetBox;
@@ -3713,6 +3770,7 @@ namespace ActionNodes
   class CombatAbilityNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "CombatAbility"; }
     QCheckBox *onceBox;
 
     CombatAbilityNode(NodeScene *scene) : NodeItem("CombatAbility", true)
@@ -3745,6 +3803,7 @@ namespace ActionNodes
   class CompleteTaskNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "CompleteTask"; }
     QCheckBox *onceBox;
     QComboBox *slotCombo;
     QLineEdit *animationEdit;
@@ -3815,6 +3874,7 @@ namespace ActionNodes
   class CrouchNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Crouch"; }
     QCheckBox *onceBox;
     QCheckBox *crouchBox;
 
@@ -3856,6 +3916,7 @@ namespace ActionNodes
   class DelayDespawnNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "DelayDespawn"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *timeSpin;
     QCheckBox *shortenBox;
@@ -3906,6 +3967,7 @@ namespace ActionNodes
   class DespawnNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Despawn"; }
     QCheckBox *onceBox;
     QCheckBox *forceBox;
 
@@ -3947,6 +4009,7 @@ namespace ActionNodes
   class DieNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Die"; }
     QCheckBox *onceBox;
 
     DieNode(NodeScene *scene) : NodeItem("Die", true)
@@ -3979,6 +4042,7 @@ namespace ActionNodes
   class DisplayNameNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "DisplayName"; }
     QCheckBox *onceBox;
     QLineEdit *displayNameEdit;
 
@@ -4018,6 +4082,7 @@ namespace ActionNodes
   class DropItemNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "DropItem"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *delayMinSpin;
     QDoubleSpinBox *delayMaxSpin;
@@ -4150,6 +4215,7 @@ namespace ActionNodes
   class FlockStateNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "FlockState"; }
     QCheckBox *onceBox;
     QLineEdit *stateEdit;
 
@@ -4189,6 +4255,7 @@ namespace ActionNodes
   class FlockTargetNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "FlockTarget"; }
     QCheckBox *onceBox;
     QCheckBox *clearBox;
     QLineEdit *targetSlotEdit;
@@ -4239,6 +4306,7 @@ namespace ActionNodes
   class IgnoreForAvoidanceNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "IgnoreForAvoidance"; }
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -4278,6 +4346,7 @@ namespace ActionNodes
   class InventoryNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Inventory"; }
     QCheckBox *onceBox;
     QComboBox *operationCombo;
     QSpinBox *countSpin;
@@ -4400,6 +4469,7 @@ namespace ActionNodes
   class JoinFlockNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "JoinFlock"; }
     QCheckBox *onceBox;
     QCheckBox *forceJoinBox;
 
@@ -4441,6 +4511,7 @@ namespace ActionNodes
   class LeaveFlockNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "LeaveFlock"; }
     QCheckBox *onceBox;
 
     LeaveFlockNode(NodeScene *scene) : NodeItem("LeaveFlock", true)
@@ -4473,6 +4544,7 @@ namespace ActionNodes
   class LockOnInteractionTargetNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "LockOnInteractionTarget"; }
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -4512,6 +4584,7 @@ namespace ActionNodes
   class LogNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Log"; }
     QCheckBox *onceBox;
     QLineEdit *messageEdit;
 
@@ -4551,6 +4624,7 @@ namespace ActionNodes
   class ModelAttachmentNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ModelAttachment"; }
     QCheckBox *onceBox;
     QLineEdit *slotEdit;
     QLineEdit *attachmentEdit;
@@ -4597,6 +4671,7 @@ namespace ActionNodes
   class MountNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Mount"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *anchorXSpin;
     QDoubleSpinBox *anchorYSpin;
@@ -4655,6 +4730,7 @@ namespace ActionNodes
   class NothingNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Nothing"; }
     NothingNode(NodeScene *scene) : NodeItem("Nothing", false)
     {
       addInputSocket("In", scene);
@@ -4670,6 +4746,7 @@ namespace ActionNodes
   class NotifyNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Notify"; }
     QCheckBox *onceBox;
     QLineEdit *messageEdit;
     QLineEdit *slotEdit;
@@ -4716,6 +4793,7 @@ namespace ActionNodes
   class OpenBarterShopNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "OpenBarterShop"; }
     QCheckBox *onceBox;
     QLineEdit *shopEdit;
 
@@ -4755,6 +4833,7 @@ namespace ActionNodes
   class OpenShopNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "OpenShop"; }
     QCheckBox *onceBox;
     QLineEdit *shopEdit;
 
@@ -4794,6 +4873,7 @@ namespace ActionNodes
   class OverrideAltitudeNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "OverrideAltitude"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *altitudeMinSpin;
     QDoubleSpinBox *altitudeMaxSpin;
@@ -4842,6 +4922,7 @@ namespace ActionNodes
   class OverrideAttitudeNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "OverrideAttitude"; }
     QCheckBox *onceBox;
     QComboBox *attitudeCombo;
     QDoubleSpinBox *durationSpin;
@@ -4900,6 +4981,7 @@ namespace ActionNodes
   class ParentStateNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ParentState"; }
     QCheckBox *onceBox;
     QLineEdit *stateEdit;
 
@@ -4939,6 +5021,7 @@ namespace ActionNodes
   class PickUpItemNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "PickUpItem"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *delayMinSpin;
     QDoubleSpinBox *delayMaxSpin;
@@ -5020,6 +5103,7 @@ namespace ActionNodes
   class PlaceBlockNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "PlaceBlock"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *rangeSpin;
     QCheckBox *allowEmptyMaterialsBox;
@@ -5068,6 +5152,7 @@ namespace ActionNodes
   class PlaySoundNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "PlaySound"; }
     QCheckBox *onceBox;
     QLineEdit *soundEventIdEdit;
 
@@ -5107,6 +5192,7 @@ namespace ActionNodes
   class RandomNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Random"; }
     QCheckBox *onceBox;
 
     RandomNode(NodeScene *scene) : NodeItem("Random", true, 210)
@@ -5140,6 +5226,7 @@ namespace ActionNodes
   class RecomputePathNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "RecomputePath"; }
     QCheckBox *onceBox;
 
     RecomputePathNode(NodeScene *scene) : NodeItem("RecomputePath", true)
@@ -5172,6 +5259,7 @@ namespace ActionNodes
   class ReleaseTargetNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ReleaseTarget"; }
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -5211,6 +5299,7 @@ namespace ActionNodes
   class RemoveNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Remove"; }
     QCheckBox *onceBox;
     QCheckBox *useTargetBox;
 
@@ -5252,6 +5341,7 @@ namespace ActionNodes
   class ResetBlockSensorsNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ResetBlockSensors"; }
     QCheckBox *onceBox;
     QLineEdit *blockSetsEdit;
 
@@ -5298,6 +5388,7 @@ namespace ActionNodes
   class ResetInstructionsNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ResetInstructions"; }
     QCheckBox *onceBox;
     QLineEdit *instructionsEdit;
 
@@ -5349,6 +5440,7 @@ namespace ActionNodes
   class ResetPathNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ResetPath"; }
     QCheckBox *onceBox;
 
     ResetPathNode(NodeScene *scene) : NodeItem("ResetPath", true)
@@ -5381,6 +5473,7 @@ namespace ActionNodes
   class ResetSearchRaysNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ResetSearchRays"; }
     QCheckBox *onceBox;
     QLineEdit *namesEdit;
 
@@ -5427,6 +5520,7 @@ namespace ActionNodes
   class RoleNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Role"; }
     QCheckBox *onceBox;
     QLineEdit *roleEdit;
     QCheckBox *changeAppearanceBox;
@@ -5485,6 +5579,7 @@ namespace ActionNodes
   class SequenceNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Sequence"; }
     QCheckBox *onceBox;
     QCheckBox *blockingBox;
     QCheckBox *atomicBox;
@@ -5536,6 +5631,7 @@ namespace ActionNodes
   class SetAlarmNode : public NodeItem // TODO: Fix duration so it alligns with the temporal type in-game
   {
   public:
+    QString nodeType() const override { return "SetAlarm"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QDoubleSpinBox *durationMinEdit;
@@ -5589,6 +5685,7 @@ namespace ActionNodes
   class SetBlockToPlaceNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SetBlockToPlace"; }
     QCheckBox *onceBox;
     QLineEdit *blockEdit;
 
@@ -5628,6 +5725,7 @@ namespace ActionNodes
   class SetFlagNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SetFlag"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QCheckBox *setToBox;
@@ -5676,6 +5774,7 @@ namespace ActionNodes
   class SetInteractableNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SetInteractable"; }
     QCheckBox *onceBox;
     QCheckBox *interactableBox;
     QLineEdit *hintEdit;
@@ -5737,6 +5836,7 @@ namespace ActionNodes
   class SetLeashPositionNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SetLeashPosition"; }
     QCheckBox *onceBox;
     QCheckBox *toCurrentBox;
     QCheckBox *toTargetBox;
@@ -5788,6 +5888,7 @@ namespace ActionNodes
   class SetMarkedTargetNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SetMarkedTarget"; }
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -5827,6 +5928,7 @@ namespace ActionNodes
   class SetStatNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "SetStat"; }
     QCheckBox *onceBox;
     QLineEdit *statEdit;
     QDoubleSpinBox *valueSpin;
@@ -5882,6 +5984,7 @@ namespace ActionNodes
   class StartObjectiveNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "StartObjective"; }
     QCheckBox *onceBox;
     QLineEdit *objectiveEdit;
 
@@ -5921,6 +6024,7 @@ namespace ActionNodes
   class StateNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "State"; }
     QCheckBox *onceBox;
     QLineEdit *stateEdit;
     QCheckBox *clearStateBox;
@@ -5969,6 +6073,7 @@ namespace ActionNodes
   class StorePositionNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "StorePosition"; }
     QCheckBox *onceBox;
     QLineEdit *slotEdit;
 
@@ -6008,6 +6113,7 @@ namespace ActionNodes
   class TimeoutNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "Timeout"; }
     QCheckBox *onceBox;
     QDoubleSpinBox *delayMinSpin;
     QDoubleSpinBox *delayMaxSpin;
@@ -6065,6 +6171,7 @@ namespace ActionNodes
   class TimerContinueNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TimerContinue"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -6104,6 +6211,7 @@ namespace ActionNodes
   class TimerModifyNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TimerModify"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QDoubleSpinBox *addValueSpin;
@@ -6207,6 +6315,7 @@ namespace ActionNodes
   class TimerPauseNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TimerPause"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -6246,6 +6355,7 @@ namespace ActionNodes
   class TimerRestartNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TimerRestart"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -6285,6 +6395,7 @@ namespace ActionNodes
   class TimerStartNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TimerStart"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QDoubleSpinBox *startValueMinSpin;
@@ -6387,6 +6498,7 @@ namespace ActionNodes
   class TimerStopNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TimerStop"; }
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -6426,6 +6538,7 @@ namespace ActionNodes
   class ToggleStateEvaluatorNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "ToggleStateEvaluator"; }
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -6467,6 +6580,7 @@ namespace ActionNodes
   class TriggerSpawnBeaconNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TriggerSpawnBeacon"; }
     QCheckBox *onceBox;
     QLineEdit *beaconSpawnEdit;
     QSpinBox *rangeSpin;
@@ -6524,6 +6638,7 @@ namespace ActionNodes
   class TriggerSpawnersNode : public NodeItem
   {
   public:
+    QString nodeType() const override { return "TriggerSpawners"; }
     QCheckBox *onceBox;
     QLineEdit *spawnMarkerEdit;
     QSpinBox *rangeSpin;
