@@ -806,7 +806,7 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      std::vector<Sensor> sensor;
+      std::vector<Sensor> sensors;
       std::optional<std::string> autoUnlockTargetSlot;
       Or() : Sensor(Type::Or) {}
     };

@@ -288,7 +288,7 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
 
     tabs->addTab(instructionsTab, "Behavior Editor");
 
-    auto *scene = new NodeScene(this);
+    scene = new NodeScene(this);
     scene->setSceneRect(-500, -500, 1000, 1000);
 
     // add node types for UI builder:
@@ -874,12 +874,10 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
 
     instructionsTabLayout->addWidget(topBar);
 
-    {
-      std::shared_ptr<RootNode> node = std::make_shared<RootNode>(scene);
-      node->setPos(0, 0);
-      scene->addItem(node.get());
-      scene->nodes.emplace_back(node);
-    }
+    rootNode = new RootNode(scene);
+    rootNode->setPos(0, 0);
+    scene->addItem(rootNode);
+    scene->nodes.emplace_back(rootNode);
 
     // Code to diplsay all nodes of a certain type easily
 
@@ -985,7 +983,7 @@ void AttributesEditor::loadAttributes(const General::Attributes &attr)
     inventorySpin->setValue(*attr.inventorySize);
 }
 
-General::Attributes AttributesEditor::getAttributes() const
+General::Attributes AttributesEditor::getAttributes()
 {
   General::Attributes attr;
   attr.requiredAttributes.maxHealth = maxHealthSpin->value();
@@ -996,147 +994,12 @@ General::Attributes AttributesEditor::getAttributes() const
   attr.defaultNPCAttitude = stringToAttitudeFlag(npcAttitudeCombo->currentText());
   attr.invulnerable = invulnerableCheck->isChecked();
   attr.inventorySize = inventorySpin->value();
+  attr.instructions = serializeInstructions(&serializer, scene, rootNode);
   return attr;
 }
 
 void AttributesEditor::printValues()
 {
   General::Attributes attr = getAttributes();
-  std::cout << "Max Health: " << attr.requiredAttributes.maxHealth << std::endl;
-  std::cout << "Appearance: " << attr.requiredAttributes.appearance << std::endl;
-  std::cout << "Name Key: " << attr.requiredAttributes.nameTranslationKey << std::endl;
-
-  std::cout << "Busy States: [" << std::endl;
-  for (auto &state : attr.requiredAttributes.busyStates)
-  {
-    std::cout << "state" << "," << std::endl;
-  }
-  std::cout << "]" << std::endl;
-
-  std::cout << "Motion Controllers: [" << std::endl;
-  for (auto &controller : attr.requiredAttributes.motionControllerList)
-  {
-    std::cout << "{" << std::endl;
-    std::cout << controller.type << std::endl;
-    std::cout << "}" << std::endl;
-  }
-  std::cout << "]" << std::endl;
-
-  if (attr.initialMotionController.has_value())
-    std::cout << "Initial Motion Controller: " << attr.initialMotionController.value() << std::endl;
-
-  if (attr.displayNames.has_value())
-  {
-    std::cout << "Display Names: [" << std::endl;
-    for (auto &name : attr.displayNames.value())
-      std::cout << "  " << name << std::endl;
-    std::cout << "]" << std::endl;
-  }
-
-  if (attr.opaqueBlockSet.has_value())
-    std::cout << "Opaque Block Set: " << attr.opaqueBlockSet.value() << std::endl;
-
-  if (attr.knockbackScale.has_value())
-    std::cout << "Knockback Scale: " << attr.knockbackScale.value() << std::endl;
-
-  if (attr.inventorySize.has_value())
-    std::cout << "Inventory Size: " << attr.inventorySize.value() << std::endl;
-
-  if (attr.hotbarSize.has_value())
-    std::cout << "Hotbar Size: " << attr.hotbarSize.value() << std::endl;
-
-  if (attr.offhandSlots.has_value())
-    std::cout << "Offhand Slots: " << attr.offhandSlots.value() << std::endl;
-
-  if (attr.hotbarItems.has_value())
-  {
-    std::cout << "Hotbar Items: [" << std::endl;
-    for (auto &item : attr.hotbarItems.value())
-      std::cout << "  " << item << std::endl;
-    std::cout << "]" << std::endl;
-  }
-
-  if (attr.offhandItems.has_value())
-  {
-    std::cout << "Offhand Items: [" << std::endl;
-    for (auto &item : attr.offhandItems.value())
-      std::cout << "  " << item << std::endl;
-    std::cout << "]" << std::endl;
-  }
-
-  if (attr.possibleInventoryItems.has_value())
-    std::cout << "Possible Inventory Items: " << attr.possibleInventoryItems.value() << std::endl;
-
-  if (attr.defaultOffhandSlot.has_value())
-    std::cout << "Default Offhand Slot: " << attr.defaultOffhandSlot.value() << std::endl;
-
-  if (attr.dropList.has_value())
-    std::cout << "Drop List: " << attr.dropList.value() << std::endl;
-
-  if (attr.startState.has_value())
-    std::cout << "Start State: " << attr.startState.value() << std::endl;
-
-  if (attr.defaultSubState.has_value())
-    std::cout << "Default Sub State: " << attr.defaultSubState.value() << std::endl;
-
-  if (attr.collisionDistance.has_value())
-    std::cout << "Collision Distance: " << attr.collisionDistance.value() << std::endl;
-
-  if (attr.combatConfig.has_value())
-    std::cout << "Combat Config: " << attr.combatConfig.value() << std::endl;
-
-  if (attr.invulnerable.has_value())
-    std::cout << "Invulnerable: " << (attr.invulnerable.value() ? "true" : "false") << std::endl;
-
-  if (attr.pickupDropOnDeath.has_value())
-    std::cout << "Pickup Drop On Death: " << (attr.pickupDropOnDeath.value() ? "true" : "false") << std::endl;
-
-  if (attr.deathInteraction.has_value())
-    std::cout << "Death Interaction: " << attr.deathInteraction.value() << std::endl;
-
-  if (attr.defaultPlayerAttitude.has_value())
-    std::cout << "Player Attitude: "
-              << attitudeFlagToStdString(attr.defaultPlayerAttitude.value()) << std::endl;
-
-  if (attr.defaultNPCAttitude.has_value())
-    std::cout << "NPC Attitude: "
-              << attitudeFlagToStdString(attr.defaultNPCAttitude.value()) << std::endl;
-
-  if (attr.attitudeGroup.has_value())
-    std::cout << "Attitude Group: "
-              << attitudeFlagToStdString(attr.attitudeGroup.value()) << std::endl;
-
-  if (attr.itemAttitudeGroup.has_value())
-    std::cout << "Item Attitude Group: "
-              << attitudeFlagToStdString(attr.itemAttitudeGroup.value()) << std::endl;
-
-  if (attr.corpseStaysInFlock.has_value())
-    std::cout << "Corpse Stays In Flock: "
-              << (attr.corpseStaysInFlock.value() ? "true" : "false") << std::endl;
-
-  if (attr.instructions.has_value())
-    std::cout << "Instructions Count: "
-              << attr.instructions.value().size() << std::endl;
-
-  if (attr.interactionInstruction.has_value())
-    std::cout << "Interaction Instruction: <present>" << std::endl;
-
-  if (attr.deathInstruction.has_value())
-    std::cout << "Death Instruction: <present>" << std::endl;
-
-  if (attr.stateTransitions.has_value())
-    std::cout << "State Transitions: <present>" << std::endl;
-
-  if (attr.isMemory.has_value())
-    std::cout << "Is Memory: "
-              << (attr.isMemory.value() ? "true" : "false") << std::endl;
-
-  if (attr.memoriesCategory.has_value())
-    std::cout << "Memories Category: " << attr.memoriesCategory.value() << std::endl;
-
-  if (attr.memoriesNameOverride.has_value())
-    std::cout << "Memories Name Override: " << attr.memoriesNameOverride.value() << std::endl;
-
-  if (attr.spawnLockTime.has_value())
-    std::cout << "Spawn Lock Time: " << attr.spawnLockTime.value() << std::endl;
+  print(attr);
 }

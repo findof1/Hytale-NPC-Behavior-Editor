@@ -17,6 +17,7 @@
 #include <string>
 #include <optional>
 #include <iostream>
+#include <memory>
 
 #include "typeUtils.hpp"
 #include "types.hpp"
@@ -27,20 +28,27 @@
 #include "stateTransitionEditor.hpp"
 #include "nodeWidgets.hpp"
 #include "nodes.hpp"
+#include "serialization.hpp"
+#include "print.hpp"
 
 class AttributesEditor : public QWidget
 {
 public:
+  SerializerValues serializer;
+
   AttributesEditor(QWidget *parent = nullptr);
 
   void loadAttributes(const General::Attributes &attr);
 
   QMenu *buildAddMenu(NodeScene *scene, QWidget *parent);
 
-  General::Attributes getAttributes() const;
+  General::Attributes getAttributes();
 
 private:
   void printValues();
+
+  NodeScene *scene;
+  RootNode *rootNode;
 
   QSpinBox *maxHealthSpin;
   QLineEdit *appearanceEdit;
