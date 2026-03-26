@@ -248,8 +248,20 @@ void NodeScene::finishDrag(SocketItem * /*socket*/, QPointF pos)
     if (target && target != draggingSocket && target->isOutput != draggingSocket->isOutput)
     {
       Link link;
-      link.startNode = draggingSocket;
-      link.endNode = target;
+
+      // This is to make sure the endNode is the input to the next one when serializing links
+      if (draggingSocket->isOutput)
+      {
+        link.startNode = draggingSocket;
+        link.endNode = target;
+      }
+      else
+      {
+        link.startNode = target;
+        link.endNode = draggingSocket;
+      }
+      //
+
       link.line = new EdgeItem(draggingSocket->scenePos(), target->scenePos());
       addItem(link.line);
       links.emplace_back(link);

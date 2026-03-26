@@ -44,6 +44,8 @@ public:
 
   General::Attributes getAttributes();
 
+  void spawnNodesDebug();
+
 private:
   void printValues();
 

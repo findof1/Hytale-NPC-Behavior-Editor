@@ -8,6 +8,8 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QMenu>
+#include <QFileDialog>
+#include <fstream>
 
 AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
 {
@@ -880,37 +882,6 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
     scene->addItem(rootNode);
     scene->nodes.emplace_back(rootNode);
 
-    // Code to diplsay all nodes of a certain type easily
-
-    int x = 50;
-    int y = 50;
-    int w = 325;
-    int h = 700;
-    int nW = 14;
-    int indexX = 1;
-    int indexY = 0;
-    for (auto it = scene->nodeFactory.begin(); it != scene->nodeFactory.end(); ++it)
-    {
-      const QString &key = it.key();
-      auto &factory = it.value();
-
-      // if (!key.contains("Sensors"))
-      //   continue;
-
-      auto node = factory(scene);
-      node->setPos(x + indexX * w, y + indexY * h);
-      scene->addItem(node.get());
-      scene->nodes.emplace_back(node);
-
-      indexX++;
-
-      if (indexX > nW)
-      {
-        indexY++;
-        indexX = 0;
-      }
-    }
-
     auto *view = new NodeView();
     view->setScene(scene);
     view->setRenderHint(QPainter::Antialiasing);
@@ -921,10 +892,41 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
     instructionsTabLayout->addWidget(view);
   }
 
-  // Save button
-  auto *saveBtn = new QPushButton("Print Values");
-  layout->addRow(saveBtn);
-  connect(saveBtn, &QPushButton::clicked, this, &AttributesEditor::printValues);
+  auto *exportBtn = new QPushButton("Export NPC Role");
+  layout->addRow(exportBtn);
+  connect(exportBtn, &QPushButton::clicked, this, &AttributesEditor::printValues);
+}
+
+void AttributesEditor::spawnNodesDebug()
+{
+  int x = 50;
+  int y = 50;
+  int w = 325;
+  int h = 700;
+  int nW = 14;
+  int indexX = 1;
+  int indexY = 0;
+  for (auto it = scene->nodeFactory.begin(); it != scene->nodeFactory.end(); ++it)
+  {
+    const QString &key = it.key();
+    auto &factory = it.value();
+
+    // if (!key.contains("Sensors"))
+    //   continue;
+
+    auto node = factory(scene);
+    node->setPos(x + indexX * w, y + indexY * h);
+    scene->addItem(node.get());
+    scene->nodes.emplace_back(node);
+
+    indexX++;
+
+    if (indexX > nW)
+    {
+      indexY++;
+      indexX = 0;
+    }
+  }
 }
 
 QMenu *AttributesEditor::buildAddMenu(NodeScene *scene, QWidget *parent)
@@ -1005,7 +1007,21 @@ void AttributesEditor::printValues()
 
   // print(attr); //debug printer
 
+  QString path = QFileDialog::getSaveFileName(
+      nullptr,
+      "Save JSON",
+      "",
+      "JSON Files (*.json)");
+
+  if (path.isEmpty())
+    return;
+
   nlohmann::json j;
   General::to_json(j, attr);
-  std::cout << j.dump(4) << std::endl;
+
+  std::ofstream file(path.toStdString());
+  if (!file.is_open())
+    return;
+
+  file << j.dump(4);
 }

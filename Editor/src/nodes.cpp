@@ -15,7 +15,7 @@ InstructionNode::InstructionNode(NodeScene *scene)
   addInputSocket("In", scene);
   addOutputSocket("Sensor", scene);
   addOutputSocket("Actions", scene);
-  addOutputSocket("Instructions", scene);
+  addOutputSocket("Instructions", scene, true);
   addOutputSocket("Body Motion", scene, true);
   addOutputSocket("Head Motion", scene, true);
 

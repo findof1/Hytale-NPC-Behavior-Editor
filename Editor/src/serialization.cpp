@@ -631,15 +631,11 @@ General::Instruction serializeInstruction(SerializerValues *serializer, NodeScen
     }
     else if (socketName == "Body Motion")
     {
-      // auto bodyNode = dynamic_cast<BodyMotionNodes::BodyMotionNode *>(targetNode);
-      // if (bodyNode)
-      //   instrData.bodyMotion = bodyNode->serialize();
+      // TODO: Add this
     }
     else if (socketName == "Head Motion")
     {
-      // auto headNode = dynamic_cast<HeadMotionNodes::HeadMotionNode *>(targetNode);
-      // if (headNode)
-      //   instrData.headMotion = headNode->serialize();
+      // TODO: Add this
     }
     else if (socketName == "Actions")
     {

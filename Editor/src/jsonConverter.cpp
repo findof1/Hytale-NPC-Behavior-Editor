@@ -12,28 +12,12 @@ static void opt_to_json(nlohmann::json &j, const char *key, const std::optional<
     j[key] = *v;
 }
 
-// Deserialize an optional value: leave nullopt when key absent.
-template <typename T>
-static void opt_from_json(const nlohmann::json &j, const char *key, std::optional<T> &v)
-{
-  auto it = j.find(key);
-  if (it != j.end() && !it->is_null())
-    v = it->get<T>();
-  else
-    v = std::nullopt;
-}
-
 namespace General
 {
 
   void to_json(nlohmann::json &j, const MotionController &v)
   {
     j["type"] = v.type;
-  }
-
-  void from_json(const nlohmann::json &j, MotionController &v)
-  {
-    j.at("type").get_to(v.type);
   }
 
   void to_json(nlohmann::json &j, const ValueToParameterMapping &v)
@@ -43,13 +27,6 @@ namespace General
     j["toParameter"] = v.toParameter;
   }
 
-  void from_json(const nlohmann::json &j, ValueToParameterMapping &v)
-  {
-    j.at("valueType").get_to(v.valueType);
-    j.at("fromValue").get_to(v.fromValue);
-    j.at("toParameter").get_to(v.toParameter);
-  }
-
   namespace ISensorEntityPrioritiser
   {
     void to_json(nlohmann::json &j, const ISensorEntityPrioritiser & /*v*/)
@@ -57,16 +34,9 @@ namespace General
       j = nlohmann::json::object();
     }
 
-    void from_json(const nlohmann::json & /*j*/, ISensorEntityPrioritiser & /*v*/) {}
-
     void to_json(nlohmann::json &j, const Attitude &v)
     {
       j["attitudesByPriority"] = v.attitudesByPriority;
-    }
-
-    void from_json(const nlohmann::json &j, Attitude &v)
-    {
-      j.at("attitudesByPriority").get_to(v.attitudesByPriority);
     }
   }
 
@@ -77,14 +47,10 @@ namespace General
       j = nlohmann::json::object();
     }
 
-    void from_json(const nlohmann::json & /*j*/, ISensorEntityCollector & /*v*/) {}
-
     void to_json(nlohmann::json &j, const CombatTargets & /*v*/)
     {
       j = nlohmann::json::object();
     }
-
-    void from_json(const nlohmann::json & /*j*/, CombatTargets & /*v*/) {}
   }
 
   namespace IEntityFilter
@@ -94,21 +60,11 @@ namespace General
       j["type"] = v.type;
     }
 
-    void from_json(const nlohmann::json &j, IEntityFilter &v)
-    {
-      j.at("type").get_to(v.type);
-    }
-
     void to_json(nlohmann::json &j, const Altitude &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       j["altitudeRange"] = v.altitudeRange;
-    }
-    void from_json(const nlohmann::json &j, Altitude &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("altitudeRange").get_to(v.altitudeRange);
     }
 
     void to_json(nlohmann::json &j, const And &v)
@@ -117,22 +73,12 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["filters"] = v.filters;
     }
-    void from_json(const nlohmann::json &j, And &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      // j.at("filters").get_to(v.filters); //TODO: Add something that does this
-    }
 
     void to_json(nlohmann::json &j, const Attitude &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       j["attitudes"] = v.attitudes;
-    }
-    void from_json(const nlohmann::json &j, Attitude &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("attitudes").get_to(v.attitudes);
     }
 
     void to_json(nlohmann::json &j, const Combat &v)
@@ -142,13 +88,6 @@ namespace General
       opt_to_json(j, "sequence", v.sequence);
       opt_to_json(j, "timeElapsedRange", v.timeElapsedRange);
       opt_to_json(j, "mode", v.mode);
-    }
-    void from_json(const nlohmann::json &j, Combat &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "sequence", v.sequence);
-      opt_from_json(j, "timeElapsedRange", v.timeElapsedRange);
-      opt_from_json(j, "mode", v.mode);
     }
 
     void to_json(nlohmann::json &j, const Flock &v)
@@ -160,14 +99,6 @@ namespace General
       opt_to_json(j, "size", v.size);
       opt_to_json(j, "checkCanJoin", v.checkCanJoin);
     }
-    void from_json(const nlohmann::json &j, Flock &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "flockStatus", v.flockStatus);
-      opt_from_json(j, "flockPlayerStatus", v.flockPlayerStatus);
-      opt_from_json(j, "size", v.size);
-      opt_from_json(j, "checkCanJoin", v.checkCanJoin);
-    }
 
     void to_json(nlohmann::json &j, const HeightDifference &v)
     {
@@ -176,23 +107,12 @@ namespace General
       opt_to_json(j, "heightDifference", v.heightDifference);
       opt_to_json(j, "useEyePosition", v.useEyePosition);
     }
-    void from_json(const nlohmann::json &j, HeightDifference &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "heightDifference", v.heightDifference);
-      opt_from_json(j, "useEyePosition", v.useEyePosition);
-    }
 
     void to_json(nlohmann::json &j, const InsideBlock &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       j["blockSet"] = v.blockSet;
-    }
-    void from_json(const nlohmann::json &j, InsideBlock &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("blockSet").get_to(v.blockSet);
     }
 
     void to_json(nlohmann::json &j, const Inventory &v)
@@ -203,13 +123,6 @@ namespace General
       opt_to_json(j, "countRange", v.countRange);
       opt_to_json(j, "freeSlotRange", v.freeSlotRange);
     }
-    void from_json(const nlohmann::json &j, Inventory &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "items", v.items);
-      opt_from_json(j, "countRange", v.countRange);
-      opt_from_json(j, "freeSlotRange", v.freeSlotRange);
-    }
 
     void to_json(nlohmann::json &j, const ItemInHand &v)
     {
@@ -218,21 +131,11 @@ namespace General
       opt_to_json(j, "items", v.items);
       opt_to_json(j, "hand", v.hand);
     }
-    void from_json(const nlohmann::json &j, ItemInHand &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "items", v.items);
-      opt_from_json(j, "hand", v.hand);
-    }
 
     void to_json(nlohmann::json &j, const LineOfSight &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, LineOfSight &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const MovementState &v)
@@ -240,11 +143,6 @@ namespace General
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       j["state"] = v.state;
-    }
-    void from_json(const nlohmann::json &j, MovementState &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("state").get_to(v.state);
     }
 
     void to_json(nlohmann::json &j, const NPCGroup &v)
@@ -254,12 +152,6 @@ namespace General
       opt_to_json(j, "includeGroups", v.includeGroups);
       opt_to_json(j, "excludeGroups", v.excludeGroups);
     }
-    void from_json(const nlohmann::json &j, NPCGroup &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "includeGroups", v.includeGroups);
-      opt_from_json(j, "excludeGroups", v.excludeGroups);
-    }
 
     void to_json(nlohmann::json &j, const Not &v)
     {
@@ -267,22 +159,12 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["filter"] = v.filter;
     }
-    void from_json(const nlohmann::json &j, Not &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("filter").get_to(v.filter);
-    }
 
     void to_json(nlohmann::json &j, const Or &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       j["filters"] = v.filters;
-    }
-    void from_json(const nlohmann::json &j, Or &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      // j.at("filters").get_to(v.filters); //TODO: Add something that does this
     }
 
     void to_json(nlohmann::json &j, const SpotsMe &v)
@@ -293,24 +175,12 @@ namespace General
       opt_to_json(j, "viewTest", v.viewTest);
       opt_to_json(j, "testLineOfSight", v.testLineOfSight);
     }
-    void from_json(const nlohmann::json &j, SpotsMe &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "viewAngle", v.viewAngle);
-      opt_from_json(j, "viewTest", v.viewTest);
-      opt_from_json(j, "testLineOfSight", v.testLineOfSight);
-    }
 
     void to_json(nlohmann::json &j, const StandingOnBlock &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       opt_to_json(j, "blockSet", v.blockSet);
-    }
-    void from_json(const nlohmann::json &j, StandingOnBlock &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "blockSet", v.blockSet);
     }
 
     void to_json(nlohmann::json &j, const Stat &v)
@@ -323,26 +193,12 @@ namespace General
       j["relativeToTarget"] = v.relativeToTarget;
       j["valueRange"] = v.valueRange;
     }
-    void from_json(const nlohmann::json &j, Stat &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("stat").get_to(v.stat);
-      j.at("statTarget").get_to(v.statTarget);
-      j.at("relativeTo").get_to(v.relativeTo);
-      j.at("relativeToTarget").get_to(v.relativeToTarget);
-      j.at("valueRange").get_to(v.valueRange);
-    }
 
     void to_json(nlohmann::json &j, const ViewSector &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "enabled", v.enabled);
       opt_to_json(j, "viewSector", v.viewSector);
-    }
-    void from_json(const nlohmann::json &j, ViewSector &v)
-    {
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "viewSector", v.viewSector);
     }
   }
 
@@ -506,310 +362,6 @@ namespace General
       return j;
     }
 
-    std::unique_ptr<Sensor> sensorFromJson(const nlohmann::json &j)
-    {
-      Type t = j.at("type").get<Type>();
-      switch (t)
-      {
-      case Type::AdjustPosition:
-      {
-        auto v = std::make_unique<AdjustPosition>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Age:
-      {
-        auto v = std::make_unique<Age>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Alarm:
-      {
-        auto v = std::make_unique<Alarm>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::And:
-      {
-        auto v = std::make_unique<And>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Animation:
-      {
-        auto v = std::make_unique<Animation>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Any:
-      {
-        auto v = std::make_unique<Any>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Beacon:
-      {
-        auto v = std::make_unique<Beacon>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::BlockChange:
-      {
-        auto v = std::make_unique<BlockChange>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::BlockType:
-      {
-        auto v = std::make_unique<BlockType>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::CanInteract:
-      {
-        auto v = std::make_unique<CanInteract>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::CanPlaceBlock:
-      {
-        auto v = std::make_unique<CanPlaceBlock>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::CombatActionEvaluator:
-      {
-        auto v = std::make_unique<CombatActionEvaluator>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Count:
-      {
-        auto v = std::make_unique<Count>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Damage:
-      {
-        auto v = std::make_unique<Damage>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::DroppedItem:
-      {
-        auto v = std::make_unique<DroppedItem>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::EntityEvent:
-      {
-        auto v = std::make_unique<EntityEvent>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Flag:
-      {
-        auto v = std::make_unique<Flag>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::FlockCombatDamage:
-      {
-        auto v = std::make_unique<FlockCombatDamage>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::FlockLeader:
-      {
-        auto v = std::make_unique<FlockLeader>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::HasHostileTargetMemory:
-      {
-        auto v = std::make_unique<HasHostileTargetMemory>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::HasInteracted:
-      {
-        auto v = std::make_unique<HasInteracted>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::HasTask:
-      {
-        auto v = std::make_unique<HasTask>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::InAir:
-      {
-        auto v = std::make_unique<InAir>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::InWater:
-      {
-        auto v = std::make_unique<InWater>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::InflictedDamage:
-      {
-        auto v = std::make_unique<InflictedDamage>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::InteractionContext:
-      {
-        auto v = std::make_unique<InteractionContext>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::IsBackingAway:
-      {
-        auto v = std::make_unique<IsBackingAway>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::IsBusy:
-      {
-        auto v = std::make_unique<IsBusy>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Kill:
-      {
-        auto v = std::make_unique<Kill>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Leash:
-      {
-        auto v = std::make_unique<Leash>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Light:
-      {
-        auto v = std::make_unique<Light>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Mob:
-      {
-        auto v = std::make_unique<Mob>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Nav:
-      {
-        auto v = std::make_unique<Nav>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Not:
-      {
-        auto v = std::make_unique<Not>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::OnGround:
-      {
-        auto v = std::make_unique<OnGround>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Or:
-      {
-        auto v = std::make_unique<Or>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Path:
-      {
-        auto v = std::make_unique<Path>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Player:
-      {
-        auto v = std::make_unique<Player>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Random:
-      {
-        auto v = std::make_unique<Random>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ReadPosition:
-      {
-        auto v = std::make_unique<ReadPosition>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SearchRay:
-      {
-        auto v = std::make_unique<SearchRay>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Self:
-      {
-        auto v = std::make_unique<Self>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::State:
-      {
-        auto v = std::make_unique<State>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Switch:
-      {
-        auto v = std::make_unique<Switch>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Target:
-      {
-        auto v = std::make_unique<Target>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Time:
-      {
-        auto v = std::make_unique<Time>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Timer:
-      {
-        auto v = std::make_unique<Timer>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ValueProviderWrapper:
-      {
-        auto v = std::make_unique<ValueProviderWrapper>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Weather:
-      {
-        auto v = std::make_unique<Weather>();
-        j.get_to(*v);
-        return v;
-      }
-      default:
-        throw std::runtime_error("Unknown Sensor type in sensorFromJson");
-      }
-    }
-
     void to_json(nlohmann::json &j, const Sensor &v) { j = sensorToJson(v); }
 
     void to_json(nlohmann::json &j, const AdjustPosition &v)
@@ -817,17 +369,9 @@ namespace General
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-      if (v.sensor)
+      if (v.sensor != nullptr)
         j["sensor"] = sensorToJson(*v.sensor);
       j["offset"] = v.offset;
-    }
-    void from_json(const nlohmann::json &j, AdjustPosition &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      if (j.contains("sensor"))
-        v.sensor = sensorFromJson(j.at("sensor"));
-      j.at("offset").get_to(v.offset);
     }
 
     void to_json(nlohmann::json &j, const Age &v)
@@ -836,12 +380,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
       j["ageRange"] = v.ageRange;
-    }
-    void from_json(const nlohmann::json &j, Age &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("ageRange").get_to(v.ageRange);
     }
 
     void to_json(nlohmann::json &j, const Alarm &v)
@@ -852,14 +390,6 @@ namespace General
       j["name"] = v.name;
       j["state"] = v.state;
       opt_to_json(j, "clear", v.clear);
-    }
-    void from_json(const nlohmann::json &j, Alarm &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("name").get_to(v.name);
-      j.at("state").get_to(v.state);
-      opt_from_json(j, "clear", v.clear);
     }
 
     void to_json(nlohmann::json &j, const And &v)
@@ -873,15 +403,6 @@ namespace General
       j["sensors"] = arr;
       opt_to_json(j, "autoUnlockTargetSlot", v.autoUnlockTargetSlot);
     }
-    void from_json(const nlohmann::json &j, And &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      v.sensors.clear();
-      for (const auto &item : j.at("sensors"))
-        v.sensors.push_back(sensorFromJson(item));
-      opt_from_json(j, "autoUnlockTargetSlot", v.autoUnlockTargetSlot);
-    }
 
     void to_json(nlohmann::json &j, const Animation &v)
     {
@@ -891,24 +412,11 @@ namespace General
       j["slot"] = v.slot;
       j["animation"] = v.animation;
     }
-    void from_json(const nlohmann::json &j, Animation &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("slot").get_to(v.slot);
-      j.at("animation").get_to(v.animation);
-    }
-
     void to_json(nlohmann::json &j, const Any &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, Any &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const Beacon &v)
@@ -920,15 +428,6 @@ namespace General
       opt_to_json(j, "range", v.range);
       opt_to_json(j, "targetSlot", v.targetSlot);
       opt_to_json(j, "consumeMessage", v.consumeMessage);
-    }
-    void from_json(const nlohmann::json &j, Beacon &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("message").get_to(v.message);
-      opt_from_json(j, "range", v.range);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-      opt_from_json(j, "consumeMessage", v.consumeMessage);
     }
 
     void to_json(nlohmann::json &j, const BlockChange &v)
@@ -942,33 +441,15 @@ namespace General
       j["blockSet"] = v.blockSet;
       opt_to_json(j, "eventType", v.eventType);
     }
-    void from_json(const nlohmann::json &j, BlockChange &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("range").get_to(v.range);
-      j.at("searchType").get_to(v.searchType);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-      j.at("blockSet").get_to(v.blockSet);
-      opt_from_json(j, "eventType", v.eventType);
-    }
 
     void to_json(nlohmann::json &j, const BlockType &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-      if (v.sensor)
+      if (v.sensor != nullptr)
         j["sensor"] = sensorToJson(*v.sensor);
       j["blockSet"] = v.blockSet;
-    }
-    void from_json(const nlohmann::json &j, BlockType &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      if (j.contains("sensor"))
-        v.sensor = sensorFromJson(j.at("sensor"));
-      j.at("blockSet").get_to(v.blockSet);
     }
 
     void to_json(nlohmann::json &j, const CanInteract &v)
@@ -978,13 +459,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["viewSector"] = v.viewSector;
       j["attitudes"] = v.attitudes;
-    }
-    void from_json(const nlohmann::json &j, CanInteract &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("viewSector").get_to(v.viewSector);
-      j.at("attitudes").get_to(v.attitudes);
     }
 
     void to_json(nlohmann::json &j, const CanPlaceBlock &v)
@@ -997,15 +471,6 @@ namespace General
       opt_to_json(j, "retryDelay", v.retryDelay);
       opt_to_json(j, "allowEmptyMaterials", v.allowEmptyMaterials);
     }
-    void from_json(const nlohmann::json &j, CanPlaceBlock &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("direction").get_to(v.direction);
-      opt_from_json(j, "offset", v.offset);
-      opt_from_json(j, "retryDelay", v.retryDelay);
-      opt_from_json(j, "allowEmptyMaterials", v.allowEmptyMaterials);
-    }
 
     void to_json(nlohmann::json &j, const CombatActionEvaluator &v)
     {
@@ -1014,13 +479,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["targetInRange"] = v.targetInRange;
       opt_to_json(j, "allowableDeviation", v.allowableDeviation);
-    }
-    void from_json(const nlohmann::json &j, CombatActionEvaluator &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("targetInRange").get_to(v.targetInRange);
-      opt_from_json(j, "allowableDeviation", v.allowableDeviation);
     }
 
     void to_json(nlohmann::json &j, const Count &v)
@@ -1032,15 +490,6 @@ namespace General
       j["range"] = v.range;
       opt_to_json(j, "includeGroups", v.includeGroups);
       opt_to_json(j, "excludeGroups", v.excludeGroups);
-    }
-    void from_json(const nlohmann::json &j, Count &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("count").get_to(v.count);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "includeGroups", v.includeGroups);
-      opt_from_json(j, "excludeGroups", v.excludeGroups);
     }
 
     void to_json(nlohmann::json &j, const Damage &v)
@@ -1055,17 +504,6 @@ namespace General
       opt_to_json(j, "other", v.other);
       opt_to_json(j, "targetSlot", v.targetSlot);
     }
-    void from_json(const nlohmann::json &j, Damage &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "combat", v.combat);
-      opt_from_json(j, "friendly", v.friendly);
-      opt_from_json(j, "drowning", v.drowning);
-      opt_from_json(j, "environment", v.environment);
-      opt_from_json(j, "other", v.other);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-    }
 
     void to_json(nlohmann::json &j, const DroppedItem &v)
     {
@@ -1077,16 +515,6 @@ namespace General
       opt_to_json(j, "lineOfSight", v.lineOfSight);
       opt_to_json(j, "items", v.items);
       opt_to_json(j, "attitudes", v.attitudes);
-    }
-    void from_json(const nlohmann::json &j, DroppedItem &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("range").get_to(v.range);
-      j.at("viewSector").get_to(v.viewSector);
-      opt_from_json(j, "lineOfSight", v.lineOfSight);
-      opt_from_json(j, "items", v.items);
-      opt_from_json(j, "attitudes", v.attitudes);
     }
 
     void to_json(nlohmann::json &j, const EntityEvent &v)
@@ -1101,17 +529,6 @@ namespace General
       j["eventType"] = v.eventType;
       opt_to_json(j, "flockOnly", v.flockOnly);
     }
-    void from_json(const nlohmann::json &j, EntityEvent &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "searchType", v.searchType);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-      j.at("npcGroup").get_to(v.npcGroup);
-      j.at("eventType").get_to(v.eventType);
-      opt_from_json(j, "flockOnly", v.flockOnly);
-    }
 
     void to_json(nlohmann::json &j, const Flag &v)
     {
@@ -1121,26 +538,12 @@ namespace General
       j["name"] = v.name;
       opt_to_json(j, "set", v.set);
     }
-    void from_json(const nlohmann::json &j, Flag &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("name").get_to(v.name);
-      opt_from_json(j, "set", v.set);
-    }
-
     void to_json(nlohmann::json &j, const FlockCombatDamage &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
       opt_to_json(j, "leaderOnly", v.leaderOnly);
-    }
-    void from_json(const nlohmann::json &j, FlockCombatDamage &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "leaderOnly", v.leaderOnly);
     }
 
     void to_json(nlohmann::json &j, const FlockLeader &v)
@@ -1149,11 +552,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
     }
-    void from_json(const nlohmann::json &j, FlockLeader &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-    }
 
     void to_json(nlohmann::json &j, const HasHostileTargetMemory &v)
     {
@@ -1161,22 +559,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
     }
-    void from_json(const nlohmann::json &j, HasHostileTargetMemory &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-    }
 
     void to_json(nlohmann::json &j, const HasInteracted &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, HasInteracted &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const HasTask &v)
@@ -1186,12 +574,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["taskById"] = v.taskById;
     }
-    void from_json(const nlohmann::json &j, HasTask &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("taskById").get_to(v.taskById);
-    }
 
     void to_json(nlohmann::json &j, const InAir &v)
     {
@@ -1199,22 +581,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
     }
-    void from_json(const nlohmann::json &j, InAir &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-    }
 
     void to_json(nlohmann::json &j, const InWater &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, InWater &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const InflictedDamage &v)
@@ -1225,13 +597,6 @@ namespace General
       opt_to_json(j, "target", v.target);
       opt_to_json(j, "friendlyFire", v.friendlyFire);
     }
-    void from_json(const nlohmann::json &j, InflictedDamage &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "target", v.target);
-      opt_from_json(j, "friendlyFire", v.friendlyFire);
-    }
 
     void to_json(nlohmann::json &j, const InteractionContext &v)
     {
@@ -1240,12 +605,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["context"] = v.context;
     }
-    void from_json(const nlohmann::json &j, InteractionContext &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("context").get_to(v.context);
-    }
 
     void to_json(nlohmann::json &j, const IsBackingAway &v)
     {
@@ -1253,22 +612,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
     }
-    void from_json(const nlohmann::json &j, IsBackingAway &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-    }
 
     void to_json(nlohmann::json &j, const IsBusy &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, IsBusy &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const Kill &v)
@@ -1278,12 +627,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       opt_to_json(j, "targetSlot", v.targetSlot);
     }
-    void from_json(const nlohmann::json &j, Kill &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-    }
 
     void to_json(nlohmann::json &j, const Leash &v)
     {
@@ -1291,12 +634,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
       j["range"] = v.range;
-    }
-    void from_json(const nlohmann::json &j, Leash &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("range").get_to(v.range);
     }
 
     void to_json(nlohmann::json &j, const Light &v)
@@ -1311,18 +648,6 @@ namespace General
       opt_to_json(j, "greenLightRange", v.greenLightRange);
       opt_to_json(j, "blueLightRange", v.blueLightRange);
       opt_to_json(j, "targetSlot", v.targetSlot);
-    }
-    void from_json(const nlohmann::json &j, Light &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "lightRange", v.lightRange);
-      opt_from_json(j, "skyLightRange", v.skyLightRange);
-      opt_from_json(j, "sunlightRange", v.sunlightRange);
-      opt_from_json(j, "redLightRange", v.redLightRange);
-      opt_from_json(j, "greenLightRange", v.greenLightRange);
-      opt_from_json(j, "blueLightRange", v.blueLightRange);
-      opt_from_json(j, "targetSlot", v.targetSlot);
     }
 
     void to_json(nlohmann::json &j, const Mob &v)
@@ -1349,28 +674,6 @@ namespace General
       if (v.filters.has_value())
         j["filters"] = *v.filters;
     }
-    void from_json(const nlohmann::json &j, Mob &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "minRange", v.minRange);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "lockedOnTarget", v.lockedOnTarget);
-      opt_from_json(j, "lockedTargetSlot", v.lockedTargetSlot);
-      opt_from_json(j, "autoUnlockTarget", v.autoUnlockTarget);
-      opt_from_json(j, "onlyLockedTarget", v.onlyLockedTarget);
-      opt_from_json(j, "ignoredTargetSlot", v.ignoredTargetSlot);
-      opt_from_json(j, "useProjectedDistance", v.useProjectedDistance);
-      opt_from_json(j, "getPlayers", v.getPlayers);
-      opt_from_json(j, "getNPCs", v.getNPCs);
-      opt_from_json(j, "excludeOwnType", v.excludeOwnType);
-      if (j.contains("prioritizer"))
-        v.prioritizer = j.at("prioritizer").get<ISensorEntityPrioritiser::ISensorEntityPrioritiser>();
-      if (j.contains("collector"))
-        v.collector = j.at("collector").get<ISensorEntityCollector::ISensorEntityCollector>();
-      // if (j.contains("filters"))
-      // v.filters = j.at("filters").get<std::vector<IEntityFilter::IEntityFilter>>();//TODO: Add something that does this
-    }
 
     void to_json(nlohmann::json &j, const Nav &v)
     {
@@ -1381,33 +684,15 @@ namespace General
       opt_to_json(j, "throttleDuration", v.throttleDuration);
       opt_to_json(j, "targetDelta", v.targetDelta);
     }
-    void from_json(const nlohmann::json &j, Nav &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "navStates", v.navStates);
-      opt_from_json(j, "throttleDuration", v.throttleDuration);
-      opt_from_json(j, "targetDelta", v.targetDelta);
-    }
-
     void to_json(nlohmann::json &j, const Not &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-      if (v.sensor)
+      if (v.sensor != nullptr)
         j["sensor"] = sensorToJson(*v.sensor);
       opt_to_json(j, "useTargetSlot", v.useTargetSlot);
       opt_to_json(j, "autoUnlockTargetSlot", v.autoUnlockTargetSlot);
-    }
-    void from_json(const nlohmann::json &j, Not &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      if (j.contains("sensor"))
-        v.sensor = sensorFromJson(j.at("sensor"));
-      opt_from_json(j, "useTargetSlot", v.useTargetSlot);
-      opt_from_json(j, "autoUnlockTargetSlot", v.autoUnlockTargetSlot);
     }
 
     void to_json(nlohmann::json &j, const OnGround &v)
@@ -1415,11 +700,6 @@ namespace General
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, OnGround &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const Or &v)
@@ -1433,15 +713,6 @@ namespace General
       j["sensors"] = arr;
       opt_to_json(j, "autoUnlockTargetSlot", v.autoUnlockTargetSlot);
     }
-    void from_json(const nlohmann::json &j, Or &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      v.sensors.clear();
-      for (const auto &item : j.at("sensors"))
-        v.sensors.push_back(sensorFromJson(item));
-      opt_from_json(j, "autoUnlockTargetSlot", v.autoUnlockTargetSlot);
-    }
 
     void to_json(nlohmann::json &j, const Path &v)
     {
@@ -1451,14 +722,6 @@ namespace General
       opt_to_json(j, "path", v.path);
       opt_to_json(j, "range", v.range);
       opt_to_json(j, "pathType", v.pathType);
-    }
-    void from_json(const nlohmann::json &j, Path &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "path", v.path);
-      opt_from_json(j, "range", v.range);
-      opt_from_json(j, "pathType", v.pathType);
     }
 
     void to_json(nlohmann::json &j, const Player &v)
@@ -1481,25 +744,6 @@ namespace General
       if (v.filters.has_value())
         j["filters"] = *v.filters;
     }
-    void from_json(const nlohmann::json &j, Player &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "minRange", v.minRange);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "lockedOnTarget", v.lockedOnTarget);
-      opt_from_json(j, "lockedTargetSlot", v.lockedTargetSlot);
-      opt_from_json(j, "autoUnlockTarget", v.autoUnlockTarget);
-      opt_from_json(j, "onlyLockedTarget", v.onlyLockedTarget);
-      opt_from_json(j, "ignoredTargetSlot", v.ignoredTargetSlot);
-      opt_from_json(j, "useProjectedDistance", v.useProjectedDistance);
-      if (j.contains("prioritizer"))
-        v.prioritizer = j.at("prioritizer").get<ISensorEntityPrioritiser::ISensorEntityPrioritiser>();
-      if (j.contains("collector"))
-        v.collector = j.at("collector").get<ISensorEntityCollector::ISensorEntityCollector>();
-      // if (j.contains("filters"))
-      // v.filters = j.at("filters").get<std::vector<IEntityFilter::IEntityFilter>>();//TODO: Add something that does this
-    }
 
     void to_json(nlohmann::json &j, const Random &v)
     {
@@ -1508,13 +752,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       j["trueDurationRange"] = v.trueDurationRange;
       j["falseDurationRange"] = v.falseDurationRange;
-    }
-    void from_json(const nlohmann::json &j, Random &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("trueDurationRange").get_to(v.trueDurationRange);
-      j.at("falseDurationRange").get_to(v.falseDurationRange);
     }
 
     void to_json(nlohmann::json &j, const ReadPosition &v)
@@ -1526,15 +763,6 @@ namespace General
       opt_to_json(j, "minRange", v.minRange);
       j["range"] = v.range;
       opt_to_json(j, "useMarkedTarget", v.useMarkedTarget);
-    }
-    void from_json(const nlohmann::json &j, ReadPosition &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("slot").get_to(v.slot);
-      opt_from_json(j, "minRange", v.minRange);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "useMarkedTarget", v.useMarkedTarget);
     }
 
     void to_json(nlohmann::json &j, const SearchRay &v)
@@ -1550,18 +778,6 @@ namespace General
       opt_to_json(j, "minRetestMove", v.minRetestMove);
       opt_to_json(j, "throttleTime", v.throttleTime);
     }
-    void from_json(const nlohmann::json &j, SearchRay &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("name").get_to(v.name);
-      j.at("angle").get_to(v.angle);
-      j.at("range").get_to(v.range);
-      j.at("blocks").get_to(v.blocks);
-      opt_from_json(j, "minRetestAngle", v.minRetestAngle);
-      opt_from_json(j, "minRetestMove", v.minRetestMove);
-      opt_from_json(j, "throttleTime", v.throttleTime);
-    }
 
     void to_json(nlohmann::json &j, const Self &v)
     {
@@ -1570,13 +786,6 @@ namespace General
       opt_to_json(j, "enabled", v.enabled);
       if (v.filters.has_value())
         j["filters"] = *v.filters;
-    }
-    void from_json(const nlohmann::json &j, Self &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      // if (j.contains("filters"))
-      // v.filters = j.at("filters").get<std::vector<IEntityFilter::IEntityFilter>>(); //TODO: Add something that does this
     }
 
     void to_json(nlohmann::json &j, const State &v)
@@ -1587,13 +796,6 @@ namespace General
       j["state"] = v.state;
       opt_to_json(j, "ignoreMissingSetState", v.ignoreMissingSetState);
     }
-    void from_json(const nlohmann::json &j, State &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("state").get_to(v.state);
-      opt_from_json(j, "ignoreMissingSetState", v.ignoreMissingSetState);
-    }
 
     void to_json(nlohmann::json &j, const Switch &v)
     {
@@ -1601,12 +803,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
       j["switch"] = v.switchCheck;
-    }
-    void from_json(const nlohmann::json &j, Switch &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("switch").get_to(v.switchCheck);
     }
 
     void to_json(nlohmann::json &j, const Target &v)
@@ -1620,16 +816,6 @@ namespace General
       if (v.filters.has_value())
         j["filters"] = *v.filters;
     }
-    void from_json(const nlohmann::json &j, Target &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "autoUnlockTarget", v.autoUnlockTarget);
-      // if (j.contains("filters"))
-      // v.filters = j.at("filters").get<std::vector<IEntityFilter::IEntityFilter>>();//TODO: Add something that does this
-    }
 
     void to_json(nlohmann::json &j, const Time &v)
     {
@@ -1641,15 +827,6 @@ namespace General
       opt_to_json(j, "checkYear", v.checkYear);
       opt_to_json(j, "scaleDayTimeRange", v.scaleDayTimeRange);
     }
-    void from_json(const nlohmann::json &j, Time &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("period").get_to(v.period);
-      opt_from_json(j, "checkDay", v.checkDay);
-      opt_from_json(j, "checkYear", v.checkYear);
-      opt_from_json(j, "scaleDayTimeRange", v.scaleDayTimeRange);
-    }
 
     void to_json(nlohmann::json &j, const Timer &v)
     {
@@ -1660,14 +837,6 @@ namespace General
       opt_to_json(j, "state", v.state);
       opt_to_json(j, "timeRemainingRange", v.timeRemainingRange);
     }
-    void from_json(const nlohmann::json &j, Timer &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("name").get_to(v.name);
-      opt_from_json(j, "state", v.state);
-      opt_from_json(j, "timeRemainingRange", v.timeRemainingRange);
-    }
 
     void to_json(nlohmann::json &j, const ValueProviderWrapper &v)
     {
@@ -1675,18 +844,9 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
       opt_to_json(j, "passValues", v.passValues);
-      if (v.sensor)
+      if (v.sensor != nullptr)
         j["sensor"] = sensorToJson(*v.sensor);
       j["valueToParameterMappings"] = v.valueToParameterMappings;
-    }
-    void from_json(const nlohmann::json &j, ValueProviderWrapper &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      opt_from_json(j, "passValues", v.passValues);
-      if (j.contains("sensor"))
-        v.sensor = sensorFromJson(j.at("sensor"));
-      j.at("valueToParameterMappings").get_to(v.valueToParameterMappings);
     }
 
     void to_json(nlohmann::json &j, const Weather &v)
@@ -1695,12 +855,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
       j["weathers"] = v.weathers;
-    }
-    void from_json(const nlohmann::json &j, Weather &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
-      j.at("weathers").get_to(v.weathers);
     }
   }
 
@@ -1899,409 +1053,26 @@ namespace General
       return j;
     }
 
-    std::unique_ptr<Action> actionFromJson(const nlohmann::json &j)
-    {
-      Type t = j.at("type").get<Type>();
-      switch (t)
-      {
-      case Type::AddToHostileTargetMemory:
-      {
-        auto v = std::make_unique<AddToHostileTargetMemory>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Appearance:
-      {
-        auto v = std::make_unique<Appearance>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ApplyEntityEffect:
-      {
-        auto v = std::make_unique<ApplyEntityEffect>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::CombatAbility:
-      {
-        auto v = std::make_unique<CombatAbility>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::CompleteTask:
-      {
-        auto v = std::make_unique<CompleteTask>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Crouch:
-      {
-        auto v = std::make_unique<Crouch>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::DelayDespawn:
-      {
-        auto v = std::make_unique<DelayDespawn>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Despawn:
-      {
-        auto v = std::make_unique<Despawn>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Die:
-      {
-        auto v = std::make_unique<Die>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::DisplayName:
-      {
-        auto v = std::make_unique<DisplayName>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::DropItem:
-      {
-        auto v = std::make_unique<DropItem>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::FlockState:
-      {
-        auto v = std::make_unique<FlockState>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::FlockTarget:
-      {
-        auto v = std::make_unique<FlockTarget>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::IgnoreForAvoidance:
-      {
-        auto v = std::make_unique<IgnoreForAvoidance>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Inventory:
-      {
-        auto v = std::make_unique<Inventory>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::JoinFlock:
-      {
-        auto v = std::make_unique<JoinFlock>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::LeaveFlock:
-      {
-        auto v = std::make_unique<LeaveFlock>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::LockOnInteractionTarget:
-      {
-        auto v = std::make_unique<LockOnInteractionTarget>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Log:
-      {
-        auto v = std::make_unique<Log>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ModelAttachment:
-      {
-        auto v = std::make_unique<ModelAttachment>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Mount:
-      {
-        auto v = std::make_unique<Mount>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Nothing:
-      {
-        auto v = std::make_unique<Nothing>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Notify:
-      {
-        auto v = std::make_unique<Notify>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::OpenBarterShop:
-      {
-        auto v = std::make_unique<OpenBarterShop>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::OpenShop:
-      {
-        auto v = std::make_unique<OpenShop>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::OverrideAltitude:
-      {
-        auto v = std::make_unique<OverrideAltitude>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::OverrideAttitude:
-      {
-        auto v = std::make_unique<OverrideAttitude>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ParentState:
-      {
-        auto v = std::make_unique<ParentState>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::PickUpItem:
-      {
-        auto v = std::make_unique<PickUpItem>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::PlaceBlock:
-      {
-        auto v = std::make_unique<PlaceBlock>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::PlaySound:
-      {
-        auto v = std::make_unique<PlaySound>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Random:
-      {
-        auto v = std::make_unique<Random>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::RecomputePath:
-      {
-        auto v = std::make_unique<RecomputePath>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ReleaseTarget:
-      {
-        auto v = std::make_unique<ReleaseTarget>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Remove:
-      {
-        auto v = std::make_unique<Remove>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ResetBlockSensors:
-      {
-        auto v = std::make_unique<ResetBlockSensors>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ResetInstructions:
-      {
-        auto v = std::make_unique<ResetInstructions>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ResetPath:
-      {
-        auto v = std::make_unique<ResetPath>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ResetSearchRays:
-      {
-        auto v = std::make_unique<ResetSearchRays>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Role:
-      {
-        auto v = std::make_unique<Role>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Sequence:
-      {
-        auto v = std::make_unique<Sequence>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetAlarm:
-      {
-        auto v = std::make_unique<SetAlarm>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetBlockToPlace:
-      {
-        auto v = std::make_unique<SetBlockToPlace>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetFlag:
-      {
-        auto v = std::make_unique<SetFlag>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetInteractable:
-      {
-        auto v = std::make_unique<SetInteractable>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetLeashPosition:
-      {
-        auto v = std::make_unique<SetLeashPosition>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetMarkedTarget:
-      {
-        auto v = std::make_unique<SetMarkedTarget>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::SetStat:
-      {
-        auto v = std::make_unique<SetStat>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::StartObjective:
-      {
-        auto v = std::make_unique<StartObjective>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::State:
-      {
-        auto v = std::make_unique<State>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::StorePosition:
-      {
-        auto v = std::make_unique<StorePosition>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::Timeout:
-      {
-        auto v = std::make_unique<Timeout>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TimerContinue:
-      {
-        auto v = std::make_unique<TimerContinue>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TimerModify:
-      {
-        auto v = std::make_unique<TimerModify>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TimerPause:
-      {
-        auto v = std::make_unique<TimerPause>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TimerRestart:
-      {
-        auto v = std::make_unique<TimerRestart>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TimerStart:
-      {
-        auto v = std::make_unique<TimerStart>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TimerStop:
-      {
-        auto v = std::make_unique<TimerStop>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::ToggleStateEvaluator:
-      {
-        auto v = std::make_unique<ToggleStateEvaluator>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TriggerSpawnBeacon:
-      {
-        auto v = std::make_unique<TriggerSpawnBeacon>();
-        j.get_to(*v);
-        return v;
-      }
-      case Type::TriggerSpawners:
-      {
-        auto v = std::make_unique<TriggerSpawners>();
-        j.get_to(*v);
-        return v;
-      }
-      default:
-        throw std::runtime_error("Unknown Action type in actionFromJson");
-      }
-    }
-
     void to_json(nlohmann::json &j, const Action &v) { j = actionToJson(v); }
 
     void to_json(nlohmann::json &j, const WeightedAction &v)
     {
-      if (v.action)
+      if (v.action != nullptr)
         j["action"] = actionToJson(*v.action);
       j["weight"] = v.weight;
-    }
-    void from_json(const nlohmann::json &j, WeightedAction &v)
-    {
-      if (j.contains("action"))
-        v.action = actionFromJson(j.at("action"));
-      j.at("weight").get_to(v.weight);
     }
 
     void to_json(nlohmann::json &j, const ActionList &v)
     {
       nlohmann::json arr = nlohmann::json::array();
       for (const auto &a : v.actions)
+      {
+        if (a == nullptr)
+          continue;
+
         arr.push_back(actionToJson(*a));
+      }
       j["actions"] = arr;
-    }
-    void from_json(const nlohmann::json &j, ActionList &v)
-    {
-      v.actions.clear();
-      for (const auto &item : j.at("actions"))
-        v.actions.push_back(actionFromJson(item));
     }
 
     void to_json(nlohmann::json &j, const AddToHostileTargetMemory &v)
@@ -2309,18 +1080,12 @@ namespace General
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
     }
-    void from_json(const nlohmann::json &j, AddToHostileTargetMemory &v) { opt_from_json(j, "once", v.once); }
 
     void to_json(nlohmann::json &j, const Appearance &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["appearance"] = v.appearance;
-    }
-    void from_json(const nlohmann::json &j, Appearance &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("appearance").get_to(v.appearance);
     }
 
     void to_json(nlohmann::json &j, const ApplyEntityEffect &v)
@@ -2330,19 +1095,11 @@ namespace General
       j["entityEffect"] = v.entityEffect;
       opt_to_json(j, "useTarget", v.useTarget);
     }
-    void from_json(const nlohmann::json &j, ApplyEntityEffect &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("entityEffect").get_to(v.entityEffect);
-      opt_from_json(j, "useTarget", v.useTarget);
-    }
-
     void to_json(nlohmann::json &j, const CombatAbility &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
     }
-    void from_json(const nlohmann::json &j, CombatAbility &v) { opt_from_json(j, "once", v.once); }
 
     void to_json(nlohmann::json &j, const CompleteTask &v)
     {
@@ -2352,24 +1109,12 @@ namespace General
       opt_to_json(j, "animation", v.animation);
       opt_to_json(j, "playAnimation", v.playAnimation);
     }
-    void from_json(const nlohmann::json &j, CompleteTask &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("slot").get_to(v.slot);
-      opt_from_json(j, "animation", v.animation);
-      opt_from_json(j, "playAnimation", v.playAnimation);
-    }
 
     void to_json(nlohmann::json &j, const Crouch &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "crouch", v.crouch);
-    }
-    void from_json(const nlohmann::json &j, Crouch &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "crouch", v.crouch);
     }
 
     void to_json(nlohmann::json &j, const DelayDespawn &v)
@@ -2379,12 +1124,6 @@ namespace General
       j["time"] = v.time;
       opt_to_json(j, "shorten", v.shorten);
     }
-    void from_json(const nlohmann::json &j, DelayDespawn &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("time").get_to(v.time);
-      opt_from_json(j, "shorten", v.shorten);
-    }
 
     void to_json(nlohmann::json &j, const Despawn &v)
     {
@@ -2392,29 +1131,18 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "force", v.force);
     }
-    void from_json(const nlohmann::json &j, Despawn &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "force", v.force);
-    }
 
     void to_json(nlohmann::json &j, const Die &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
     }
-    void from_json(const nlohmann::json &j, Die &v) { opt_from_json(j, "once", v.once); }
 
     void to_json(nlohmann::json &j, const DisplayName &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["displayName"] = v.displayName;
-    }
-    void from_json(const nlohmann::json &j, DisplayName &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("displayName").get_to(v.displayName);
     }
 
     void to_json(nlohmann::json &j, const DropItem &v)
@@ -2429,28 +1157,12 @@ namespace General
       opt_to_json(j, "dropSector", v.dropSector);
       opt_to_json(j, "pitchHigh", v.pitchHigh);
     }
-    void from_json(const nlohmann::json &j, DropItem &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "delay", v.delay);
-      opt_from_json(j, "item", v.item);
-      opt_from_json(j, "dropList", v.dropList);
-      opt_from_json(j, "throwSpeed", v.throwSpeed);
-      opt_from_json(j, "distance", v.distance);
-      opt_from_json(j, "dropSector", v.dropSector);
-      opt_from_json(j, "pitchHigh", v.pitchHigh);
-    }
 
     void to_json(nlohmann::json &j, const FlockState &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["state"] = v.state;
-    }
-    void from_json(const nlohmann::json &j, FlockState &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("state").get_to(v.state);
     }
 
     void to_json(nlohmann::json &j, const FlockTarget &v)
@@ -2460,23 +1172,12 @@ namespace General
       opt_to_json(j, "clear", v.clear);
       opt_to_json(j, "targetSlot", v.targetSlot);
     }
-    void from_json(const nlohmann::json &j, FlockTarget &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "clear", v.clear);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-    }
 
     void to_json(nlohmann::json &j, const IgnoreForAvoidance &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["targetSlot"] = v.targetSlot;
-    }
-    void from_json(const nlohmann::json &j, IgnoreForAvoidance &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("targetSlot").get_to(v.targetSlot);
     }
 
     void to_json(nlohmann::json &j, const Inventory &v)
@@ -2489,15 +1190,6 @@ namespace General
       opt_to_json(j, "useTarget", v.useTarget);
       opt_to_json(j, "slot", v.slot);
     }
-    void from_json(const nlohmann::json &j, Inventory &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "operation", v.operation);
-      opt_from_json(j, "count", v.count);
-      opt_from_json(j, "item", v.item);
-      opt_from_json(j, "useTarget", v.useTarget);
-      opt_from_json(j, "slot", v.slot);
-    }
 
     void to_json(nlohmann::json &j, const JoinFlock &v)
     {
@@ -2505,29 +1197,18 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "forceJoin", v.forceJoin);
     }
-    void from_json(const nlohmann::json &j, JoinFlock &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "forceJoin", v.forceJoin);
-    }
 
     void to_json(nlohmann::json &j, const LeaveFlock &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
     }
-    void from_json(const nlohmann::json &j, LeaveFlock &v) { opt_from_json(j, "once", v.once); }
 
     void to_json(nlohmann::json &j, const LockOnInteractionTarget &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["targetSlot"] = v.targetSlot;
-    }
-    void from_json(const nlohmann::json &j, LockOnInteractionTarget &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("targetSlot").get_to(v.targetSlot);
     }
 
     void to_json(nlohmann::json &j, const Log &v)
@@ -2536,11 +1217,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["message"] = v.message;
     }
-    void from_json(const nlohmann::json &j, Log &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("message").get_to(v.message);
-    }
 
     void to_json(nlohmann::json &j, const ModelAttachment &v)
     {
@@ -2548,12 +1224,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["slot"] = v.slot;
       j["attachment"] = v.attachment;
-    }
-    void from_json(const nlohmann::json &j, ModelAttachment &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("slot").get_to(v.slot);
-      j.at("attachment").get_to(v.attachment);
     }
 
     void to_json(nlohmann::json &j, const Mount &v)
@@ -2565,17 +1235,8 @@ namespace General
       j["anchorZ"] = v.anchorZ;
       j["movementConfig"] = v.movementConfig;
     }
-    void from_json(const nlohmann::json &j, Mount &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("anchorX").get_to(v.anchorX);
-      j.at("anchorY").get_to(v.anchorY);
-      j.at("anchorZ").get_to(v.anchorZ);
-      j.at("movementConfig").get_to(v.movementConfig);
-    }
 
     void to_json(nlohmann::json &j, const Nothing &v) { j["type"] = v.type; }
-    void from_json(const nlohmann::json & /*j*/, Nothing & /*v*/) {}
 
     void to_json(nlohmann::json &j, const Notify &v)
     {
@@ -2584,23 +1245,12 @@ namespace General
       j["message"] = v.message;
       j["slot"] = v.slot;
     }
-    void from_json(const nlohmann::json &j, Notify &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("message").get_to(v.message);
-      j.at("slot").get_to(v.slot);
-    }
 
     void to_json(nlohmann::json &j, const OpenBarterShop &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["shop"] = v.shop;
-    }
-    void from_json(const nlohmann::json &j, OpenBarterShop &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("shop").get_to(v.shop);
     }
 
     void to_json(nlohmann::json &j, const OpenShop &v)
@@ -2609,22 +1259,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["shop"] = v.shop;
     }
-    void from_json(const nlohmann::json &j, OpenShop &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("shop").get_to(v.shop);
-    }
 
     void to_json(nlohmann::json &j, const OverrideAltitude &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["desiredAltitudeRange"] = v.desiredAltitudeRange;
-    }
-    void from_json(const nlohmann::json &j, OverrideAltitude &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("desiredAltitudeRange").get_to(v.desiredAltitudeRange);
     }
 
     void to_json(nlohmann::json &j, const OverrideAttitude &v)
@@ -2634,23 +1274,12 @@ namespace General
       j["attitude"] = v.attitude;
       j["duration"] = v.duration;
     }
-    void from_json(const nlohmann::json &j, OverrideAttitude &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("attitude").get_to(v.attitude);
-      j.at("duration").get_to(v.duration);
-    }
 
     void to_json(nlohmann::json &j, const ParentState &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["state"] = v.state;
-    }
-    void from_json(const nlohmann::json &j, ParentState &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("state").get_to(v.state);
     }
 
     void to_json(nlohmann::json &j, const PickUpItem &v)
@@ -2662,14 +1291,6 @@ namespace General
       opt_to_json(j, "hoover", v.hoover);
       j["items"] = v.items;
     }
-    void from_json(const nlohmann::json &j, PickUpItem &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "delay", v.delay);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "hoover", v.hoover);
-      j.at("items").get_to(v.items);
-    }
 
     void to_json(nlohmann::json &j, const PlaceBlock &v)
     {
@@ -2678,23 +1299,12 @@ namespace General
       j["range"] = v.range;
       opt_to_json(j, "allowEmptyMaterials", v.allowEmptyMaterials);
     }
-    void from_json(const nlohmann::json &j, PlaceBlock &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "allowEmptyMaterials", v.allowEmptyMaterials);
-    }
 
     void to_json(nlohmann::json &j, const PlaySound &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["soundEventId"] = v.soundEventId;
-    }
-    void from_json(const nlohmann::json &j, PlaySound &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("soundEventId").get_to(v.soundEventId);
     }
 
     void to_json(nlohmann::json &j, const Random &v)
@@ -2703,29 +1313,18 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["actions"] = v.actions;
     }
-    void from_json(const nlohmann::json &j, Random &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("actions").get_to(v.actions);
-    }
 
     void to_json(nlohmann::json &j, const RecomputePath &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
     }
-    void from_json(const nlohmann::json &j, RecomputePath &v) { opt_from_json(j, "once", v.once); }
 
     void to_json(nlohmann::json &j, const ReleaseTarget &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["targetSlot"] = v.targetSlot;
-    }
-    void from_json(const nlohmann::json &j, ReleaseTarget &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("targetSlot").get_to(v.targetSlot);
     }
 
     void to_json(nlohmann::json &j, const Remove &v)
@@ -2734,22 +1333,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "useTarget", v.useTarget);
     }
-    void from_json(const nlohmann::json &j, Remove &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "useTarget", v.useTarget);
-    }
 
     void to_json(nlohmann::json &j, const ResetBlockSensors &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["blockSets"] = v.blockSets;
-    }
-    void from_json(const nlohmann::json &j, ResetBlockSensors &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("blockSets").get_to(v.blockSets);
     }
 
     void to_json(nlohmann::json &j, const ResetInstructions &v)
@@ -2758,29 +1347,18 @@ namespace General
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "instructions", v.instructions);
     }
-    void from_json(const nlohmann::json &j, ResetInstructions &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "instructions", v.instructions);
-    }
 
     void to_json(nlohmann::json &j, const ResetPath &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
     }
-    void from_json(const nlohmann::json &j, ResetPath &v) { opt_from_json(j, "once", v.once); }
 
     void to_json(nlohmann::json &j, const ResetSearchRays &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["names"] = v.names;
-    }
-    void from_json(const nlohmann::json &j, ResetSearchRays &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("names").get_to(v.names);
     }
 
     void to_json(nlohmann::json &j, const Role &v)
@@ -2791,13 +1369,6 @@ namespace General
       opt_to_json(j, "changeAppearance", v.changeAppearance);
       opt_to_json(j, "state", v.state);
     }
-    void from_json(const nlohmann::json &j, Role &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("role").get_to(v.role);
-      opt_from_json(j, "changeAppearance", v.changeAppearance);
-      opt_from_json(j, "state", v.state);
-    }
 
     void to_json(nlohmann::json &j, const Sequence &v)
     {
@@ -2807,13 +1378,6 @@ namespace General
       opt_to_json(j, "atomic", v.atomic);
       j["actions"] = v.actions;
     }
-    void from_json(const nlohmann::json &j, Sequence &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "blocking", v.blocking);
-      opt_from_json(j, "atomic", v.atomic);
-      j.at("actions").get_to(v.actions);
-    }
 
     void to_json(nlohmann::json &j, const SetAlarm &v)
     {
@@ -2822,23 +1386,12 @@ namespace General
       j["name"] = v.name;
       j["durationRange"] = v.durationRange;
     }
-    void from_json(const nlohmann::json &j, SetAlarm &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
-      j.at("durationRange").get_to(v.durationRange);
-    }
 
     void to_json(nlohmann::json &j, const SetBlockToPlace &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["block"] = v.block;
-    }
-    void from_json(const nlohmann::json &j, SetBlockToPlace &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("block").get_to(v.block);
     }
 
     void to_json(nlohmann::json &j, const SetFlag &v)
@@ -2847,12 +1400,6 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["name"] = v.name;
       opt_to_json(j, "setTo", v.setTo);
-    }
-    void from_json(const nlohmann::json &j, SetFlag &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
-      opt_from_json(j, "setTo", v.setTo);
     }
 
     void to_json(nlohmann::json &j, const SetInteractable &v)
@@ -2863,13 +1410,6 @@ namespace General
       opt_to_json(j, "hint", v.hint);
       opt_to_json(j, "showPrompt", v.showPrompt);
     }
-    void from_json(const nlohmann::json &j, SetInteractable &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "interactable", v.interactable);
-      opt_from_json(j, "hint", v.hint);
-      opt_from_json(j, "showPrompt", v.showPrompt);
-    }
 
     void to_json(nlohmann::json &j, const SetLeashPosition &v)
     {
@@ -2878,23 +1418,12 @@ namespace General
       opt_to_json(j, "toCurrent", v.toCurrent);
       opt_to_json(j, "toTarget", v.toTarget);
     }
-    void from_json(const nlohmann::json &j, SetLeashPosition &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "toCurrent", v.toCurrent);
-      opt_from_json(j, "toTarget", v.toTarget);
-    }
 
     void to_json(nlohmann::json &j, const SetMarkedTarget &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["targetSlot"] = v.targetSlot;
-    }
-    void from_json(const nlohmann::json &j, SetMarkedTarget &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("targetSlot").get_to(v.targetSlot);
     }
 
     void to_json(nlohmann::json &j, const SetStat &v)
@@ -2905,24 +1434,12 @@ namespace General
       j["value"] = v.value;
       opt_to_json(j, "add", v.add);
     }
-    void from_json(const nlohmann::json &j, SetStat &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("stat").get_to(v.stat);
-      j.at("value").get_to(v.value);
-      opt_from_json(j, "add", v.add);
-    }
 
     void to_json(nlohmann::json &j, const StartObjective &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["objective"] = v.objective;
-    }
-    void from_json(const nlohmann::json &j, StartObjective &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("objective").get_to(v.objective);
     }
 
     void to_json(nlohmann::json &j, const State &v)
@@ -2932,23 +1449,12 @@ namespace General
       j["state"] = v.state;
       opt_to_json(j, "clearState", v.clearState);
     }
-    void from_json(const nlohmann::json &j, State &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("state").get_to(v.state);
-      opt_from_json(j, "clearState", v.clearState);
-    }
 
     void to_json(nlohmann::json &j, const StorePosition &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["slot"] = v.slot;
-    }
-    void from_json(const nlohmann::json &j, StorePosition &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("slot").get_to(v.slot);
     }
 
     void to_json(nlohmann::json &j, const Timeout &v)
@@ -2957,16 +1463,8 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["delay"] = v.delay;
       opt_to_json(j, "delayAfter", v.delayAfter);
-      if (v.action)
+      if (v.action != nullptr)
         j["action"] = actionToJson(*v.action);
-    }
-    void from_json(const nlohmann::json &j, Timeout &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("delay").get_to(v.delay);
-      opt_from_json(j, "delayAfter", v.delayAfter);
-      if (j.contains("action"))
-        v.action = actionFromJson(j.at("action"));
     }
 
     void to_json(nlohmann::json &j, const TimerContinue &v)
@@ -2974,11 +1472,6 @@ namespace General
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["name"] = v.name;
-    }
-    void from_json(const nlohmann::json &j, TimerContinue &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
     }
 
     void to_json(nlohmann::json &j, const TimerModify &v)
@@ -2992,16 +1485,6 @@ namespace General
       opt_to_json(j, "setValue", v.setValue);
       opt_to_json(j, "repeating", v.repeating);
     }
-    void from_json(const nlohmann::json &j, TimerModify &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
-      opt_from_json(j, "addValue", v.addValue);
-      opt_from_json(j, "maxValue", v.maxValue);
-      opt_from_json(j, "rate", v.rate);
-      opt_from_json(j, "setValue", v.setValue);
-      opt_from_json(j, "repeating", v.repeating);
-    }
 
     void to_json(nlohmann::json &j, const TimerPause &v)
     {
@@ -3009,22 +1492,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["name"] = v.name;
     }
-    void from_json(const nlohmann::json &j, TimerPause &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
-    }
 
     void to_json(nlohmann::json &j, const TimerRestart &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       j["name"] = v.name;
-    }
-    void from_json(const nlohmann::json &j, TimerRestart &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
     }
 
     void to_json(nlohmann::json &j, const TimerStart &v)
@@ -3037,15 +1510,6 @@ namespace General
       opt_to_json(j, "rate", v.rate);
       opt_to_json(j, "repeating", v.repeating);
     }
-    void from_json(const nlohmann::json &j, TimerStart &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
-      opt_from_json(j, "startValueRange", v.startValueRange);
-      opt_from_json(j, "restartValueRange", v.restartValueRange);
-      opt_from_json(j, "rate", v.rate);
-      opt_from_json(j, "repeating", v.repeating);
-    }
 
     void to_json(nlohmann::json &j, const TimerStop &v)
     {
@@ -3053,22 +1517,12 @@ namespace General
       opt_to_json(j, "once", v.once);
       j["name"] = v.name;
     }
-    void from_json(const nlohmann::json &j, TimerStop &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("name").get_to(v.name);
-    }
 
     void to_json(nlohmann::json &j, const ToggleStateEvaluator &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "once", v.once);
       opt_to_json(j, "enabled", v.enabled);
-    }
-    void from_json(const nlohmann::json &j, ToggleStateEvaluator &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "enabled", v.enabled);
     }
 
     void to_json(nlohmann::json &j, const TriggerSpawnBeacon &v)
@@ -3079,13 +1533,6 @@ namespace General
       j["range"] = v.range;
       opt_to_json(j, "targetSlot", v.targetSlot);
     }
-    void from_json(const nlohmann::json &j, TriggerSpawnBeacon &v)
-    {
-      opt_from_json(j, "once", v.once);
-      j.at("beaconSpawn").get_to(v.beaconSpawn);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "targetSlot", v.targetSlot);
-    }
 
     void to_json(nlohmann::json &j, const TriggerSpawners &v)
     {
@@ -3095,26 +1542,17 @@ namespace General
       j["range"] = v.range;
       opt_to_json(j, "count", v.count);
     }
-    void from_json(const nlohmann::json &j, TriggerSpawners &v)
-    {
-      opt_from_json(j, "once", v.once);
-      opt_from_json(j, "spawnMarker", v.spawnMarker);
-      j.at("range").get_to(v.range);
-      opt_from_json(j, "count", v.count);
-    }
   }
 
   namespace BodyMotion
   {
     void to_json(nlohmann::json &j, const BodyMotion &v) { j["type"] = v.type; }
-    void from_json(const nlohmann::json &j, BodyMotion &v) { j.at("type").get_to(v.type); }
 
     void to_json(nlohmann::json &j, const AimCharge &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "relativeTurnSpeed", v.relativeTurnSpeed);
     }
-    void from_json(const nlohmann::json &j, AimCharge &v) { opt_from_json(j, "relativeTurnSpeed", v.relativeTurnSpeed); }
 
     void to_json(nlohmann::json &j, const MaintainDistance &v)
     {
@@ -3128,23 +1566,10 @@ namespace General
       opt_to_json(j, "strafingDurationRange", v.strafingDurationRange);
       opt_to_json(j, "strafingFrequencyRange", v.strafingFrequencyRange);
     }
-    void from_json(const nlohmann::json &j, MaintainDistance &v)
-    {
-      j.at("desiredDistanceRange").get_to(v.desiredDistanceRange);
-      opt_from_json(j, "targetDistanceFactor", v.targetDistanceFactor);
-      opt_from_json(j, "moveThreshold", v.moveThreshold);
-      opt_from_json(j, "relativeForwardsSpeed", v.relativeForwardsSpeed);
-      opt_from_json(j, "relativeBackwardsSpeed", v.relativeBackwardsSpeed);
-      opt_from_json(j, "moveTowardsSlowdownThreshold", v.moveTowardsSlowdownThreshold);
-      opt_from_json(j, "strafingDurationRange", v.strafingDurationRange);
-      opt_from_json(j, "strafingFrequencyRange", v.strafingFrequencyRange);
-    }
 
     void to_json(nlohmann::json &j, const MatchLook &v) { j["type"] = v.type; }
-    void from_json(const nlohmann::json & /*j*/, MatchLook & /*v*/) {}
 
     void to_json(nlohmann::json &j, const Nothing &v) { j["type"] = v.type; }
-    void from_json(const nlohmann::json & /*j*/, Nothing & /*v*/) {}
 
     void to_json(nlohmann::json &j, const Path &v)
     {
@@ -3162,21 +1587,6 @@ namespace General
       opt_to_json(j, "pickRandomAngle", v.pickRandomAngle);
       opt_to_json(j, "viewSegments", v.viewSegments);
     }
-    void from_json(const nlohmann::json &j, Path &v)
-    {
-      opt_from_json(j, "startAtNearestNode", v.startAtNearestNode);
-      opt_from_json(j, "minRelSpeed", v.minRelSpeed);
-      opt_from_json(j, "maxRelSpeed", v.maxRelSpeed);
-      opt_from_json(j, "direction", v.direction);
-      opt_from_json(j, "shape", v.shape);
-      opt_from_json(j, "minNodeDelay", v.minNodeDelay);
-      opt_from_json(j, "maxNodeDelay", v.maxNodeDelay);
-      opt_from_json(j, "useNodeViewDirection", v.useNodeViewDirection);
-      opt_from_json(j, "nodePauseScaleRange", v.nodePauseScaleRange);
-      opt_from_json(j, "nodePauseExtraPercentRange", v.nodePauseExtraPercentRange);
-      opt_from_json(j, "pickRandomAngle", v.pickRandomAngle);
-      opt_from_json(j, "viewSegments", v.viewSegments);
-    }
 
     void to_json(nlohmann::json &j, const Sequence &v)
     {
@@ -3184,22 +1594,11 @@ namespace General
       opt_to_json(j, "looped", v.looped);
       j["motions"] = v.motions;
     }
-    void from_json(const nlohmann::json &j, Sequence &v)
-    {
-      opt_from_json(j, "looped", v.looped);
-      // j.at("motions").get_to(v.motions);
-    }
-
     void to_json(nlohmann::json &j, const Timer &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "time", v.time);
       j["motion"] = v.motion;
-    }
-    void from_json(const nlohmann::json &j, Timer &v)
-    {
-      opt_from_json(j, "time", v.time);
-      j.at("motion").get_to(v.motion);
     }
 
 // Shared wander fields helper macro
@@ -3217,26 +1616,11 @@ namespace General
   opt_to_json(j, "relaxedMoveConstraints", v.relaxedMoveConstraints); \
   opt_to_json(j, "desiredAltitudeWeight", v.desiredAltitudeWeight);
 
-#define WANDER_FROM_JSON(v)                                             \
-  opt_from_json(j, "minWalkTime", v.minWalkTime);                       \
-  opt_from_json(j, "maxWalkTime", v.maxWalkTime);                       \
-  opt_from_json(j, "minHeadingChange", v.minHeadingChange);             \
-  opt_from_json(j, "maxHeadingChange", v.maxHeadingChange);             \
-  opt_from_json(j, "relaxHeadingChange", v.relaxHeadingChange);         \
-  opt_from_json(j, "relativeSpeed", v.relativeSpeed);                   \
-  opt_from_json(j, "minMoveDistance", v.minMoveDistance);               \
-  opt_from_json(j, "stopDistance", v.stopDistance);                     \
-  opt_from_json(j, "testsPerTick", v.testsPerTick);                     \
-  opt_from_json(j, "avoidBlockDamage", v.avoidBlockDamage);             \
-  opt_from_json(j, "relaxedMoveConstraints", v.relaxedMoveConstraints); \
-  opt_from_json(j, "desiredAltitudeWeight", v.desiredAltitudeWeight);
-
     void to_json(nlohmann::json &j, const Wander &v)
     {
       j["type"] = v.type;
       WANDER_TO_JSON(v)
     }
-    void from_json(const nlohmann::json &j, Wander &v) { WANDER_FROM_JSON(v) }
 
     void to_json(nlohmann::json &j, const WanderInCircle &v)
     {
@@ -3244,12 +1628,6 @@ namespace General
       WANDER_TO_JSON(v)
       opt_to_json(j, "radius", v.radius);
       opt_to_json(j, "useSphere", v.useSphere);
-    }
-    void from_json(const nlohmann::json &j, WanderInCircle &v)
-    {
-      WANDER_FROM_JSON(v)
-      opt_from_json(j, "radius", v.radius);
-      opt_from_json(j, "useSphere", v.useSphere);
     }
 
     void to_json(nlohmann::json &j, const WanderInRect &v)
@@ -3259,31 +1637,21 @@ namespace General
       opt_to_json(j, "width", v.width);
       opt_to_json(j, "depth", v.depth);
     }
-    void from_json(const nlohmann::json &j, WanderInRect &v)
-    {
-      WANDER_FROM_JSON(v)
-      opt_from_json(j, "width", v.width);
-      opt_from_json(j, "depth", v.depth);
-    }
 
 #undef WANDER_TO_JSON
-#undef WANDER_FROM_JSON
   }
 
   namespace HeadMotion
   {
     void to_json(nlohmann::json &j, const HeadMotion &v) { j["type"] = v.type; }
-    void from_json(const nlohmann::json &j, HeadMotion &v) { j.at("type").get_to(v.type); }
 
     void to_json(nlohmann::json &j, const Aim &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "relativeTurnSpeed", v.relativeTurnSpeed);
     }
-    void from_json(const nlohmann::json &j, Aim &v) { opt_from_json(j, "relativeTurnSpeed", v.relativeTurnSpeed); }
 
     void to_json(nlohmann::json &j, const Nothing &v) { j["type"] = v.type; }
-    void from_json(const nlohmann::json & /*j*/, Nothing & /*v*/) {}
 
     void to_json(nlohmann::json &j, const Observe &v)
     {
@@ -3294,25 +1662,12 @@ namespace General
       opt_to_json(j, "viewSegments", v.viewSegments);
       opt_to_json(j, "relativeTurnSpeed", v.relativeTurnSpeed);
     }
-    void from_json(const nlohmann::json &j, Observe &v)
-    {
-      j.at("angleRange").get_to(v.angleRange);
-      opt_from_json(j, "pauseTimeRange", v.pauseTimeRange);
-      opt_from_json(j, "pickRandomAngle", v.pickRandomAngle);
-      opt_from_json(j, "viewSegments", v.viewSegments);
-      opt_from_json(j, "relativeTurnSpeed", v.relativeTurnSpeed);
-    }
 
     void to_json(nlohmann::json &j, const Sequence &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "looped", v.looped);
       j["motions"] = v.motions;
-    }
-    void from_json(const nlohmann::json &j, Sequence &v)
-    {
-      opt_from_json(j, "looped", v.looped);
-      // j.at("motions").get_to(v.motions);
     }
 
     void to_json(nlohmann::json &j, const Timer &v)
@@ -3321,18 +1676,12 @@ namespace General
       opt_to_json(j, "time", v.time);
       j["motion"] = v.motion;
     }
-    void from_json(const nlohmann::json &j, Timer &v)
-    {
-      opt_from_json(j, "time", v.time);
-      j.at("motion").get_to(v.motion);
-    }
 
     void to_json(nlohmann::json &j, const Watch &v)
     {
       j["type"] = v.type;
       opt_to_json(j, "relativeTurnSpeed", v.relativeTurnSpeed);
     }
-    void from_json(const nlohmann::json &j, Watch &v) { opt_from_json(j, "relativeTurnSpeed", v.relativeTurnSpeed); }
   }
 
   void to_json(nlohmann::json &j, const Instruction &v)
@@ -3341,12 +1690,12 @@ namespace General
     opt_to_json(j, "comment", v.comment);
     opt_to_json(j, "enabled", v.enabled);
 
-    if (v.sensor)
+    if (v.sensor != nullptr)
       j["sensor"] = Sensor::sensorToJson(*v.sensor);
-    if (v.bodyMotion)
-      j["bodyMotion"] = *v.bodyMotion;
-    if (v.headMotion)
-      j["headMotion"] = *v.headMotion;
+    if (v.bodyMotion.has_value())
+      j["bodyMotion"] = v.bodyMotion.value();
+    if (v.headMotion.has_value())
+      j["headMotion"] = v.headMotion.value();
 
     nlohmann::json actArr = nlohmann::json::array();
     for (const auto &a : v.actions)
@@ -3364,34 +1713,6 @@ namespace General
     opt_to_json(j, "weight", v.weight);
   }
 
-  void from_json(const nlohmann::json &j, Instruction &v)
-  {
-    j.at("name").get_to(v.name);
-    opt_from_json(j, "comment", v.comment);
-    opt_from_json(j, "enabled", v.enabled);
-
-    if (j.contains("sensor"))
-      v.sensor = Sensor::sensorFromJson(j.at("sensor"));
-    // if (j.contains("bodyMotion"))
-    // v.bodyMotion = j.at("bodyMotion").get<BodyMotion::BodyMotion>();
-    // if (j.contains("headMotion"))
-    // v.headMotion = j.at("headMotion").get<HeadMotion::HeadMotion>();
-
-    v.actions.clear();
-    if (j.contains("actions"))
-      for (const auto &a : j.at("actions"))
-        v.actions.push_back(Action::actionFromJson(a));
-
-    opt_from_json(j, "actionsBlocking", v.actionsBlocking);
-    opt_from_json(j, "actionsAtomic", v.actionsAtomic);
-
-    if (j.contains("instructions"))
-      j.at("instructions").get_to(v.instructions);
-
-    opt_from_json(j, "continue", v.cont);
-    opt_from_json(j, "weight", v.weight);
-  }
-
   void to_json(nlohmann::json &j, const StateTransition &v)
   {
     j["priority"] = v.priority;
@@ -3400,30 +1721,21 @@ namespace General
     opt_to_json(j, "enabled", v.enabled);
   }
 
-  void from_json(const nlohmann::json &j, StateTransition &v)
-  {
-    j.at("priority").get_to(v.priority);
-    j.at("from").get_to(v.from);
-    j.at("to").get_to(v.to);
-    opt_from_json(j, "enabled", v.enabled);
-  }
-
   void to_json(nlohmann::json &j, const RequiredAttributes &v)
   {
     j["maxHealth"] = v.maxHealth;
     j["appearance"] = v.appearance;
     j["nameTranslationKey"] = v.nameTranslationKey;
-    j["busyStates"] = v.busyStates;
-    j["motionControllerList"] = v.motionControllerList;
-  }
 
-  void from_json(const nlohmann::json &j, RequiredAttributes &v)
-  {
-    // j.at("maxHealth").get_to(v.maxHealth);
-    // j.at("appearance").get_to(v.appearance);
-    // j.at("nameTranslationKey").get_to(v.nameTranslationKey);
-    // j.at("busyStates").get_to(v.busyStates);
-    //  j.at("motionControllerList").get_to(v.motionControllerList);
+    nlohmann::json busyArr = nlohmann::json::array();
+    for (const auto &b : v.busyStates)
+      busyArr.push_back(b);
+    j["busyStates"] = busyArr;
+
+    nlohmann::json motionArr = nlohmann::json::array();
+    for (const auto &m : v.motionControllerList)
+      motionArr.push_back(m);
+    j["motionControllerList"] = motionArr;
   }
 
   void to_json(nlohmann::json &j, const Attributes &v)
@@ -3455,54 +1767,15 @@ namespace General
     opt_to_json(j, "itemAttitudeGroup", v.itemAttitudeGroup);
     opt_to_json(j, "corpseStaysInFlock", v.corpseStaysInFlock);
     opt_to_json(j, "instructions", v.instructions);
-    if (v.interactionInstruction)
-      j["interactionInstruction"] = *v.interactionInstruction;
-    if (v.deathInstruction)
-      j["deathInstruction"] = *v.deathInstruction;
+    if (v.interactionInstruction.has_value())
+      j["interactionInstruction"] = v.interactionInstruction.value();
+    if (v.deathInstruction.has_value())
+      j["deathInstruction"] = v.deathInstruction.value();
     opt_to_json(j, "stateTransitions", v.stateTransitions);
     opt_to_json(j, "isMemory", v.isMemory);
     opt_to_json(j, "memoriesCategory", v.memoriesCategory);
     opt_to_json(j, "memoriesNameOverride", v.memoriesNameOverride);
     opt_to_json(j, "spawnLockTime", v.spawnLockTime);
-  }
-
-  void from_json(const nlohmann::json &j, Attributes &v)
-  {
-    j.at("requiredAttributes").get_to(v.requiredAttributes);
-    opt_from_json(j, "initialMotionController", v.initialMotionController);
-    opt_from_json(j, "displayNames", v.displayNames);
-    opt_from_json(j, "opaqueBlockSet", v.opaqueBlockSet);
-    opt_from_json(j, "knockbackScale", v.knockbackScale);
-    opt_from_json(j, "inventorySize", v.inventorySize);
-    opt_from_json(j, "hotbarSize", v.hotbarSize);
-    opt_from_json(j, "offhandSlots", v.offhandSlots);
-    opt_from_json(j, "hotbarItems", v.hotbarItems);
-    opt_from_json(j, "offhandItems", v.offhandItems);
-    opt_from_json(j, "possibleInventoryItems", v.possibleInventoryItems);
-    opt_from_json(j, "defaultOffhandSlot", v.defaultOffhandSlot);
-    opt_from_json(j, "dropList", v.dropList);
-    opt_from_json(j, "startState", v.startState);
-    opt_from_json(j, "defaultSubState", v.defaultSubState);
-    opt_from_json(j, "collisionDistance", v.collisionDistance);
-    opt_from_json(j, "combatConfig", v.combatConfig);
-    opt_from_json(j, "invulnerable", v.invulnerable);
-    opt_from_json(j, "pickupDropOnDeath", v.pickupDropOnDeath);
-    opt_from_json(j, "deathInteraction", v.deathInteraction);
-    opt_from_json(j, "defaultPlayerAttitude", v.defaultPlayerAttitude);
-    opt_from_json(j, "defaultNPCAttitude", v.defaultNPCAttitude);
-    opt_from_json(j, "attitudeGroup", v.attitudeGroup);
-    opt_from_json(j, "itemAttitudeGroup", v.itemAttitudeGroup);
-    opt_from_json(j, "corpseStaysInFlock", v.corpseStaysInFlock);
-    opt_from_json(j, "instructions", v.instructions);
-    if (j.contains("interactionInstruction"))
-      v.interactionInstruction = j.at("interactionInstruction").get<Instruction>();
-    if (j.contains("deathInstruction"))
-      v.deathInstruction = j.at("deathInstruction").get<Instruction>();
-    opt_from_json(j, "stateTransitions", v.stateTransitions);
-    opt_from_json(j, "isMemory", v.isMemory);
-    opt_from_json(j, "memoriesCategory", v.memoriesCategory);
-    opt_from_json(j, "memoriesNameOverride", v.memoriesNameOverride);
-    opt_from_json(j, "spawnLockTime", v.spawnLockTime);
   }
 
 }
