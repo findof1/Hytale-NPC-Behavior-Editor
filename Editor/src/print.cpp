@@ -4,28 +4,28 @@
 using namespace General;
 void printOpt(const char *label, const std::optional<bool> &v, std::ostream &os)
 {
-  if (v)
-    os << "  " << label << ": " << (*v ? "true" : "false") << "\n";
+  if (v.has_value())
+    os << "  " << label << ": " << (v.value() ? "true" : "false") << "\n";
 }
 void printOpt(const char *label, const std::optional<std::string> &v, std::ostream &os)
 {
-  if (v)
-    os << "  " << label << ": " << *v << "\n";
+  if (v.has_value())
+    os << "  " << label << ": " << v.value() << "\n";
 }
 void printOpt(const char *label, const std::optional<double> &v, std::ostream &os)
 {
-  if (v)
-    os << "  " << label << ": " << *v << "\n";
+  if (v.has_value())
+    os << "  " << label << ": " << v.value() << "\n";
 }
 void printOpt(const char *label, const std::optional<int> &v, std::ostream &os)
 {
-  if (v)
-    os << "  " << label << ": " << *v << "\n";
+  if (v.has_value())
+    os << "  " << label << ": " << v.value() << "\n";
 }
 void printOpt(const char *label, const std::optional<unsigned int> &v, std::ostream &os)
 {
-  if (v)
-    os << "  " << label << ": " << *v << "\n";
+  if (v.has_value())
+    os << "  " << label << ": " << v.value() << "\n";
 }
 void printVec(const char *label, const std::vector<double> &v, std::ostream &os)
 {
@@ -68,18 +68,18 @@ void printVec(const char *label, const std::vector<std::string> &v, std::ostream
 }
 void printOpt(const char *label, const std::optional<std::vector<double>> &v, std::ostream &os)
 {
-  if (v)
-    printVec(label, *v, os);
+  if (v.has_value())
+    printVec(label, v.value(), os);
 }
 void printOpt(const char *label, const std::optional<std::vector<int>> &v, std::ostream &os)
 {
-  if (v)
-    printVec(label, *v, os);
+  if (v.has_value())
+    printVec(label, v.value(), os);
 }
 void printOpt(const char *label, const std::optional<std::vector<std::string>> &v, std::ostream &os)
 {
-  if (v)
-    printVec(label, *v, os);
+  if (v.has_value())
+    printVec(label, v.value(), os);
 }
 
 void print(AttitudeFlag v, std::ostream &os)
@@ -957,602 +957,753 @@ void print(Sensor::Timer::TimerStateFlag v, std::ostream &os)
   }
 }
 
-void print(const Sensor::Sensor &v, std::ostream &os)
+void print(const Sensor::Sensor *v, std::ostream &os)
 {
-  os << "Sensor { type: ";
-  print(v.type, os);
-  os << " }\n";
+  switch (v->type)
+  {
+  case Sensor::Type::AdjustPosition:
+    print(static_cast<const Sensor::AdjustPosition *>(v), os);
+    break;
+  case Sensor::Type::Age:
+    print(static_cast<const Sensor::Age *>(v), os);
+    break;
+  case Sensor::Type::Alarm:
+    print(static_cast<const Sensor::Alarm *>(v), os);
+    break;
+  case Sensor::Type::And:
+    print(static_cast<const Sensor::And *>(v), os);
+    break;
+  case Sensor::Type::Animation:
+    print(static_cast<const Sensor::Animation *>(v), os);
+    break;
+  case Sensor::Type::Any:
+    print(static_cast<const Sensor::Any *>(v), os);
+    break;
+  case Sensor::Type::Beacon:
+    print(static_cast<const Sensor::Beacon *>(v), os);
+    break;
+  case Sensor::Type::BlockChange:
+    print(static_cast<const Sensor::BlockChange *>(v), os);
+    break;
+  case Sensor::Type::BlockType:
+    print(static_cast<const Sensor::BlockType *>(v), os);
+    break;
+  case Sensor::Type::CanInteract:
+    print(static_cast<const Sensor::CanInteract *>(v), os);
+    break;
+  case Sensor::Type::CanPlaceBlock:
+    print(static_cast<const Sensor::CanPlaceBlock *>(v), os);
+    break;
+  case Sensor::Type::CombatActionEvaluator:
+    print(static_cast<const Sensor::CombatActionEvaluator *>(v), os);
+    break;
+  case Sensor::Type::Count:
+    print(static_cast<const Sensor::Count *>(v), os);
+    break;
+  case Sensor::Type::Damage:
+    print(static_cast<const Sensor::Damage *>(v), os);
+    break;
+  case Sensor::Type::DroppedItem:
+    print(static_cast<const Sensor::DroppedItem *>(v), os);
+    break;
+  case Sensor::Type::EntityEvent:
+    print(static_cast<const Sensor::EntityEvent *>(v), os);
+    break;
+  case Sensor::Type::Flag:
+    print(static_cast<const Sensor::Flag *>(v), os);
+    break;
+  case Sensor::Type::FlockCombatDamage:
+    print(static_cast<const Sensor::FlockCombatDamage *>(v), os);
+    break;
+  case Sensor::Type::FlockLeader:
+    print(static_cast<const Sensor::FlockLeader *>(v), os);
+    break;
+  case Sensor::Type::HasHostileTargetMemory:
+    print(static_cast<const Sensor::HasHostileTargetMemory *>(v), os);
+    break;
+  case Sensor::Type::HasInteracted:
+    print(static_cast<const Sensor::HasInteracted *>(v), os);
+    break;
+  case Sensor::Type::HasTask:
+    print(static_cast<const Sensor::HasTask *>(v), os);
+    break;
+  case Sensor::Type::InAir:
+    print(static_cast<const Sensor::InAir *>(v), os);
+    break;
+  case Sensor::Type::InWater:
+    print(static_cast<const Sensor::InWater *>(v), os);
+    break;
+  case Sensor::Type::InflictedDamage:
+    print(static_cast<const Sensor::InflictedDamage *>(v), os);
+    break;
+  case Sensor::Type::InteractionContext:
+    print(static_cast<const Sensor::InteractionContext *>(v), os);
+    break;
+  case Sensor::Type::IsBackingAway:
+    print(static_cast<const Sensor::IsBackingAway *>(v), os);
+    break;
+  case Sensor::Type::IsBusy:
+    print(static_cast<const Sensor::IsBusy *>(v), os);
+    break;
+  case Sensor::Type::Kill:
+    print(static_cast<const Sensor::Kill *>(v), os);
+    break;
+  case Sensor::Type::Leash:
+    print(static_cast<const Sensor::Leash *>(v), os);
+    break;
+  case Sensor::Type::Light:
+    print(static_cast<const Sensor::Light *>(v), os);
+    break;
+  case Sensor::Type::Mob:
+    print(static_cast<const Sensor::Mob *>(v), os);
+    break;
+  case Sensor::Type::Nav:
+    print(static_cast<const Sensor::Nav *>(v), os);
+    break;
+  case Sensor::Type::Not:
+    print(static_cast<const Sensor::Not *>(v), os);
+    break;
+  case Sensor::Type::OnGround:
+    print(static_cast<const Sensor::OnGround *>(v), os);
+    break;
+  case Sensor::Type::Or:
+    print(static_cast<const Sensor::Or *>(v), os);
+    break;
+  case Sensor::Type::Path:
+    print(static_cast<const Sensor::Path *>(v), os);
+    break;
+  case Sensor::Type::Player:
+    print(static_cast<const Sensor::Player *>(v), os);
+    break;
+  case Sensor::Type::Random:
+    print(static_cast<const Sensor::Random *>(v), os);
+    break;
+  case Sensor::Type::ReadPosition:
+    print(static_cast<const Sensor::ReadPosition *>(v), os);
+    break;
+  case Sensor::Type::SearchRay:
+    print(static_cast<const Sensor::SearchRay *>(v), os);
+    break;
+  case Sensor::Type::Self:
+    print(static_cast<const Sensor::Self *>(v), os);
+    break;
+  case Sensor::Type::State:
+    print(static_cast<const Sensor::State *>(v), os);
+    break;
+  case Sensor::Type::Switch:
+    print(static_cast<const Sensor::Switch *>(v), os);
+    break;
+  case Sensor::Type::Target:
+    print(static_cast<const Sensor::Target *>(v), os);
+    break;
+  case Sensor::Type::Time:
+    print(static_cast<const Sensor::Time *>(v), os);
+    break;
+  case Sensor::Type::Timer:
+    print(static_cast<const Sensor::Timer *>(v), os);
+    break;
+  case Sensor::Type::ValueProviderWrapper:
+    print(static_cast<const Sensor::ValueProviderWrapper *>(v), os);
+    break;
+  case Sensor::Type::Weather:
+    print(static_cast<const Sensor::Weather *>(v), os);
+    break;
+  }
 }
 
-void print(const Sensor::AdjustPosition &v, std::ostream &os)
+void print(const Sensor::AdjustPosition *v, std::ostream &os)
 {
   os << "Sensor::AdjustPosition {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  sensor.type: ";
-  print(v.sensor.type, os);
-  os << "\n";
-  printVec("offset", v.offset, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  sensor:{ ";
+  if (v->sensor)
+    print(v->sensor.get(), os);
+  os << "}\n";
+  printVec("offset", v->offset, os);
   os << "}\n";
 }
 
-void print(const Sensor::Age &v, std::ostream &os)
+void print(const Sensor::Age *v, std::ostream &os)
 {
   os << "Sensor::Age {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printVec("ageRange", v.ageRange, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printVec("ageRange", v->ageRange, os);
   os << "}\n";
 }
 
-void print(const Sensor::Alarm &v, std::ostream &os)
+void print(const Sensor::Alarm *v, std::ostream &os)
 {
   os << "Sensor::Alarm {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  name: " << v.name << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  name: " << v->name << "\n";
   os << "  state: ";
-  print(v.state, os);
+  print(v->state, os);
   os << "\n";
-  printOpt("clear", v.clear, os);
+  printOpt("clear", v->clear, os);
   os << "}\n";
 }
 
-void print(const Sensor::And &v, std::ostream &os)
+void print(const Sensor::And *v, std::ostream &os)
 {
   os << "Sensor::And {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  sensors: [" << v.sensors.size() << " entries]\n";
-  printOpt("autoUnlockTargetSlot", v.autoUnlockTargetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  sensors: [" << v->sensors.size() << " entries]\n";
+  printOpt("autoUnlockTargetSlot", v->autoUnlockTargetSlot, os);
   os << "}\n";
 }
 
-void print(const Sensor::Animation &v, std::ostream &os)
+void print(const Sensor::Animation *v, std::ostream &os)
 {
   os << "Sensor::Animation {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "  slot: ";
-  print(v.slot, os);
+  print(v->slot, os);
   os << "\n";
-  os << "  animation: " << v.animation << "\n";
+  os << "  animation: " << v->animation << "\n";
   os << "}\n";
 }
 
-void print(const Sensor::Any &v, std::ostream &os)
+void print(const Sensor::Any *v, std::ostream &os)
 {
   os << "Sensor::Any {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::Beacon &v, std::ostream &os)
+void print(const Sensor::Beacon *v, std::ostream &os)
 {
   os << "Sensor::Beacon {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  message: " << v.message << "\n";
-  printOpt("range", v.range, os);
-  printOpt("targetSlot", v.targetSlot, os);
-  printOpt("consumeMessage", v.consumeMessage, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  message: " << v->message << "\n";
+  printOpt("range", v->range, os);
+  printOpt("targetSlot", v->targetSlot, os);
+  printOpt("consumeMessage", v->consumeMessage, os);
   os << "}\n";
 }
 
-void print(const Sensor::BlockChange &v, std::ostream &os)
+void print(const Sensor::BlockChange *v, std::ostream &os)
 {
   os << "Sensor::BlockChange {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  range: " << v.range << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  range: " << v->range << "\n";
   os << "  searchType: ";
-  print(v.searchType, os);
+  print(v->searchType, os);
   os << "\n";
-  printOpt("targetSlot", v.targetSlot, os);
-  os << "  blockSet: " << v.blockSet << "\n";
-  if (v.eventType)
+  printOpt("targetSlot", v->targetSlot, os);
+  os << "  blockSet: " << v->blockSet << "\n";
+  if (v->eventType)
   {
     os << "  eventType: ";
-    print(*v.eventType, os);
+    print(*v->eventType, os);
     os << "\n";
   }
   os << "}\n";
 }
 
-void print(const Sensor::BlockType &v, std::ostream &os)
+void print(const Sensor::BlockType *v, std::ostream &os)
 {
   os << "Sensor::BlockType {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  sensor.type: ";
-  print(v.sensor.type, os);
-  os << "\n";
-  os << "  blockSet: " << v.blockSet << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  sensor:{ ";
+  if (v->sensor)
+    print(v->sensor.get(), os);
+  os << "}\n";
+  os << "  blockSet: " << v->blockSet << "\n";
   os << "}\n";
 }
 
-void print(const Sensor::CanInteract &v, std::ostream &os)
+void print(const Sensor::CanInteract *v, std::ostream &os)
 {
   os << "Sensor::CanInteract {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  viewSector: " << v.viewSector << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  viewSector: " << v->viewSector << "\n";
   os << "  attitudes: [";
-  for (size_t i = 0; i < v.attitudes.size(); ++i)
+  for (size_t i = 0; i < v->attitudes.size(); ++i)
   {
     if (i)
       os << ", ";
-    print(v.attitudes[i], os);
+    print(v->attitudes[i], os);
   }
   os << "]\n}\n";
 }
 
-void print(const Sensor::CanPlaceBlock &v, std::ostream &os)
+void print(const Sensor::CanPlaceBlock *v, std::ostream &os)
 {
   os << "Sensor::CanPlaceBlock {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "  direction: ";
-  print(v.direction, os);
+  print(v->direction, os);
   os << "\n";
-  if (v.offset)
+  if (v->offset)
   {
     os << "  offset: ";
-    print(*v.offset, os);
+    print(*v->offset, os);
     os << "\n";
   }
-  printOpt("retryDelay", v.retryDelay, os);
-  printOpt("allowEmptyMaterials", v.allowEmptyMaterials, os);
+  printOpt("retryDelay", v->retryDelay, os);
+  printOpt("allowEmptyMaterials", v->allowEmptyMaterials, os);
   os << "}\n";
 }
 
-void print(const Sensor::CombatActionEvaluator &v, std::ostream &os)
+void print(const Sensor::CombatActionEvaluator *v, std::ostream &os)
 {
   os << "Sensor::CombatActionEvaluator {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  targetInRange: " << (v.targetInRange ? "true" : "false") << "\n";
-  printOpt("allowableDeviation", v.allowableDeviation, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  targetInRange: " << (v->targetInRange ? "true" : "false") << "\n";
+  printOpt("allowableDeviation", v->allowableDeviation, os);
   os << "}\n";
 }
 
-void print(const Sensor::Count &v, std::ostream &os)
+void print(const Sensor::Count *v, std::ostream &os)
 {
   os << "Sensor::Count {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printVec("count", v.count, os);
-  printVec("range", v.range, os);
-  printOpt("includeGroups", v.includeGroups, os);
-  printOpt("excludeGroups", v.excludeGroups, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printVec("count", v->count, os);
+  printVec("range", v->range, os);
+  printOpt("includeGroups", v->includeGroups, os);
+  printOpt("excludeGroups", v->excludeGroups, os);
   os << "}\n";
 }
 
-void print(const Sensor::Damage &v, std::ostream &os)
+void print(const Sensor::Damage *v, std::ostream &os)
 {
   os << "Sensor::Damage {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("combat", v.combat, os);
-  printOpt("friendly", v.friendly, os);
-  printOpt("drowning", v.drowning, os);
-  printOpt("environment", v.environment, os);
-  printOpt("other", v.other, os);
-  printOpt("targetSlot", v.targetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("combat", v->combat, os);
+  printOpt("friendly", v->friendly, os);
+  printOpt("drowning", v->drowning, os);
+  printOpt("environment", v->environment, os);
+  printOpt("other", v->other, os);
+  printOpt("targetSlot", v->targetSlot, os);
   os << "}\n";
 }
 
-void print(const Sensor::DroppedItem &v, std::ostream &os)
+void print(const Sensor::DroppedItem *v, std::ostream &os)
 {
   os << "Sensor::DroppedItem {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  range: " << v.range << "\n";
-  os << "  viewSector: " << v.viewSector << "\n";
-  printOpt("lineOfSight", v.lineOfSight, os);
-  printOpt("items", v.items, os);
-  if (v.attitudes)
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  range: " << v->range << "\n";
+  os << "  viewSector: " << v->viewSector << "\n";
+  printOpt("lineOfSight", v->lineOfSight, os);
+  printOpt("items", v->items, os);
+  if (v->attitudes)
   {
     os << "  attitudes: [";
-    for (size_t i = 0; i < v.attitudes->size(); ++i)
+    for (size_t i = 0; i < v->attitudes->size(); ++i)
     {
       if (i)
         os << ", ";
-      print((*v.attitudes)[i], os);
+      print((*v->attitudes)[i], os);
     }
     os << "]\n";
   }
   os << "}\n";
 }
 
-void print(const Sensor::EntityEvent &v, std::ostream &os)
+void print(const Sensor::EntityEvent *v, std::ostream &os)
 {
   os << "Sensor::EntityEvent {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  range: " << v.range << "\n";
-  if (v.searchType)
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  range: " << v->range << "\n";
+  if (v->searchType)
   {
     os << "  searchType: ";
-    print(*v.searchType, os);
+    print(*v->searchType, os);
     os << "\n";
   }
-  printOpt("targetSlot", v.targetSlot, os);
-  os << "  npcGroup: " << v.npcGroup << "\n";
+  printOpt("targetSlot", v->targetSlot, os);
+  os << "  npcGroup: " << v->npcGroup << "\n";
   os << "  eventType: ";
-  print(v.eventType, os);
+  print(v->eventType, os);
   os << "\n";
-  printOpt("flockOnly", v.flockOnly, os);
+  printOpt("flockOnly", v->flockOnly, os);
   os << "}\n";
 }
 
-void print(const Sensor::Flag &v, std::ostream &os)
+void print(const Sensor::Flag *v, std::ostream &os)
 {
   os << "Sensor::Flag {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  name: " << v.name << "\n";
-  printOpt("set", v.set, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  name: " << v->name << "\n";
+  printOpt("set", v->set, os);
   os << "}\n";
 }
 
-void print(const Sensor::FlockCombatDamage &v, std::ostream &os)
+void print(const Sensor::FlockCombatDamage *v, std::ostream &os)
 {
   os << "Sensor::FlockCombatDamage {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("leaderOnly", v.leaderOnly, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("leaderOnly", v->leaderOnly, os);
   os << "}\n";
 }
 
-void print(const Sensor::FlockLeader &v, std::ostream &os)
+void print(const Sensor::FlockLeader *v, std::ostream &os)
 {
   os << "Sensor::FlockLeader {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::HasHostileTargetMemory &v, std::ostream &os)
+void print(const Sensor::HasHostileTargetMemory *v, std::ostream &os)
 {
   os << "Sensor::HasHostileTargetMemory {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::HasInteracted &v, std::ostream &os)
+void print(const Sensor::HasInteracted *v, std::ostream &os)
 {
   os << "Sensor::HasInteracted {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::HasTask &v, std::ostream &os)
+void print(const Sensor::HasTask *v, std::ostream &os)
 {
   os << "Sensor::HasTask {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printVec("taskById", v.taskById, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printVec("taskById", v->taskById, os);
   os << "}\n";
 }
 
-void print(const Sensor::InAir &v, std::ostream &os)
+void print(const Sensor::InAir *v, std::ostream &os)
 {
   os << "Sensor::InAir {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::InWater &v, std::ostream &os)
+void print(const Sensor::InWater *v, std::ostream &os)
 {
   os << "Sensor::InWater {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::InflictedDamage &v, std::ostream &os)
+void print(const Sensor::InflictedDamage *v, std::ostream &os)
 {
   os << "Sensor::InflictedDamage {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  if (v.target)
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  if (v->target)
   {
     os << "  target: ";
-    print(*v.target, os);
+    print(*v->target, os);
     os << "\n";
   }
-  printOpt("friendlyFire", v.friendlyFire, os);
+  printOpt("friendlyFire", v->friendlyFire, os);
   os << "}\n";
 }
 
-void print(const Sensor::InteractionContext &v, std::ostream &os)
+void print(const Sensor::InteractionContext *v, std::ostream &os)
 {
   os << "Sensor::InteractionContext {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  context: " << v.context << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  context: " << v->context << "\n";
   os << "}\n";
 }
 
-void print(const Sensor::IsBackingAway &v, std::ostream &os)
+void print(const Sensor::IsBackingAway *v, std::ostream &os)
 {
   os << "Sensor::IsBackingAway {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::IsBusy &v, std::ostream &os)
+void print(const Sensor::IsBusy *v, std::ostream &os)
 {
   os << "Sensor::IsBusy {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::Kill &v, std::ostream &os)
+void print(const Sensor::Kill *v, std::ostream &os)
 {
   os << "Sensor::Kill {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("targetSlot", v.targetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("targetSlot", v->targetSlot, os);
   os << "}\n";
 }
 
-void print(const Sensor::Leash &v, std::ostream &os)
+void print(const Sensor::Leash *v, std::ostream &os)
 {
   os << "Sensor::Leash {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  range: " << v.range << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  range: " << v->range << "\n";
   os << "}\n";
 }
 
-void print(const Sensor::Light &v, std::ostream &os)
+void print(const Sensor::Light *v, std::ostream &os)
 {
   os << "Sensor::Light {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("lightRange", v.lightRange, os);
-  printOpt("skyLightRange", v.skyLightRange, os);
-  printOpt("sunlightRange", v.sunlightRange, os);
-  printOpt("redLightRange", v.redLightRange, os);
-  printOpt("greenLightRange", v.greenLightRange, os);
-  printOpt("blueLightRange", v.blueLightRange, os);
-  printOpt("targetSlot", v.targetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("lightRange", v->lightRange, os);
+  printOpt("skyLightRange", v->skyLightRange, os);
+  printOpt("sunlightRange", v->sunlightRange, os);
+  printOpt("redLightRange", v->redLightRange, os);
+  printOpt("greenLightRange", v->greenLightRange, os);
+  printOpt("blueLightRange", v->blueLightRange, os);
+  printOpt("targetSlot", v->targetSlot, os);
   os << "}\n";
 }
 
-void print(const Sensor::Mob &v, std::ostream &os)
+void print(const Sensor::Mob *v, std::ostream &os)
 {
   os << "Sensor::Mob {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("minRange", v.minRange, os);
-  os << "  range: " << v.range << "\n";
-  printOpt("lockedOnTarget", v.lockedOnTarget, os);
-  printOpt("lockedTargetSlot", v.lockedTargetSlot, os);
-  printOpt("autoUnlockTarget", v.autoUnlockTarget, os);
-  printOpt("onlyLockedTarget", v.onlyLockedTarget, os);
-  printOpt("ignoredTargetSlot", v.ignoredTargetSlot, os);
-  printOpt("useProjectedDistance", v.useProjectedDistance, os);
-  printOpt("getPlayers", v.getPlayers, os);
-  printOpt("getNPCs", v.getNPCs, os);
-  printOpt("excludeOwnType", v.excludeOwnType, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("minRange", v->minRange, os);
+  os << "  range: " << v->range << "\n";
+  printOpt("lockedOnTarget", v->lockedOnTarget, os);
+  printOpt("lockedTargetSlot", v->lockedTargetSlot, os);
+  printOpt("autoUnlockTarget", v->autoUnlockTarget, os);
+  printOpt("onlyLockedTarget", v->onlyLockedTarget, os);
+  printOpt("ignoredTargetSlot", v->ignoredTargetSlot, os);
+  printOpt("useProjectedDistance", v->useProjectedDistance, os);
+  printOpt("getPlayers", v->getPlayers, os);
+  printOpt("getNPCs", v->getNPCs, os);
+  printOpt("excludeOwnType", v->excludeOwnType, os);
   os << "}\n";
 }
 
-void print(const Sensor::Nav &v, std::ostream &os)
+void print(const Sensor::Nav *v, std::ostream &os)
 {
   os << "Sensor::Nav {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  if (v.navStates)
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  if (v->navStates)
   {
     os << "  navStates: [";
-    for (size_t i = 0; i < v.navStates->size(); ++i)
+    for (size_t i = 0; i < v->navStates->size(); ++i)
     {
       if (i)
         os << ", ";
-      print((*v.navStates)[i], os);
+      print((*v->navStates)[i], os);
     }
     os << "]\n";
   }
-  printOpt("throttleDuration", v.throttleDuration, os);
-  printOpt("targetDelta", v.targetDelta, os);
+  printOpt("throttleDuration", v->throttleDuration, os);
+  printOpt("targetDelta", v->targetDelta, os);
   os << "}\n";
 }
 
-void print(const Sensor::Not &v, std::ostream &os)
+void print(const Sensor::Not *v, std::ostream &os)
 {
   os << "Sensor::Not {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  sensor.type: ";
-  print(v.sensor.type, os);
-  os << "\n";
-  printOpt("useTargetSlot", v.useTargetSlot, os);
-  printOpt("autoUnlockTargetSlot", v.autoUnlockTargetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  sensor:{ ";
+  if (v->sensor)
+    print(v->sensor.get(), os);
+  os << "}\n";
+  printOpt("useTargetSlot", v->useTargetSlot, os);
+  printOpt("autoUnlockTargetSlot", v->autoUnlockTargetSlot, os);
   os << "}\n";
 }
 
-void print(const Sensor::OnGround &v, std::ostream &os)
+void print(const Sensor::OnGround *v, std::ostream &os)
 {
   os << "Sensor::OnGround {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::Or &v, std::ostream &os)
+void print(const Sensor::Or *v, std::ostream &os)
 {
   os << "Sensor::Or {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  sensors: [" << v.sensors.size() << " entries]\n";
-  printOpt("autoUnlockTargetSlot", v.autoUnlockTargetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  sensors: [" << v->sensors.size() << " entries]\n";
+  printOpt("autoUnlockTargetSlot", v->autoUnlockTargetSlot, os);
   os << "}\n";
 }
 
-void print(const Sensor::Path &v, std::ostream &os)
+void print(const Sensor::Path *v, std::ostream &os)
 {
   os << "Sensor::Path {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("path", v.path, os);
-  printOpt("range", v.range, os);
-  if (v.pathType)
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("path", v->path, os);
+  printOpt("range", v->range, os);
+  if (v->pathType)
   {
     os << "  pathType: ";
-    print(*v.pathType, os);
+    print(*v->pathType, os);
     os << "\n";
   }
   os << "}\n";
 }
 
-void print(const Sensor::Player &v, std::ostream &os)
+void print(const Sensor::Player *v, std::ostream &os)
 {
   os << "Sensor::Player {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("minRange", v.minRange, os);
-  os << "  range: " << v.range << "\n";
-  printOpt("lockedOnTarget", v.lockedOnTarget, os);
-  printOpt("lockedTargetSlot", v.lockedTargetSlot, os);
-  printOpt("autoUnlockTarget", v.autoUnlockTarget, os);
-  printOpt("onlyLockedTarget", v.onlyLockedTarget, os);
-  printOpt("ignoredTargetSlot", v.ignoredTargetSlot, os);
-  printOpt("useProjectedDistance", v.useProjectedDistance, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("minRange", v->minRange, os);
+  os << "  range: " << v->range << "\n";
+  printOpt("lockedOnTarget", v->lockedOnTarget, os);
+  printOpt("lockedTargetSlot", v->lockedTargetSlot, os);
+  printOpt("autoUnlockTarget", v->autoUnlockTarget, os);
+  printOpt("onlyLockedTarget", v->onlyLockedTarget, os);
+  printOpt("ignoredTargetSlot", v->ignoredTargetSlot, os);
+  printOpt("useProjectedDistance", v->useProjectedDistance, os);
   os << "}\n";
 }
 
-void print(const Sensor::Random &v, std::ostream &os)
+void print(const Sensor::Random *v, std::ostream &os)
 {
   os << "Sensor::Random {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printVec("trueDurationRange", v.trueDurationRange, os);
-  printVec("falseDurationRange", v.falseDurationRange, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printVec("trueDurationRange", v->trueDurationRange, os);
+  printVec("falseDurationRange", v->falseDurationRange, os);
   os << "}\n";
 }
 
-void print(const Sensor::ReadPosition &v, std::ostream &os)
+void print(const Sensor::ReadPosition *v, std::ostream &os)
 {
   os << "Sensor::ReadPosition {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  slot: " << v.slot << "\n";
-  printOpt("minRange", v.minRange, os);
-  os << "  range: " << v.range << "\n";
-  printOpt("useMarkedTarget", v.useMarkedTarget, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  slot: " << v->slot << "\n";
+  printOpt("minRange", v->minRange, os);
+  os << "  range: " << v->range << "\n";
+  printOpt("useMarkedTarget", v->useMarkedTarget, os);
   os << "}\n";
 }
 
-void print(const Sensor::SearchRay &v, std::ostream &os)
+void print(const Sensor::SearchRay *v, std::ostream &os)
 {
   os << "Sensor::SearchRay {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  name: " << v.name << "\n";
-  os << "  angle: " << v.angle << "\n";
-  os << "  range: " << v.range << "\n";
-  os << "  blocks: " << v.blocks << "\n";
-  printOpt("minRetestAngle", v.minRetestAngle, os);
-  printOpt("minRetestMove", v.minRetestMove, os);
-  printOpt("throttleTime", v.throttleTime, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  name: " << v->name << "\n";
+  os << "  angle: " << v->angle << "\n";
+  os << "  range: " << v->range << "\n";
+  os << "  blocks: " << v->blocks << "\n";
+  printOpt("minRetestAngle", v->minRetestAngle, os);
+  printOpt("minRetestMove", v->minRetestMove, os);
+  printOpt("throttleTime", v->throttleTime, os);
   os << "}\n";
 }
 
-void print(const Sensor::Self &v, std::ostream &os)
+void print(const Sensor::Self *v, std::ostream &os)
 {
   os << "Sensor::Self {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Sensor::State &v, std::ostream &os)
+void print(const Sensor::State *v, std::ostream &os)
 {
   os << "Sensor::State {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  state: " << v.state << "\n";
-  printOpt("ignoreMissingSetState", v.ignoreMissingSetState, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  state: " << v->state << "\n";
+  printOpt("ignoreMissingSetState", v->ignoreMissingSetState, os);
   os << "}\n";
 }
 
-void print(const Sensor::Switch &v, std::ostream &os)
+void print(const Sensor::Switch *v, std::ostream &os)
 {
   os << "Sensor::Switch {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  switchCheck: " << (v.switchCheck ? "true" : "false") << "\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  switchCheck: " << (v->switchCheck ? "true" : "false") << "\n";
   os << "}\n";
 }
 
-void print(const Sensor::Target &v, std::ostream &os)
+void print(const Sensor::Target *v, std::ostream &os)
 {
   os << "Sensor::Target {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("targetSlot", v.targetSlot, os);
-  os << "  range: " << v.range << "\n";
-  printOpt("autoUnlockTarget", v.autoUnlockTarget, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("targetSlot", v->targetSlot, os);
+  os << "  range: " << v->range << "\n";
+  printOpt("autoUnlockTarget", v->autoUnlockTarget, os);
   os << "}\n";
 }
 
-void print(const Sensor::Time &v, std::ostream &os)
+void print(const Sensor::Time *v, std::ostream &os)
 {
   os << "Sensor::Time {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printVec("period", v.period, os);
-  printOpt("checkDay", v.checkDay, os);
-  printOpt("checkYear", v.checkYear, os);
-  printOpt("scaleDayTimeRange", v.scaleDayTimeRange, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printVec("period", v->period, os);
+  printOpt("checkDay", v->checkDay, os);
+  printOpt("checkYear", v->checkYear, os);
+  printOpt("scaleDayTimeRange", v->scaleDayTimeRange, os);
   os << "}\n";
 }
 
-void print(const Sensor::Timer &v, std::ostream &os)
+void print(const Sensor::Timer *v, std::ostream &os)
 {
   os << "Sensor::Timer {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  os << "  name: " << v.name << "\n";
-  if (v.state)
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  name: " << v->name << "\n";
+  if (v->state)
   {
     os << "  state: ";
-    print(*v.state, os);
+    print(*v->state, os);
     os << "\n";
   }
-  printOpt("timeRemainingRange", v.timeRemainingRange, os);
+  printOpt("timeRemainingRange", v->timeRemainingRange, os);
   os << "}\n";
 }
 
-void print(const Sensor::ValueProviderWrapper &v, std::ostream &os)
+void print(const Sensor::ValueProviderWrapper *v, std::ostream &os)
 {
   os << "Sensor::ValueProviderWrapper {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printOpt("passValues", v.passValues, os);
-  os << "  sensor.type: ";
-  print(v.sensor.type, os);
-  os << "\n";
-  os << "  valueToParameterMappings: [" << v.valueToParameterMappings.size() << " entries]\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printOpt("passValues", v->passValues, os);
+  os << "  sensor:{ ";
+  if (v->sensor)
+    print(v->sensor.get(), os);
+  os << "}\n";
+  os << "  valueToParameterMappings: [" << v->valueToParameterMappings.size() << " entries]\n";
   os << "}\n";
 }
 
-void print(const Sensor::Weather &v, std::ostream &os)
+void print(const Sensor::Weather *v, std::ostream &os)
 {
   os << "Sensor::Weather {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
-  printVec("weathers", v.weathers, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  printVec("weathers", v->weathers, os);
   os << "}\n";
 }
 
@@ -1796,568 +1947,756 @@ void print(Action::Inventory::OperationFlag v, std::ostream &os)
   }
 }
 
-void print(const Action::Action &v, std::ostream &os)
+void print(const Action::Action *v, std::ostream &os)
 {
-  os << "Action { type: ";
-  print(v.type, os);
-  os << " }\n";
+  if (!v)
+    return;
+
+  switch (v->type)
+  {
+  case Action::Type::AddToHostileTargetMemory:
+    print(static_cast<const Action::AddToHostileTargetMemory *>(v), os);
+    break;
+  case Action::Type::Appearance:
+    print(static_cast<const Action::Appearance *>(v), os);
+    break;
+  case Action::Type::ApplyEntityEffect:
+    print(static_cast<const Action::ApplyEntityEffect *>(v), os);
+    break;
+  case Action::Type::CombatAbility:
+    print(static_cast<const Action::CombatAbility *>(v), os);
+    break;
+  case Action::Type::CompleteTask:
+    print(static_cast<const Action::CompleteTask *>(v), os);
+    break;
+  case Action::Type::Crouch:
+    print(static_cast<const Action::Crouch *>(v), os);
+    break;
+  case Action::Type::DelayDespawn:
+    print(static_cast<const Action::DelayDespawn *>(v), os);
+    break;
+  case Action::Type::Despawn:
+    print(static_cast<const Action::Despawn *>(v), os);
+    break;
+  case Action::Type::Die:
+    print(static_cast<const Action::Die *>(v), os);
+    break;
+  case Action::Type::DisplayName:
+    print(static_cast<const Action::DisplayName *>(v), os);
+    break;
+  case Action::Type::DropItem:
+    print(static_cast<const Action::DropItem *>(v), os);
+    break;
+  case Action::Type::FlockState:
+    print(static_cast<const Action::FlockState *>(v), os);
+    break;
+  case Action::Type::FlockTarget:
+    print(static_cast<const Action::FlockTarget *>(v), os);
+    break;
+  case Action::Type::IgnoreForAvoidance:
+    print(static_cast<const Action::IgnoreForAvoidance *>(v), os);
+    break;
+  case Action::Type::Inventory:
+    print(static_cast<const Action::Inventory *>(v), os);
+    break;
+  case Action::Type::JoinFlock:
+    print(static_cast<const Action::JoinFlock *>(v), os);
+    break;
+  case Action::Type::LeaveFlock:
+    print(static_cast<const Action::LeaveFlock *>(v), os);
+    break;
+  case Action::Type::LockOnInteractionTarget:
+    print(static_cast<const Action::LockOnInteractionTarget *>(v), os);
+    break;
+  case Action::Type::Log:
+    print(static_cast<const Action::Log *>(v), os);
+    break;
+  case Action::Type::ModelAttachment:
+    print(static_cast<const Action::ModelAttachment *>(v), os);
+    break;
+  case Action::Type::Mount:
+    print(static_cast<const Action::Mount *>(v), os);
+    break;
+  case Action::Type::Nothing:
+    print(static_cast<const Action::Nothing *>(v), os);
+    break;
+  case Action::Type::Notify:
+    print(static_cast<const Action::Notify *>(v), os);
+    break;
+  case Action::Type::OpenBarterShop:
+    print(static_cast<const Action::OpenBarterShop *>(v), os);
+    break;
+  case Action::Type::OpenShop:
+    print(static_cast<const Action::OpenShop *>(v), os);
+    break;
+  case Action::Type::OverrideAltitude:
+    print(static_cast<const Action::OverrideAltitude *>(v), os);
+    break;
+  case Action::Type::OverrideAttitude:
+    print(static_cast<const Action::OverrideAttitude *>(v), os);
+    break;
+  case Action::Type::ParentState:
+    print(static_cast<const Action::ParentState *>(v), os);
+    break;
+  case Action::Type::PickUpItem:
+    print(static_cast<const Action::PickUpItem *>(v), os);
+    break;
+  case Action::Type::PlaceBlock:
+    print(static_cast<const Action::PlaceBlock *>(v), os);
+    break;
+  case Action::Type::PlaySound:
+    print(static_cast<const Action::PlaySound *>(v), os);
+    break;
+  case Action::Type::Random:
+    print(static_cast<const Action::Random *>(v), os);
+    break;
+  case Action::Type::RecomputePath:
+    print(static_cast<const Action::RecomputePath *>(v), os);
+    break;
+  case Action::Type::ReleaseTarget:
+    print(static_cast<const Action::ReleaseTarget *>(v), os);
+    break;
+  case Action::Type::Remove:
+    print(static_cast<const Action::Remove *>(v), os);
+    break;
+  case Action::Type::ResetBlockSensors:
+    print(static_cast<const Action::ResetBlockSensors *>(v), os);
+    break;
+  case Action::Type::ResetInstructions:
+    print(static_cast<const Action::ResetInstructions *>(v), os);
+    break;
+  case Action::Type::ResetPath:
+    print(static_cast<const Action::ResetPath *>(v), os);
+    break;
+  case Action::Type::ResetSearchRays:
+    print(static_cast<const Action::ResetSearchRays *>(v), os);
+    break;
+  case Action::Type::Role:
+    print(static_cast<const Action::Role *>(v), os);
+    break;
+  case Action::Type::Sequence:
+    print(static_cast<const Action::Sequence *>(v), os);
+    break;
+  case Action::Type::SetAlarm:
+    print(static_cast<const Action::SetAlarm *>(v), os);
+    break;
+  case Action::Type::SetBlockToPlace:
+    print(static_cast<const Action::SetBlockToPlace *>(v), os);
+    break;
+  case Action::Type::SetFlag:
+    print(static_cast<const Action::SetFlag *>(v), os);
+    break;
+  case Action::Type::SetInteractable:
+    print(static_cast<const Action::SetInteractable *>(v), os);
+    break;
+  case Action::Type::SetLeashPosition:
+    print(static_cast<const Action::SetLeashPosition *>(v), os);
+    break;
+  case Action::Type::SetMarkedTarget:
+    print(static_cast<const Action::SetMarkedTarget *>(v), os);
+    break;
+  case Action::Type::SetStat:
+    print(static_cast<const Action::SetStat *>(v), os);
+    break;
+  case Action::Type::StartObjective:
+    print(static_cast<const Action::StartObjective *>(v), os);
+    break;
+  case Action::Type::State:
+    print(static_cast<const Action::State *>(v), os);
+    break;
+  case Action::Type::StorePosition:
+    print(static_cast<const Action::StorePosition *>(v), os);
+    break;
+  case Action::Type::Timeout:
+    print(static_cast<const Action::Timeout *>(v), os);
+    break;
+  case Action::Type::TimerContinue:
+    print(static_cast<const Action::TimerContinue *>(v), os);
+    break;
+  case Action::Type::TimerModify:
+    print(static_cast<const Action::TimerModify *>(v), os);
+    break;
+  case Action::Type::TimerPause:
+    print(static_cast<const Action::TimerPause *>(v), os);
+    break;
+  case Action::Type::TimerRestart:
+    print(static_cast<const Action::TimerRestart *>(v), os);
+    break;
+  case Action::Type::TimerStart:
+    print(static_cast<const Action::TimerStart *>(v), os);
+    break;
+  case Action::Type::TimerStop:
+    print(static_cast<const Action::TimerStop *>(v), os);
+    break;
+  case Action::Type::ToggleStateEvaluator:
+    print(static_cast<const Action::ToggleStateEvaluator *>(v), os);
+    break;
+  case Action::Type::TriggerSpawnBeacon:
+    print(static_cast<const Action::TriggerSpawnBeacon *>(v), os);
+    break;
+  case Action::Type::TriggerSpawners:
+    print(static_cast<const Action::TriggerSpawners *>(v), os);
+    break;
+  }
 }
 
-void print(const Action::WeightedAction &v, std::ostream &os)
+void print(const Action::WeightedAction *v, std::ostream &os)
 {
   os << "WeightedAction {\n";
-  os << "  action.type: ";
-  print(v.action.type, os);
-  os << "\n";
-  os << "  weight: " << v.weight << "\n";
+  os << "  action:{ ";
+  if (v->action)
+    print(v->action.get(), os);
+  os << "}\n";
+  os << "  weight: " << v->weight << "\n";
   os << "}\n";
 }
 
-void print(const Action::ActionList &v, std::ostream &os)
+void print(const Action::ActionList *v, std::ostream &os)
 {
-  os << "ActionList { actions: [" << v.actions.size() << " entries] }\n";
+  os << "ActionList { actions: [" << v->actions.size() << " entries] }\n";
 }
 
-void print(const Action::AddToHostileTargetMemory &v, std::ostream &os)
+void print(const Action::AddToHostileTargetMemory *v, std::ostream &os)
 {
   os << "Action::AddToHostileTargetMemory {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "}\n";
 }
 
-void print(const Action::Appearance &v, std::ostream &os)
+void print(const Action::Appearance *v, std::ostream &os)
 {
   os << "Action::Appearance {\n";
-  printOpt("once", v.once, os);
-  os << "  appearance: " << v.appearance << "\n";
+  printOpt("once", v->once, os);
+  os << "  appearance: " << v->appearance << "\n";
   os << "}\n";
 }
 
-void print(const Action::ApplyEntityEffect &v, std::ostream &os)
+void print(const Action::ApplyEntityEffect *v, std::ostream &os)
 {
   os << "Action::ApplyEntityEffect {\n";
-  printOpt("once", v.once, os);
-  os << "  entityEffect: " << v.entityEffect << "\n";
-  printOpt("useTarget", v.useTarget, os);
+  printOpt("once", v->once, os);
+  os << "  entityEffect: " << v->entityEffect << "\n";
+  printOpt("useTarget", v->useTarget, os);
   os << "}\n";
 }
 
-void print(const Action::CombatAbility &v, std::ostream &os)
+void print(const Action::CombatAbility *v, std::ostream &os)
 {
   os << "Action::CombatAbility {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "}\n";
 }
 
-void print(const Action::CompleteTask &v, std::ostream &os)
+void print(const Action::CompleteTask *v, std::ostream &os)
 {
   os << "Action::CompleteTask {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "  slot: ";
-  print(v.slot, os);
+  print(v->slot, os);
   os << "\n";
-  printOpt("animation", v.animation, os);
-  printOpt("playAnimation", v.playAnimation, os);
+  printOpt("animation", v->animation, os);
+  printOpt("playAnimation", v->playAnimation, os);
   os << "}\n";
 }
 
-void print(const Action::Crouch &v, std::ostream &os)
+void print(const Action::Crouch *v, std::ostream &os)
 {
   os << "Action::Crouch {\n";
-  printOpt("once", v.once, os);
-  printOpt("crouch", v.crouch, os);
+  printOpt("once", v->once, os);
+  printOpt("crouch", v->crouch, os);
   os << "}\n";
 }
 
-void print(const Action::DelayDespawn &v, std::ostream &os)
+void print(const Action::DelayDespawn *v, std::ostream &os)
 {
   os << "Action::DelayDespawn {\n";
-  printOpt("once", v.once, os);
-  os << "  time: " << v.time << "\n";
-  printOpt("shorten", v.shorten, os);
+  printOpt("once", v->once, os);
+  os << "  time: " << v->time << "\n";
+  printOpt("shorten", v->shorten, os);
   os << "}\n";
 }
 
-void print(const Action::Despawn &v, std::ostream &os)
+void print(const Action::Despawn *v, std::ostream &os)
 {
   os << "Action::Despawn {\n";
-  printOpt("once", v.once, os);
-  printOpt("force", v.force, os);
+  printOpt("once", v->once, os);
+  printOpt("force", v->force, os);
   os << "}\n";
 }
 
-void print(const Action::Die &v, std::ostream &os)
+void print(const Action::Die *v, std::ostream &os)
 {
   os << "Action::Die {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "}\n";
 }
 
-void print(const Action::DisplayName &v, std::ostream &os)
+void print(const Action::DisplayName *v, std::ostream &os)
 {
   os << "Action::DisplayName {\n";
-  printOpt("once", v.once, os);
-  os << "  displayName: " << v.displayName << "\n";
+  printOpt("once", v->once, os);
+  os << "  displayName: " << v->displayName << "\n";
   os << "}\n";
 }
 
-void print(const Action::DropItem &v, std::ostream &os)
+void print(const Action::DropItem *v, std::ostream &os)
 {
   os << "Action::DropItem {\n";
-  printOpt("once", v.once, os);
-  printOpt("delay", v.delay, os);
-  printOpt("item", v.item, os);
-  printOpt("dropList", v.dropList, os);
-  printOpt("throwSpeed", v.throwSpeed, os);
-  printOpt("distance", v.distance, os);
-  printOpt("dropSector", v.dropSector, os);
-  printOpt("pitchHigh", v.pitchHigh, os);
+  printOpt("once", v->once, os);
+  printOpt("delay", v->delay, os);
+  printOpt("item", v->item, os);
+  printOpt("dropList", v->dropList, os);
+  printOpt("throwSpeed", v->throwSpeed, os);
+  printOpt("distance", v->distance, os);
+  printOpt("dropSector", v->dropSector, os);
+  printOpt("pitchHigh", v->pitchHigh, os);
   os << "}\n";
 }
 
-void print(const Action::FlockState &v, std::ostream &os)
+void print(const Action::FlockState *v, std::ostream &os)
 {
   os << "Action::FlockState {\n";
-  printOpt("once", v.once, os);
-  os << "  state: " << v.state << "\n";
+  printOpt("once", v->once, os);
+  os << "  state: " << v->state << "\n";
   os << "}\n";
 }
 
-void print(const Action::FlockTarget &v, std::ostream &os)
+void print(const Action::FlockTarget *v, std::ostream &os)
 {
   os << "Action::FlockTarget {\n";
-  printOpt("once", v.once, os);
-  printOpt("clear", v.clear, os);
-  printOpt("targetSlot", v.targetSlot, os);
+  printOpt("once", v->once, os);
+  printOpt("clear", v->clear, os);
+  printOpt("targetSlot", v->targetSlot, os);
   os << "}\n";
 }
 
-void print(const Action::IgnoreForAvoidance &v, std::ostream &os)
+void print(const Action::IgnoreForAvoidance *v, std::ostream &os)
 {
   os << "Action::IgnoreForAvoidance {\n";
-  printOpt("once", v.once, os);
-  os << "  targetSlot: " << v.targetSlot << "\n";
+  printOpt("once", v->once, os);
+  os << "  targetSlot: " << v->targetSlot << "\n";
   os << "}\n";
 }
 
-void print(const Action::Inventory &v, std::ostream &os)
+void print(const Action::Inventory *v, std::ostream &os)
 {
   os << "Action::Inventory {\n";
-  printOpt("once", v.once, os);
-  if (v.operation)
+  printOpt("once", v->once, os);
+  if (v->operation)
   {
     os << "  operation: ";
-    print(*v.operation, os);
+    print(*v->operation, os);
     os << "\n";
   }
-  printOpt("count", v.count, os);
-  printOpt("item", v.item, os);
-  printOpt("useTarget", v.useTarget, os);
-  printOpt("slot", v.slot, os);
+  printOpt("count", v->count, os);
+  printOpt("item", v->item, os);
+  printOpt("useTarget", v->useTarget, os);
+  printOpt("slot", v->slot, os);
   os << "}\n";
 }
 
-void print(const Action::JoinFlock &v, std::ostream &os)
+void print(const Action::JoinFlock *v, std::ostream &os)
 {
   os << "Action::JoinFlock {\n";
-  printOpt("once", v.once, os);
-  printOpt("forceJoin", v.forceJoin, os);
+  printOpt("once", v->once, os);
+  printOpt("forceJoin", v->forceJoin, os);
   os << "}\n";
 }
 
-void print(const Action::LeaveFlock &v, std::ostream &os)
+void print(const Action::LeaveFlock *v, std::ostream &os)
 {
   os << "Action::LeaveFlock {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "}\n";
 }
 
-void print(const Action::LockOnInteractionTarget &v, std::ostream &os)
+void print(const Action::LockOnInteractionTarget *v, std::ostream &os)
 {
   os << "Action::LockOnInteractionTarget {\n";
-  printOpt("once", v.once, os);
-  os << "  targetSlot: " << v.targetSlot << "\n";
+  printOpt("once", v->once, os);
+  os << "  targetSlot: " << v->targetSlot << "\n";
   os << "}\n";
 }
 
-void print(const Action::Log &v, std::ostream &os)
+void print(const Action::Log *v, std::ostream &os)
 {
   os << "Action::Log {\n";
-  printOpt("once", v.once, os);
-  os << "  message: " << v.message << "\n";
+  printOpt("once", v->once, os);
+  os << "  message: " << v->message << "\n";
   os << "}\n";
 }
 
-void print(const Action::ModelAttachment &v, std::ostream &os)
+void print(const Action::ModelAttachment *v, std::ostream &os)
 {
   os << "Action::ModelAttachment {\n";
-  printOpt("once", v.once, os);
-  os << "  slot: " << v.slot << "\n";
-  os << "  attachment: " << v.attachment << "\n";
+  printOpt("once", v->once, os);
+  os << "  slot: " << v->slot << "\n";
+  os << "  attachment: " << v->attachment << "\n";
   os << "}\n";
 }
 
-void print(const Action::Mount &v, std::ostream &os)
+void print(const Action::Mount *v, std::ostream &os)
 {
   os << "Action::Mount {\n";
-  printOpt("once", v.once, os);
-  os << "  anchorX: " << v.anchorX << "\n";
-  os << "  anchorY: " << v.anchorY << "\n";
-  os << "  anchorZ: " << v.anchorZ << "\n";
-  os << "  movementConfig: " << v.movementConfig << "\n";
+  printOpt("once", v->once, os);
+  os << "  anchorX: " << v->anchorX << "\n";
+  os << "  anchorY: " << v->anchorY << "\n";
+  os << "  anchorZ: " << v->anchorZ << "\n";
+  os << "  movementConfig: " << v->movementConfig << "\n";
   os << "}\n";
 }
 
-void print(const Action::Nothing &, std::ostream &os)
+void print(const Action::Nothing *, std::ostream &os)
 {
   os << "Action::Nothing {}\n";
 }
 
-void print(const Action::Notify &v, std::ostream &os)
+void print(const Action::Notify *v, std::ostream &os)
 {
   os << "Action::Notify {\n";
-  printOpt("once", v.once, os);
-  os << "  message: " << v.message << "\n";
-  os << "  slot: " << v.slot << "\n";
+  printOpt("once", v->once, os);
+  os << "  message: " << v->message << "\n";
+  os << "  slot: " << v->slot << "\n";
   os << "}\n";
 }
 
-void print(const Action::OpenBarterShop &v, std::ostream &os)
+void print(const Action::OpenBarterShop *v, std::ostream &os)
 {
   os << "Action::OpenBarterShop {\n";
-  printOpt("once", v.once, os);
-  os << "  shop: " << v.shop << "\n";
+  printOpt("once", v->once, os);
+  os << "  shop: " << v->shop << "\n";
   os << "}\n";
 }
 
-void print(const Action::OpenShop &v, std::ostream &os)
+void print(const Action::OpenShop *v, std::ostream &os)
 {
   os << "Action::OpenShop {\n";
-  printOpt("once", v.once, os);
-  os << "  shop: " << v.shop << "\n";
+  printOpt("once", v->once, os);
+  os << "  shop: " << v->shop << "\n";
   os << "}\n";
 }
 
-void print(const Action::OverrideAltitude &v, std::ostream &os)
+void print(const Action::OverrideAltitude *v, std::ostream &os)
 {
   os << "Action::OverrideAltitude {\n";
-  printOpt("once", v.once, os);
-  printVec("desiredAltitudeRange", v.desiredAltitudeRange, os);
+  printOpt("once", v->once, os);
+  printVec("desiredAltitudeRange", v->desiredAltitudeRange, os);
   os << "}\n";
 }
 
-void print(const Action::OverrideAttitude &v, std::ostream &os)
+void print(const Action::OverrideAttitude *v, std::ostream &os)
 {
   os << "Action::OverrideAttitude {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "  attitude: ";
-  print(v.attitude, os);
+  print(v->attitude, os);
   os << "\n";
-  os << "  duration: " << v.duration << "\n";
+  os << "  duration: " << v->duration << "\n";
   os << "}\n";
 }
 
-void print(const Action::ParentState &v, std::ostream &os)
+void print(const Action::ParentState *v, std::ostream &os)
 {
   os << "Action::ParentState {\n";
-  printOpt("once", v.once, os);
-  os << "  state: " << v.state << "\n";
+  printOpt("once", v->once, os);
+  os << "  state: " << v->state << "\n";
   os << "}\n";
 }
 
-void print(const Action::PickUpItem &v, std::ostream &os)
+void print(const Action::PickUpItem *v, std::ostream &os)
 {
   os << "Action::PickUpItem {\n";
-  printOpt("once", v.once, os);
-  printOpt("delay", v.delay, os);
-  os << "  range: " << v.range << "\n";
-  printOpt("hoover", v.hoover, os);
-  printVec("items", v.items, os);
+  printOpt("once", v->once, os);
+  printOpt("delay", v->delay, os);
+  os << "  range: " << v->range << "\n";
+  printOpt("hoover", v->hoover, os);
+  printVec("items", v->items, os);
   os << "}\n";
 }
 
-void print(const Action::PlaceBlock &v, std::ostream &os)
+void print(const Action::PlaceBlock *v, std::ostream &os)
 {
   os << "Action::PlaceBlock {\n";
-  printOpt("once", v.once, os);
-  os << "  range: " << v.range << "\n";
-  printOpt("allowEmptyMaterials", v.allowEmptyMaterials, os);
+  printOpt("once", v->once, os);
+  os << "  range: " << v->range << "\n";
+  printOpt("allowEmptyMaterials", v->allowEmptyMaterials, os);
   os << "}\n";
 }
 
-void print(const Action::PlaySound &v, std::ostream &os)
+void print(const Action::PlaySound *v, std::ostream &os)
 {
   os << "Action::PlaySound {\n";
-  printOpt("once", v.once, os);
-  os << "  soundEventId: " << v.soundEventId << "\n";
+  printOpt("once", v->once, os);
+  os << "  soundEventId: " << v->soundEventId << "\n";
   os << "}\n";
 }
 
-void print(const Action::Random &v, std::ostream &os)
+void print(const Action::Random *v, std::ostream &os)
 {
   os << "Action::Random {\n";
-  printOpt("once", v.once, os);
-  os << "  actions: [" << v.actions.size() << " entries]\n";
+  printOpt("once", v->once, os);
+  os << "  actions: [" << v->actions.size() << " entries]\n";
   os << "}\n";
 }
 
-void print(const Action::RecomputePath &v, std::ostream &os)
+void print(const Action::RecomputePath *v, std::ostream &os)
 {
   os << "Action::RecomputePath {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "}\n";
 }
 
-void print(const Action::ReleaseTarget &v, std::ostream &os)
+void print(const Action::ReleaseTarget *v, std::ostream &os)
 {
   os << "Action::ReleaseTarget {\n";
-  printOpt("once", v.once, os);
-  os << "  targetSlot: " << v.targetSlot << "\n";
+  printOpt("once", v->once, os);
+  os << "  targetSlot: " << v->targetSlot << "\n";
   os << "}\n";
 }
 
-void print(const Action::Remove &v, std::ostream &os)
+void print(const Action::Remove *v, std::ostream &os)
 {
   os << "Action::Remove {\n";
-  printOpt("once", v.once, os);
-  printOpt("useTarget", v.useTarget, os);
+  printOpt("once", v->once, os);
+  printOpt("useTarget", v->useTarget, os);
   os << "}\n";
 }
 
-void print(const Action::ResetBlockSensors &v, std::ostream &os)
+void print(const Action::ResetBlockSensors *v, std::ostream &os)
 {
   os << "Action::ResetBlockSensors {\n";
-  printOpt("once", v.once, os);
-  printVec("blockSets", v.blockSets, os);
+  printOpt("once", v->once, os);
+  printVec("blockSets", v->blockSets, os);
   os << "}\n";
 }
 
-void print(const Action::ResetInstructions &v, std::ostream &os)
+void print(const Action::ResetInstructions *v, std::ostream &os)
 {
   os << "Action::ResetInstructions {\n";
-  printOpt("once", v.once, os);
-  printOpt("instructions", v.instructions, os);
+  printOpt("once", v->once, os);
+  printOpt("instructions", v->instructions, os);
   os << "}\n";
 }
 
-void print(const Action::ResetPath &v, std::ostream &os)
+void print(const Action::ResetPath *v, std::ostream &os)
 {
   os << "Action::ResetPath {\n";
-  printOpt("once", v.once, os);
+  printOpt("once", v->once, os);
   os << "}\n";
 }
 
-void print(const Action::ResetSearchRays &v, std::ostream &os)
+void print(const Action::ResetSearchRays *v, std::ostream &os)
 {
   os << "Action::ResetSearchRays {\n";
-  printOpt("once", v.once, os);
-  printVec("names", v.names, os);
+  printOpt("once", v->once, os);
+  printVec("names", v->names, os);
   os << "}\n";
 }
 
-void print(const Action::Role &v, std::ostream &os)
+void print(const Action::Role *v, std::ostream &os)
 {
   os << "Action::Role {\n";
-  printOpt("once", v.once, os);
-  os << "  role: " << v.role << "\n";
-  printOpt("changeAppearance", v.changeAppearance, os);
-  printOpt("state", v.state, os);
+  printOpt("once", v->once, os);
+  os << "  role: " << v->role << "\n";
+  printOpt("changeAppearance", v->changeAppearance, os);
+  printOpt("state", v->state, os);
   os << "}\n";
 }
 
-void print(const Action::Sequence &v, std::ostream &os)
+void print(const Action::Sequence *v, std::ostream &os)
 {
   os << "Action::Sequence {\n";
-  printOpt("once", v.once, os);
-  printOpt("blocking", v.blocking, os);
-  printOpt("atomic", v.atomic, os);
-  os << "  actions: [" << v.actions.actions.size() << " entries]\n";
+  printOpt("once", v->once, os);
+  printOpt("blocking", v->blocking, os);
+  printOpt("atomic", v->atomic, os);
+  os << "  actions: [" << v->actions.actions.size() << " entries]\n";
   os << "}\n";
 }
 
-void print(const Action::SetAlarm &v, std::ostream &os)
+void print(const Action::SetAlarm *v, std::ostream &os)
 {
   os << "Action::SetAlarm {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
-  printVec("durationRange", v.durationRange, os);
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
+  printVec("durationRange", v->durationRange, os);
   os << "}\n";
 }
 
-void print(const Action::SetBlockToPlace &v, std::ostream &os)
+void print(const Action::SetBlockToPlace *v, std::ostream &os)
 {
   os << "Action::SetBlockToPlace {\n";
-  printOpt("once", v.once, os);
-  os << "  block: " << v.block << "\n";
+  printOpt("once", v->once, os);
+  os << "  block: " << v->block << "\n";
   os << "}\n";
 }
 
-void print(const Action::SetFlag &v, std::ostream &os)
+void print(const Action::SetFlag *v, std::ostream &os)
 {
   os << "Action::SetFlag {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
-  printOpt("setTo", v.setTo, os);
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
+  printOpt("setTo", v->setTo, os);
   os << "}\n";
 }
 
-void print(const Action::SetInteractable &v, std::ostream &os)
+void print(const Action::SetInteractable *v, std::ostream &os)
 {
   os << "Action::SetInteractable {\n";
-  printOpt("once", v.once, os);
-  printOpt("interactable", v.interactable, os);
-  printOpt("hint", v.hint, os);
-  printOpt("showPrompt", v.showPrompt, os);
+  printOpt("once", v->once, os);
+  printOpt("interactable", v->interactable, os);
+  printOpt("hint", v->hint, os);
+  printOpt("showPrompt", v->showPrompt, os);
   os << "}\n";
 }
 
-void print(const Action::SetLeashPosition &v, std::ostream &os)
+void print(const Action::SetLeashPosition *v, std::ostream &os)
 {
   os << "Action::SetLeashPosition {\n";
-  printOpt("once", v.once, os);
-  printOpt("toCurrent", v.toCurrent, os);
-  printOpt("toTarget", v.toTarget, os);
+  printOpt("once", v->once, os);
+  printOpt("toCurrent", v->toCurrent, os);
+  printOpt("toTarget", v->toTarget, os);
   os << "}\n";
 }
 
-void print(const Action::SetMarkedTarget &v, std::ostream &os)
+void print(const Action::SetMarkedTarget *v, std::ostream &os)
 {
   os << "Action::SetMarkedTarget {\n";
-  printOpt("once", v.once, os);
-  os << "  targetSlot: " << v.targetSlot << "\n";
+  printOpt("once", v->once, os);
+  os << "  targetSlot: " << v->targetSlot << "\n";
   os << "}\n";
 }
 
-void print(const Action::SetStat &v, std::ostream &os)
+void print(const Action::SetStat *v, std::ostream &os)
 {
   os << "Action::SetStat {\n";
-  printOpt("once", v.once, os);
-  os << "  stat: " << v.stat << "\n";
-  os << "  value: " << v.value << "\n";
-  printOpt("add", v.add, os);
+  printOpt("once", v->once, os);
+  os << "  stat: " << v->stat << "\n";
+  os << "  value: " << v->value << "\n";
+  printOpt("add", v->add, os);
   os << "}\n";
 }
 
-void print(const Action::StartObjective &v, std::ostream &os)
+void print(const Action::StartObjective *v, std::ostream &os)
 {
   os << "Action::StartObjective {\n";
-  printOpt("once", v.once, os);
-  os << "  objective: " << v.objective << "\n";
+  printOpt("once", v->once, os);
+  os << "  objective: " << v->objective << "\n";
   os << "}\n";
 }
 
-void print(const Action::State &v, std::ostream &os)
+void print(const Action::State *v, std::ostream &os)
 {
   os << "Action::State {\n";
-  printOpt("once", v.once, os);
-  os << "  state: " << v.state << "\n";
-  printOpt("clearState", v.clearState, os);
+  printOpt("once", v->once, os);
+  os << "  state: " << v->state << "\n";
+  printOpt("clearState", v->clearState, os);
   os << "}\n";
 }
 
-void print(const Action::StorePosition &v, std::ostream &os)
+void print(const Action::StorePosition *v, std::ostream &os)
 {
   os << "Action::StorePosition {\n";
-  printOpt("once", v.once, os);
-  os << "  slot: " << v.slot << "\n";
+  printOpt("once", v->once, os);
+  os << "  slot: " << v->slot << "\n";
   os << "}\n";
 }
 
-void print(const Action::Timeout &v, std::ostream &os)
+void print(const Action::Timeout *v, std::ostream &os)
 {
   os << "Action::Timeout {\n";
-  printOpt("once", v.once, os);
-  printVec("delay", v.delay, os);
-  printOpt("delayAfter", v.delayAfter, os);
-  os << "  action.type: ";
-  print(v.action.type, os);
-  os << "\n";
+  printOpt("once", v->once, os);
+  printVec("delay", v->delay, os);
+  printOpt("delayAfter", v->delayAfter, os);
+  os << "  action:{ ";
+  if (v->action)
+    print(v->action.get(), os);
+  os << "}\n";
   os << "}\n";
 }
 
-void print(const Action::TimerContinue &v, std::ostream &os)
+void print(const Action::TimerContinue *v, std::ostream &os)
 {
   os << "Action::TimerContinue {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
   os << "}\n";
 }
 
-void print(const Action::TimerModify &v, std::ostream &os)
+void print(const Action::TimerModify *v, std::ostream &os)
 {
   os << "Action::TimerModify {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
-  printOpt("addValue", v.addValue, os);
-  printOpt("maxValue", v.maxValue, os);
-  printOpt("rate", v.rate, os);
-  printOpt("setValue", v.setValue, os);
-  printOpt("repeating", v.repeating, os);
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
+  printOpt("addValue", v->addValue, os);
+  printOpt("maxValue", v->maxValue, os);
+  printOpt("rate", v->rate, os);
+  printOpt("setValue", v->setValue, os);
+  printOpt("repeating", v->repeating, os);
   os << "}\n";
 }
 
-void print(const Action::TimerPause &v, std::ostream &os)
+void print(const Action::TimerPause *v, std::ostream &os)
 {
   os << "Action::TimerPause {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
   os << "}\n";
 }
 
-void print(const Action::TimerRestart &v, std::ostream &os)
+void print(const Action::TimerRestart *v, std::ostream &os)
 {
   os << "Action::TimerRestart {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
   os << "}\n";
 }
 
-void print(const Action::TimerStart &v, std::ostream &os)
+void print(const Action::TimerStart *v, std::ostream &os)
 {
   os << "Action::TimerStart {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
-  printOpt("startValueRange", v.startValueRange, os);
-  printOpt("restartValueRange", v.restartValueRange, os);
-  printOpt("rate", v.rate, os);
-  printOpt("repeating", v.repeating, os);
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
+  printOpt("startValueRange", v->startValueRange, os);
+  printOpt("restartValueRange", v->restartValueRange, os);
+  printOpt("rate", v->rate, os);
+  printOpt("repeating", v->repeating, os);
   os << "}\n";
 }
 
-void print(const Action::TimerStop &v, std::ostream &os)
+void print(const Action::TimerStop *v, std::ostream &os)
 {
   os << "Action::TimerStop {\n";
-  printOpt("once", v.once, os);
-  os << "  name: " << v.name << "\n";
+  printOpt("once", v->once, os);
+  os << "  name: " << v->name << "\n";
   os << "}\n";
 }
 
-void print(const Action::ToggleStateEvaluator &v, std::ostream &os)
+void print(const Action::ToggleStateEvaluator *v, std::ostream &os)
 {
   os << "Action::ToggleStateEvaluator {\n";
-  printOpt("once", v.once, os);
-  printOpt("enabled", v.enabled, os);
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
   os << "}\n";
 }
 
-void print(const Action::TriggerSpawnBeacon &v, std::ostream &os)
+void print(const Action::TriggerSpawnBeacon *v, std::ostream &os)
 {
   os << "Action::TriggerSpawnBeacon {\n";
-  printOpt("once", v.once, os);
-  os << "  beaconSpawn: " << v.beaconSpawn << "\n";
-  os << "  range: " << v.range << "\n";
-  printOpt("targetSlot", v.targetSlot, os);
+  printOpt("once", v->once, os);
+  os << "  beaconSpawn: " << v->beaconSpawn << "\n";
+  os << "  range: " << v->range << "\n";
+  printOpt("targetSlot", v->targetSlot, os);
   os << "}\n";
 }
 
-void print(const Action::TriggerSpawners &v, std::ostream &os)
+void print(const Action::TriggerSpawners *v, std::ostream &os)
 {
   os << "Action::TriggerSpawners {\n";
-  printOpt("once", v.once, os);
-  printOpt("spawnMarker", v.spawnMarker, os);
-  os << "  range: " << v.range << "\n";
-  if (v.count)
-    os << "  count: " << *v.count << "\n";
+  printOpt("once", v->once, os);
+  printOpt("spawnMarker", v->spawnMarker, os);
+  os << "  range: " << v->range << "\n";
+  if (v->count)
+    os << "  count: " << *v->count << "\n";
   os << "}\n";
 }
 
@@ -2715,13 +3054,41 @@ void print(const Instruction &v, std::ostream &os)
   os << "  name: " << v.name << "\n";
   printOpt("comment", v.comment, os);
   printOpt("enabled", v.enabled, os);
-  os << "  sensor.type: ";
-  print(v.sensor.type, os);
-  os << "\n";
-  os << "  actions: [" << v.actions.size() << " entries]\n";
+  os << "  sensor:{ ";
+  if (v.sensor)
+    print(v.sensor.get(), os);
+  os << "}\n";
+
+  if (v.actions.size() > 0)
+  {
+    os << "  actions (size: " << v.actions.size() << "):{\n";
+
+    for (auto &action : v.actions)
+    {
+      if (action)
+        print(action.get());
+    }
+
+    os << "}\n";
+  }
+  else
+  {
+    os << "  actions (empty)\n";
+  }
+
   printOpt("actionsBlocking", v.actionsBlocking, os);
   printOpt("actionsAtomic", v.actionsAtomic, os);
   os << "  instructions: [" << v.instructions.size() << " nested]\n";
+
+  os << "  instructions (size: " << v.instructions.size() << "):{\n";
+
+  for (auto &instruction : v.instructions)
+  {
+    print(instruction);
+  }
+
+  os << "}\n";
+
   printOpt("cont", v.cont, os);
   if (v.weight)
     os << "  weight: " << *v.weight << "\n";

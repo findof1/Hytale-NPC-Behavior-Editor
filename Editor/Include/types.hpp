@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <memory>
 
 namespace General
 {
@@ -382,6 +383,7 @@ namespace General
     {
       Type type;
       Sensor(Type t) : type(t) {}
+      virtual ~Sensor() = default;
     };
 
     // Provides:
@@ -390,9 +392,9 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      Sensor sensor;
+      std::unique_ptr<Sensor> sensor;
       std::vector<double> offset;
-      AdjustPosition() : Sensor(Type::AdjustPosition), sensor(Type::Any) {} // placeholder inner sensor
+      AdjustPosition() : Sensor(Type::AdjustPosition) {} // placeholder inner sensor
     };
 
     struct Age : Sensor
@@ -423,7 +425,7 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      std::vector<Sensor> sensors;
+      std::vector<std::unique_ptr<Sensor>> sensors;
       std::optional<std::string> autoUnlockTargetSlot;
       And() : Sensor(Type::And) {}
     };
@@ -486,9 +488,9 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      Sensor sensor;
-      std::string blockSet;                                       // asset
-      BlockType() : Sensor(Type::BlockType), sensor(Type::Any) {} // placeholder inner sensor
+      std::unique_ptr<Sensor> sensor;
+      std::string blockSet;                    // asset
+      BlockType() : Sensor(Type::BlockType) {} // placeholder inner sensor
     };
 
     struct CanInteract : Sensor
@@ -789,10 +791,10 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      Sensor sensor;
+      std::unique_ptr<Sensor> sensor;
       std::optional<std::string> useTargetSlot;
       std::optional<std::string> autoUnlockTargetSlot;
-      Not() : Sensor(Type::Not), sensor(Type::Any) {} // placeholder inner sensor
+      Not() : Sensor(Type::Not) {} // placeholder inner sensor
     };
 
     struct OnGround : Sensor
@@ -806,7 +808,7 @@ namespace General
     {
       std::optional<bool> once;
       std::optional<bool> enabled;
-      std::vector<Sensor> sensors;
+      std::vector<std::unique_ptr<Sensor>> sensors;
       std::optional<std::string> autoUnlockTargetSlot;
       Or() : Sensor(Type::Or) {}
     };
@@ -964,9 +966,9 @@ namespace General
       std::optional<bool> once;
       std::optional<bool> enabled;
       std::optional<bool> passValues;
-      Sensor sensor;
+      std::unique_ptr<Sensor> sensor;
       std::vector<ValueToParameterMapping> valueToParameterMappings;
-      ValueProviderWrapper() : Sensor(Type::ValueProviderWrapper), sensor(Type::Any) {} // placeholder inner sensor
+      ValueProviderWrapper() : Sensor(Type::ValueProviderWrapper) {} // placeholder inner sensor
     };
 
     struct Weather : Sensor
@@ -1049,18 +1051,19 @@ namespace General
     {
       Type type;
       Action(Type t) : type(t) {}
+      virtual ~Action() = default;
     };
 
     struct WeightedAction
     {
-      Action action;
+      std::unique_ptr<Action> action;
       double weight;
-      WeightedAction() : action(Type::Nothing) {} // placeholder
+      WeightedAction() {} // placeholder
     };
 
     struct ActionList
     {
-      std::vector<Action> actions;
+      std::vector<std::unique_ptr<Action>> actions;
     };
 
     struct AddToHostileTargetMemory : Action // must be attached to a sensor that provides one of player target, NPC target
@@ -1475,8 +1478,8 @@ namespace General
       std::optional<bool> once;
       std::vector<double> delay;
       std::optional<bool> delayAfter;
-      Action action;
-      Timeout() : Action(Type::Timeout), action(Type::Nothing) {} // placeholder inner action
+      std::unique_ptr<Action> action;
+      Timeout() : Action(Type::Timeout) {} // placeholder inner action
     };
 
     struct TimerContinue : Action
@@ -1801,17 +1804,23 @@ namespace General
     std::optional<std::string> comment;
     std::optional<bool> enabled;
 
-    Sensor::Sensor sensor;
+    std::unique_ptr<Sensor::Sensor> sensor;
     std::optional<BodyMotion::BodyMotion> bodyMotion;
     std::optional<HeadMotion::HeadMotion> headMotion;
-    std::vector<Action::Action> actions;
+    std::vector<std::unique_ptr<Action::Action>> actions;
     std::optional<bool> actionsBlocking;
     std::optional<bool> actionsAtomic;
     std::vector<Instruction> instructions;
     std::optional<bool> cont; // continue
     std::optional<unsigned int> weight;
 
-    Instruction() : sensor(Sensor::Type::Any) {} // placeholder sensor
+    Instruction() {} // placeholder sensor
+
+    Instruction(const Instruction &) = delete;
+    Instruction &operator=(const Instruction &) = delete;
+
+    Instruction(Instruction &&) = default;
+    Instruction &operator=(Instruction &&) = default;
   };
 
   struct StateTransition
