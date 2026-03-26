@@ -1,4 +1,5 @@
 #include "attributesEditor.hpp"
+#include "jsonConverter.hpp"
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -1001,5 +1002,10 @@ General::Attributes AttributesEditor::getAttributes()
 void AttributesEditor::printValues()
 {
   General::Attributes attr = getAttributes();
-  print(attr);
+
+  // print(attr); //debug printer
+
+  nlohmann::json j;
+  General::to_json(j, attr);
+  std::cout << j.dump(4) << std::endl;
 }

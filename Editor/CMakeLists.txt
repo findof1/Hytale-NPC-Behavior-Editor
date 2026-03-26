@@ -5,6 +5,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 include_directories(
     "${CMAKE_SOURCE_DIR}/Editor/Include"
+    "${CMAKE_SOURCE_DIR}/Editor/External"
 )
 
 file(GLOB_RECURSE ENGINE_SRC "${CMAKE_SOURCE_DIR}/Editor/src/*.cpp")
