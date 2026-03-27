@@ -1734,7 +1734,13 @@ namespace General
 
     nlohmann::json motionArr = nlohmann::json::array();
     for (const auto &m : v.motionControllerList)
-      motionArr.push_back(m);
+    {
+      if (m == nullptr)
+        continue;
+      nlohmann::json motionControllerJSON;
+      to_json(motionControllerJSON, *m);
+      motionArr.push_back(motionControllerJSON);
+    }
     j["motionControllerList"] = motionArr;
   }
 

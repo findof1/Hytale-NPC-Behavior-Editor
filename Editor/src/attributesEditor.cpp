@@ -992,12 +992,179 @@ General::Attributes AttributesEditor::getAttributes()
   attr.requiredAttributes.maxHealth = maxHealthSpin->value();
   attr.requiredAttributes.appearance = appearanceEdit->text().toStdString();
   attr.requiredAttributes.nameTranslationKey = nameKeyEdit->text().toStdString();
-  attr.initialMotionController = motionCombo->currentText().toStdString();
-  attr.defaultPlayerAttitude = stringToAttitudeFlag(playerAttitudeCombo->currentText());
-  attr.defaultNPCAttitude = stringToAttitudeFlag(npcAttitudeCombo->currentText());
-  attr.invulnerable = invulnerableCheck->isChecked();
-  attr.inventorySize = inventorySpin->value();
+
+  // serialize attr.requiredAttributes.motionControllerList
+  for (int i = 0; i < motionControllerEditor->count(); i++)
+  {
+    QWidget *frame = motionControllerEditor->itemAt(i);
+
+    QComboBox *combo = frame->findChild<QComboBox *>();
+    if (!combo)
+      continue;
+
+    std::string type = combo->currentText().toStdString();
+
+    if (type == "walk")
+      attr.requiredAttributes.motionControllerList.push_back(std::make_unique<General::WalkMotionController>());
+    else if (type == "fly")
+      attr.requiredAttributes.motionControllerList.push_back(std::make_unique<General::FlyMotionController>());
+    else if (type == "dive")
+      attr.requiredAttributes.motionControllerList.push_back(std::make_unique<General::DiveMotionController>());
+  }
+  //
+
+  // serialize attr.requiredAttributes.busyStates
+  for (int i = 0; i < busyStatesEditor->count(); i++)
+  {
+    QWidget *frame = busyStatesEditor->itemAt(i);
+
+    QLineEdit *line = frame->findChild<QLineEdit *>();
+    if (!line)
+      continue;
+
+    attr.requiredAttributes.busyStates.push_back(line->text().toStdString());
+  }
+  //
+
   attr.instructions = serializeInstructions(&serializer, scene, rootNode);
+
+  if (motionComboOptional->isEnabled())
+  {
+    attr.initialMotionController = motionCombo->currentText().toStdString();
+  }
+
+  if (displayNamesOptional->isEnabled())
+  {
+    std::vector<std::string> names;
+
+    auto *editor = static_cast<VectorEditor *>(displayNamesOptional->editor);
+    for (int i = 0; i < editor->count(); i++)
+    {
+      QWidget *frame = editor->itemAt(i);
+      QLineEdit *line = frame->findChild<QLineEdit *>();
+      if (line)
+        names.push_back(line->text().toStdString());
+    }
+
+    attr.displayNames = names;
+  }
+
+  if (opaqueBlockSetOptional->isEnabled())
+  {
+    attr.opaqueBlockSet = opaqueBlockSet->text().toStdString();
+  }
+
+  if (knockbackScaleOptional->isEnabled())
+  {
+    attr.knockbackScale = knockbackScale->value();
+  }
+
+  if (inventorySpinOptional->isEnabled())
+  {
+    attr.inventorySize = inventorySpin->value();
+  }
+
+  if (hotbarSizeOptional->isEnabled())
+  {
+    attr.hotbarSize = hotbarSize->value();
+  }
+
+  if (offhandSlotsOptional->isEnabled())
+  {
+    attr.offhandSlots = offhandSlots->value();
+  }
+
+  if (offhandItemsOptional->isEnabled())
+  {
+    std::vector<std::string> items;
+
+    auto *editor = static_cast<VectorEditor *>(offhandItemsOptional->editor);
+    for (int i = 0; i < editor->count(); i++)
+    {
+      QWidget *frame = editor->itemAt(i);
+      QLineEdit *line = frame->findChild<QLineEdit *>();
+      if (line)
+        items.push_back(line->text().toStdString());
+    }
+
+    attr.offhandItems = items;
+  }
+
+  if (possibleInventoryItemsOptional->isEnabled())
+  {
+    attr.possibleInventoryItems = possibleInventoryItems->text().toStdString();
+  }
+
+  if (defaultOffhandSlotOptional->isEnabled())
+  {
+    attr.defaultOffhandSlot = defaultOffhandSlot->value();
+  }
+
+  if (dropListOptional->isEnabled())
+  {
+    attr.dropList = dropList->text().toStdString();
+  }
+
+  if (collisionDistanceOptional->isEnabled())
+  {
+    attr.collisionDistance = collisionDistance->value();
+  }
+
+  if (combatConfigOptional->isEnabled())
+  {
+    attr.combatConfig = combatConfig->text().toStdString();
+  }
+
+  if (invulnerableCheckOptional->isEnabled())
+  {
+    attr.invulnerable = invulnerableCheck->isChecked();
+  }
+
+  if (pickupDropOnDeathOptional->isEnabled())
+  {
+    attr.pickupDropOnDeath = pickupDropOnDeath->isChecked();
+  }
+
+  if (deathInteractionOptional->isEnabled())
+  {
+    attr.deathInteraction = deathInteraction->text().toStdString();
+  }
+
+  if (playerAttitudeComboOptional->isEnabled())
+  {
+    attr.defaultPlayerAttitude = stringToAttitudeFlag(playerAttitudeCombo->currentText());
+  }
+
+  if (npcAttitudeComboOptional->isEnabled())
+  {
+    attr.defaultNPCAttitude = stringToAttitudeFlag(npcAttitudeCombo->currentText());
+  }
+
+  if (corpseStaysInFlockOptional->isEnabled())
+  {
+    attr.corpseStaysInFlock = corpseStaysInFlock->isChecked();
+  }
+
+  if (isMemoryOptional->isEnabled())
+  {
+    attr.isMemory = isMemory->isChecked();
+  }
+
+  if (memoriesCategoryOptional->isEnabled())
+  {
+    attr.memoriesCategory = memoriesCategory->text().toStdString();
+  }
+
+  if (memoriesNameOverrideOptional->isEnabled())
+  {
+    attr.memoriesNameOverride = memoriesNameOverride->text().toStdString();
+  }
+
+  if (spawnLockTimeOptional->isEnabled())
+  {
+    attr.spawnLockTime = spawnLockTime->value();
+  }
+
   return attr;
 }
 

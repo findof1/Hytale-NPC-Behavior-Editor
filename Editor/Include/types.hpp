@@ -1834,11 +1834,11 @@ namespace General
 
   struct RequiredAttributes
   {
-    unsigned int maxHealth;                             // max health (greater than 0)
-    std::string appearance;                             // Unique Asset ID of the model asset
-    std::string nameTranslationKey;                     // Entity name
-    std::vector<std::string> busyStates;                // states the entity cannot be interacted with
-    std::vector<MotionController> motionControllerList; // list of motion controllers
+    unsigned int maxHealth;                                              // max health (greater than 0)
+    std::string appearance;                                              // Unique Asset ID of the model asset
+    std::string nameTranslationKey;                                      // Entity name
+    std::vector<std::string> busyStates;                                 // states the entity cannot be interacted with
+    std::vector<std::unique_ptr<MotionController>> motionControllerList; // list of motion controllers
   };
 
   struct Attributes

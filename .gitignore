@@ -2,3 +2,5 @@
 build
 shaders/myCompile.bat
 shaders/*.spv
+versions
+nameSuggestions.txt
