@@ -138,7 +138,50 @@ public:
       layout->setSpacing(3);
       propertiesContainer->setLayout(layout);
       propertiesContainer->setAttribute(Qt::WA_TranslucentBackground);
-      propertiesContainer->setStyleSheet("background: transparent;");
+      propertiesContainer->setObjectName("propertiesContainer");
+      propertiesContainer->setStyleSheet(R"(
+        * { 
+            background: transparent; 
+        }
+        QLineEdit, QTextEdit, QPlainTextEdit {
+            background-color: #353535;
+            color: #ffffff;
+            border: 1px solid #1a1a1a;   
+        }
+        QComboBox {
+            background-color: #353535;
+            color: #ffffff;
+            border: 1px solid #1a1a1a;   
+        }
+        QComboBox QAbstractItemView {
+            background-color: #353535;
+            selection-background-color: #2a82da;
+            color: #ffffff;
+            border: 2px solid #1a1a1a;   
+        }
+        QPushButton, QRadioButton {
+            color: #ffffff;   
+            background-color: #353535; 
+            background: none; 
+            border: 1px solid #1a1a1a;       
+        }
+        QCheckBox {
+            color: #ffffff;   
+            background-color: #353535; 
+            background: none;   
+        }
+
+        QListWidget{
+            color: #ffffff;   
+            background-color: #353535; 
+            background: none;   
+            border: 3px solid #1a1a1a;  
+        }
+
+        QPushButton, QCheckBox, QRadioButton, QLineEdit, QTextEdit, QComboBox, QListWidget {
+            border-radius: 6px;
+        }
+         )");
 
       proxy = new QGraphicsProxyWidget(this);
       proxy->setWidget(propertiesContainer);

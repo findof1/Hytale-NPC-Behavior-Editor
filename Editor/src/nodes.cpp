@@ -26,10 +26,12 @@ InstructionNode::InstructionNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
-  QWidget *label = form->labelForField(enabledBox);
+  label = form->labelForField(enabledBox);
   label->setStyleSheet("color: gray;");
 
   continueBox = new QCheckBox;
@@ -93,6 +95,8 @@ CommentNode::CommentNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Comment:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 }
 
 SensorNodes::AdjustPositionNode::AdjustPositionNode(NodeScene *scene)
@@ -203,6 +207,8 @@ SensorNodes::AlarmNode::AlarmNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   stateCombo = new QComboBox;
   stateCombo->addItems({"Set", "Unset", "Passed"});
@@ -210,7 +216,7 @@ SensorNodes::AlarmNode::AlarmNode(NodeScene *scene)
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   enabledBox = new QCheckBox;
@@ -1241,10 +1247,12 @@ SensorNodes::FlagNode::FlagNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   enabledBox = new QCheckBox;
@@ -2595,6 +2603,8 @@ SensorNodes::SearchRayNode::SearchRayNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   angleSpin = new QDoubleSpinBox;
   angleSpin->setRange(-360, 360);
@@ -2609,7 +2619,7 @@ SensorNodes::SearchRayNode::SearchRayNode(NodeScene *scene)
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   enabledBox = new QCheckBox;
@@ -2939,10 +2949,12 @@ SensorNodes::TimerNode::TimerNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   enabledBox = new QCheckBox;
@@ -3465,10 +3477,12 @@ ActionNodes::DisplayNameNode::DisplayNameNode(NodeScene *scene)
 
   displayNameEdit = new QLineEdit;
   form->addRow("Display Name:", displayNameEdit);
+  QWidget *label = form->labelForField(displayNameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 }
 
@@ -4782,6 +4796,8 @@ ActionNodes::SetAlarmNode::SetAlarmNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   auto *durationWidget = new QWidget;
   auto *durationLayout = new QHBoxLayout(durationWidget);
@@ -4794,7 +4810,7 @@ ActionNodes::SetAlarmNode::SetAlarmNode(NodeScene *scene)
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 }
 
@@ -4860,10 +4876,12 @@ ActionNodes::SetFlagNode::SetFlagNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  QWidget *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   setToBox = new QCheckBox;
@@ -5216,10 +5234,12 @@ ActionNodes::TimerContinueNode::TimerContinueNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  auto *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 }
 
@@ -5249,10 +5269,12 @@ ActionNodes::TimerModifyNode::TimerModifyNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  auto *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   addValueSpin = new QDoubleSpinBox;
@@ -5340,10 +5362,12 @@ ActionNodes::TimerPauseNode::TimerPauseNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  auto *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 }
 
@@ -5373,10 +5397,12 @@ ActionNodes::TimerRestartNode::TimerRestartNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  auto *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 }
 
@@ -5406,10 +5432,12 @@ ActionNodes::TimerStartNode::TimerStartNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  auto *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 
   auto *startWidget = new QWidget;
@@ -5496,10 +5524,12 @@ ActionNodes::TimerStopNode::TimerStopNode(NodeScene *scene)
 
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
+  auto *label = form->labelForField(nameEdit);
+  label->setStyleSheet("color: white;");
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
+  label = form->labelForField(onceBox);
   label->setStyleSheet("color: gray;");
 }
 

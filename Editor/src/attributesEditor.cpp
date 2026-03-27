@@ -886,6 +886,8 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
     view->setScene(scene);
     view->setRenderHint(QPainter::Antialiasing);
     view->setDragMode(QGraphicsView::RubberBandDrag);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setMinimumSize(400, 300);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
