@@ -23,48 +23,105 @@ int main(int argc, char **argv)
 
   // Make sure all widgets automatically inherit the palette
   app.setStyleSheet(R"(
-        * {
-            background: #1f1f1f;
-        }
-        QLineEdit, QTextEdit, QPlainTextEdit {
-            background-color: #353535;
-            color: #ffffff;
-            border: 1px solid #1a1a1a;   
-        }
-        QComboBox {
-            background-color: #353535;
-            color: #ffffff;
-            border: 1px solid #1a1a1a;   
-        }
-        QComboBox QAbstractItemView {
-            background-color: #353535;
-            selection-background-color: #2a82da;
-            color: #ffffff;
-            border: 2px solid #1a1a1a;   
-        }
-        QPushButton, QRadioButton {
-            color: #ffffff;   
-            background-color: #353535; 
-            background: none; 
-            border: 1px solid #1a1a1a;       
-        }
-        QCheckBox {
-            color: #ffffff;   
-            background-color: #353535; 
-            background: none;   
-        }
+    * {
+        background: #1f1f1f;
+        background-color: #242424;
+        padding: 3px;
+    }
 
-        QListWidget{
-            color: #ffffff;   
-            background-color: #353535; 
-            background: none;   
-            border: 3px solid #1a1a1a;  
-        }
+    QTabWidget, QFormLayout, QScrollArea {
+        background-color: #353535;
+        color: #ffffff; 
+        border: 1px solid #1a1a1a;   
+    }
 
-        QPushButton, QCheckBox, QRadioButton, QLineEdit, QTextEdit, QComboBox, QListWidget {
-            border-radius: 6px;
-        }
-    )");
+    QTabBar::tab {
+        background-color: #353535;
+        color: #ffffff;
+        border: 1px solid #1a1a1a;
+        padding: 3px 6px;
+    }
+
+    QTabBar::tab:selected {
+        background-color: #454545;
+    }
+
+    QTabBar::tab:disabled {
+        background-color: #2a2a2a;
+        color: #777777;
+        border: 1px solid #1a1a1a;
+    }
+
+    QLineEdit, QTextEdit, QPlainTextEdit {
+        background-color: #353535;
+        color: #ffffff;
+        border: 1px solid #1a1a1a;   
+    }
+
+    QLineEdit:disabled, QTextEdit:disabled, QPlainTextEdit:disabled {
+        background-color: #2a2a2a;
+        color: #777777;
+        border: 1px solid #1a1a1a;
+    }
+
+    QComboBox {
+        background-color: #353535;
+        color: #ffffff;
+        border: 1px solid #1a1a1a;   
+    }
+
+    QComboBox:disabled {
+        background-color: #2a2a2a;
+        color: #777777;
+        border: 1px solid #1a1a1a;
+    }
+
+    QComboBox QAbstractItemView {
+        background-color: #353535;
+        selection-background-color: #2a82da;
+        color: #ffffff;
+        border: 2px solid #1a1a1a;   
+    }
+
+    QPushButton, QRadioButton {
+        color: #ffffff;   
+        background-color: #353535; 
+        background: none; 
+        border: 1px solid #1a1a1a;       
+    }
+
+    QPushButton:disabled, QRadioButton:disabled {
+        color: #777777;
+        background-color: #2a2a2a;
+        border: 1px solid #1a1a1a;
+    }
+
+    QCheckBox {
+        color: #ffffff;   
+        background-color: #353535; 
+        background: none;   
+    }
+
+    QCheckBox:disabled {
+        color: #777777;
+    }
+
+    QListWidget {
+        color: #ffffff;   
+        background-color: #353535; 
+        background: none;   
+        border: 3px solid #1a1a1a;  
+    }
+
+    QListWidget:disabled {
+        color: #777777;
+        background-color: #2a2a2a;
+    }
+
+    QPushButton, QCheckBox, QRadioButton, QLineEdit, QTextEdit, QComboBox, QListWidget {
+        border-radius: 6px;
+    }
+)");
 
   AttributesEditor editor;
   editor.show();
