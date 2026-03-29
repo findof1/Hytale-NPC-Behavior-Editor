@@ -111,7 +111,7 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
     optionalForm->addRow("Initial Motion Controller:", motionComboOptional);
 
     // Different display names
-    VectorEditor *displayNamesEditor = new VectorEditor(
+    displayNamesEditor = new VectorEditor(
         []() -> QWidget *
         {
           return new QLineEdit();
@@ -877,11 +877,6 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
 
     instructionsTabLayout->addWidget(topBar);
 
-    rootNode = new RootNode(scene);
-    rootNode->setPos(0, 0);
-    scene->addItem(rootNode);
-    scene->nodes.emplace_back(rootNode);
-
     auto *view = new NodeView();
     view->setScene(scene);
     view->setRenderHint(QPainter::Antialiasing);
@@ -897,6 +892,31 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
   auto *exportBtn = new QPushButton("Export NPC Role");
   layout->addRow(exportBtn);
   connect(exportBtn, &QPushButton::clicked, this, &AttributesEditor::printValues);
+}
+
+void AttributesEditor::setupScene()
+{
+  bool res = deserializeEditorFromDisk();
+  if (!res)
+  {
+    General::Attributes attr;
+    attr.requiredAttributes.maxHealth = 100;
+    attr.requiredAttributes.appearance = "Deer_Stag";
+    attr.requiredAttributes.nameTranslationKey = "server.npcRoles.Template.name";
+    attr.initialMotionController = "walk";
+    attr.defaultPlayerAttitude = General::AttitudeFlag::Neutral;
+    attr.defaultNPCAttitude = General::AttitudeFlag::Neutral;
+    attr.invulnerable = false;
+    attr.inventorySize = 5;
+
+    loadAttributes(attr);
+
+    rootNode = new RootNode(scene);
+    rootNode->id = scene->generateId();
+    rootNode->setPos(0, 0);
+    scene->addItem(rootNode);
+    scene->nodes.emplace_back(rootNode);
+  }
 }
 
 void AttributesEditor::spawnNodesDebug()
@@ -961,11 +981,7 @@ QMenu *AttributesEditor::buildAddMenu(NodeScene *scene, QWidget *parent)
     QAction *action = currentMenu->addAction(parts.last());
 
     QObject::connect(action, &QAction::triggered, parent, [scene, fullPath]()
-                     {
-            auto node = scene->nodeFactory[fullPath](scene);
-            node->setPos(0, 0);
-            scene->addItem(node.get());
-            scene->nodes.emplace_back(node); });
+                     { scene->spawnNode(fullPath, {0, 0}); });
   }
 
   return rootMenu;
@@ -986,6 +1002,292 @@ void AttributesEditor::loadAttributes(const General::Attributes &attr)
     invulnerableCheck->setChecked(*attr.invulnerable);
   if (attr.inventorySize)
     inventorySpin->setValue(*attr.inventorySize);
+}
+
+void AttributesEditor::serializeEditorToDisk()
+{
+  nlohmann::json j;
+
+  j["serializationVersion"] = "1";
+
+  j["scene"] = scene->serializeScene();
+
+  j["maxHealth"] = maxHealthSpin->value();
+  j["appearance"] = appearanceEdit->text().toStdString();
+  j["nameKey"] = nameKeyEdit->text().toStdString();
+
+  j["busyStates"] = serializeVectorEditor(busyStatesEditor);
+  j["motionController"] = serializeVectorEditor(motionControllerEditor);
+
+  j["motion"] = motionCombo->currentText().toStdString();
+  j["motionOptional"] = motionComboOptional->isEnabled();
+
+  j["displayNames"] = serializeVectorEditor(displayNamesEditor);
+  j["displayNamesOptional"] = displayNamesOptional->isEnabled();
+
+  j["opaqueBlockSet"] = opaqueBlockSet->text().toStdString();
+  j["opaqueBlockSetOptional"] = opaqueBlockSetOptional->isEnabled();
+
+  j["knockbackScale"] = knockbackScale->value();
+  j["knockbackScaleOptional"] = knockbackScaleOptional->isEnabled();
+
+  j["inventory"] = inventorySpin->value();
+  j["inventoryOptional"] = inventorySpinOptional->isEnabled();
+
+  j["hotbarSize"] = hotbarSize->value();
+  j["hotbarSizeOptional"] = hotbarSizeOptional->isEnabled();
+
+  j["offhandSlots"] = offhandSlots->value();
+  j["offhandSlotsOptional"] = offhandSlotsOptional->isEnabled();
+
+  j["offhandItems"] = serializeVectorEditor(offhandItems);
+  j["offhandItemsOptional"] = offhandItemsOptional->isEnabled();
+
+  j["possibleInventoryItems"] = possibleInventoryItems->text().toStdString();
+  j["possibleInventoryItemsOptional"] = possibleInventoryItemsOptional->isEnabled();
+
+  j["defaultOffhandSlot"] = defaultOffhandSlot->value();
+  j["defaultOffhandSlotOptional"] = defaultOffhandSlotOptional->isEnabled();
+
+  j["dropList"] = dropList->text().toStdString();
+  j["dropListOptional"] = dropListOptional->isEnabled();
+
+  j["startState"] = startState->text().toStdString();
+  j["startStateOptional"] = startStateOptional->isEnabled();
+
+  j["defaultSubState"] = defaultSubState->text().toStdString();
+  j["defaultSubStateOptional"] = defaultSubStateOptional->isEnabled();
+
+  j["collisionDistance"] = collisionDistance->value();
+  j["collisionDistanceOptional"] = collisionDistanceOptional->isEnabled();
+
+  j["combatConfig"] = combatConfig->text().toStdString();
+  j["combatConfigOptional"] = combatConfigOptional->isEnabled();
+
+  j["invulnerable"] = invulnerableCheck->isChecked();
+  j["invulnerableOptional"] = invulnerableCheckOptional->isEnabled();
+
+  j["pickupDropOnDeath"] = pickupDropOnDeath->isChecked();
+  j["pickupDropOnDeathOptional"] = pickupDropOnDeathOptional->isEnabled();
+
+  j["deathInteraction"] = deathInteraction->text().toStdString();
+  j["deathInteractionOptional"] = deathInteractionOptional->isEnabled();
+
+  j["playerAttitude"] = playerAttitudeCombo->currentText().toStdString();
+  j["playerAttitudeOptional"] = playerAttitudeComboOptional->isEnabled();
+
+  j["npcAttitude"] = npcAttitudeCombo->currentText().toStdString();
+  j["npcAttitudeOptional"] = npcAttitudeComboOptional->isEnabled();
+
+  j["corpseStaysInFlock"] = corpseStaysInFlock->isChecked();
+  j["corpseStaysInFlockOptional"] = corpseStaysInFlockOptional->isEnabled();
+
+  // j["stateTransitions"] = stateTransitionsEditor->toJson();
+  j["stateTransitionsOptional"] = stateTransitionsEditorOptional->isEnabled();
+
+  j["isMemory"] = isMemory->isChecked();
+  j["isMemoryOptional"] = isMemoryOptional->isEnabled();
+
+  j["memoriesCategory"] = memoriesCategory->text().toStdString();
+  j["memoriesCategoryOptional"] = memoriesCategoryOptional->isEnabled();
+
+  j["memoriesNameOverride"] = memoriesNameOverride->text().toStdString();
+  j["memoriesNameOverrideOptional"] = memoriesNameOverrideOptional->isEnabled();
+
+  j["spawnLockTime"] = spawnLockTime->value();
+  j["spawnLockTimeOptional"] = spawnLockTimeOptional->isEnabled();
+  std::ofstream file("scene.json");
+  file << j.dump(4);
+}
+
+// returns true if successfully deserialized, returns false if failed to find scene.json file
+bool AttributesEditor::deserializeEditorFromDisk()
+{
+  nlohmann::json j;
+  std::ifstream file("scene.json");
+  if (!file.is_open())
+  {
+    return false;
+  }
+
+  file >> j;
+  file.close();
+
+  if (j.contains("scene"))
+    scene->deserializeScene(j["scene"]);
+
+  if (j.contains("maxHealth"))
+    maxHealthSpin->setValue(j["maxHealth"]);
+
+  if (j.contains("appearance"))
+    appearanceEdit->setText(QString::fromStdString(j["appearance"]));
+
+  if (j.contains("nameKey"))
+    nameKeyEdit->setText(QString::fromStdString(j["nameKey"]));
+
+  if (j.contains("busyStates"))
+    deserializeVectorEditor(busyStatesEditor, j["busyStates"]);
+
+  if (j.contains("motionController"))
+    deserializeVectorEditor(motionControllerEditor, j["motionController"]);
+
+  if (j.contains("motion"))
+    motionCombo->setCurrentText(QString::fromStdString(j["motion"]));
+
+  if (j.contains("motionOptional"))
+    motionComboOptional->setEnabledValue(j["motionOptional"]);
+
+  if (j.contains("displayNames"))
+    deserializeVectorEditor(displayNamesEditor, j["displayNames"]);
+
+  if (j.contains("displayNamesOptional"))
+    displayNamesOptional->setEnabledValue(j["displayNamesOptional"]);
+
+  if (j.contains("opaqueBlockSet"))
+    opaqueBlockSet->setText(QString::fromStdString(j["opaqueBlockSet"]));
+
+  if (j.contains("opaqueBlockSetOptional"))
+    opaqueBlockSetOptional->setEnabledValue(j["opaqueBlockSetOptional"]);
+
+  if (j.contains("knockbackScale"))
+    knockbackScale->setValue(j["knockbackScale"]);
+
+  if (j.contains("knockbackScaleOptional"))
+    knockbackScaleOptional->setEnabledValue(j["knockbackScaleOptional"]);
+
+  if (j.contains("inventory"))
+    inventorySpin->setValue(j["inventory"]);
+
+  if (j.contains("inventoryOptional"))
+    inventorySpinOptional->setEnabledValue(j["inventoryOptional"]);
+
+  if (j.contains("hotbarSize"))
+    hotbarSize->setValue(j["hotbarSize"]);
+
+  if (j.contains("hotbarSizeOptional"))
+    hotbarSizeOptional->setEnabledValue(j["hotbarSizeOptional"]);
+
+  if (j.contains("offhandSlots"))
+    offhandSlots->setValue(j["offhandSlots"]);
+
+  if (j.contains("offhandSlotsOptional"))
+    offhandSlotsOptional->setEnabledValue(j["offhandSlotsOptional"]);
+
+  if (j.contains("offhandItems"))
+    deserializeVectorEditor(offhandItems, j["offhandItems"]);
+
+  if (j.contains("offhandItemsOptional"))
+    offhandItemsOptional->setEnabledValue(j["offhandItemsOptional"]);
+
+  if (j.contains("possibleInventoryItems"))
+    possibleInventoryItems->setText(QString::fromStdString(j["possibleInventoryItems"]));
+
+  if (j.contains("possibleInventoryItemsOptional"))
+    possibleInventoryItemsOptional->setEnabledValue(j["possibleInventoryItemsOptional"]);
+
+  if (j.contains("defaultOffhandSlot"))
+    defaultOffhandSlot->setValue(j["defaultOffhandSlot"]);
+
+  if (j.contains("defaultOffhandSlotOptional"))
+    defaultOffhandSlotOptional->setEnabledValue(j["defaultOffhandSlotOptional"]);
+
+  if (j.contains("dropList"))
+    dropList->setText(QString::fromStdString(j["dropList"]));
+
+  if (j.contains("dropListOptional"))
+    dropListOptional->setEnabledValue(j["dropListOptional"]);
+
+  if (j.contains("startState"))
+    startState->setText(QString::fromStdString(j["startState"]));
+
+  if (j.contains("startStateOptional"))
+    startStateOptional->setEnabledValue(j["startStateOptional"]);
+
+  if (j.contains("defaultSubState"))
+    defaultSubState->setText(QString::fromStdString(j["defaultSubState"]));
+
+  if (j.contains("defaultSubStateOptional"))
+    defaultSubStateOptional->setEnabledValue(j["defaultSubStateOptional"]);
+
+  if (j.contains("collisionDistance"))
+    collisionDistance->setValue(j["collisionDistance"]);
+
+  if (j.contains("collisionDistanceOptional"))
+    collisionDistanceOptional->setEnabledValue(j["collisionDistanceOptional"]);
+
+  if (j.contains("combatConfig"))
+    combatConfig->setText(QString::fromStdString(j["combatConfig"]));
+
+  if (j.contains("combatConfigOptional"))
+    combatConfigOptional->setEnabledValue(j["combatConfigOptional"]);
+
+  if (j.contains("invulnerable"))
+    invulnerableCheck->setChecked(j["invulnerable"]);
+
+  if (j.contains("invulnerableOptional"))
+    invulnerableCheckOptional->setEnabledValue(j["invulnerableOptional"]);
+
+  if (j.contains("pickupDropOnDeath"))
+    pickupDropOnDeath->setChecked(j["pickupDropOnDeath"]);
+
+  if (j.contains("pickupDropOnDeathOptional"))
+    pickupDropOnDeathOptional->setEnabledValue(j["pickupDropOnDeathOptional"]);
+
+  if (j.contains("deathInteraction"))
+    deathInteraction->setText(QString::fromStdString(j["deathInteraction"]));
+
+  if (j.contains("deathInteractionOptional"))
+    deathInteractionOptional->setEnabledValue(j["deathInteractionOptional"]);
+
+  if (j.contains("playerAttitude"))
+    playerAttitudeCombo->setCurrentText(QString::fromStdString(j["playerAttitude"]));
+
+  if (j.contains("playerAttitudeOptional"))
+    playerAttitudeComboOptional->setEnabledValue(j["playerAttitudeOptional"]);
+
+  if (j.contains("npcAttitude"))
+    npcAttitudeCombo->setCurrentText(QString::fromStdString(j["npcAttitude"]));
+
+  if (j.contains("npcAttitudeOptional"))
+    npcAttitudeComboOptional->setEnabledValue(j["npcAttitudeOptional"]);
+
+  if (j.contains("corpseStaysInFlock"))
+    corpseStaysInFlock->setChecked(j["corpseStaysInFlock"]);
+
+  if (j.contains("corpseStaysInFlockOptional"))
+    corpseStaysInFlockOptional->setEnabledValue(j["corpseStaysInFlockOptional"]);
+
+  // if (j.contains("stateTransitions"))
+  //   stateTransitionsEditor->fromJson(j["stateTransitions"]);
+
+  if (j.contains("stateTransitionsOptional"))
+    stateTransitionsEditorOptional->setEnabledValue(j["stateTransitionsOptional"]);
+
+  if (j.contains("isMemory"))
+    isMemory->setChecked(j["isMemory"]);
+
+  if (j.contains("isMemoryOptional"))
+    isMemoryOptional->setEnabledValue(j["isMemoryOptional"]);
+
+  if (j.contains("memoriesCategory"))
+    memoriesCategory->setText(QString::fromStdString(j["memoriesCategory"]));
+
+  if (j.contains("memoriesCategoryOptional"))
+    memoriesCategoryOptional->setEnabledValue(j["memoriesCategoryOptional"]);
+
+  if (j.contains("memoriesNameOverride"))
+    memoriesNameOverride->setText(QString::fromStdString(j["memoriesNameOverride"]));
+
+  if (j.contains("memoriesNameOverrideOptional"))
+    memoriesNameOverrideOptional->setEnabledValue(j["memoriesNameOverrideOptional"]);
+
+  if (j.contains("spawnLockTime"))
+    spawnLockTime->setValue(j["spawnLockTime"]);
+
+  if (j.contains("spawnLockTimeOptional"))
+    spawnLockTimeOptional->setEnabledValue(j["spawnLockTimeOptional"]);
+
+  return true;
 }
 
 General::Attributes AttributesEditor::getAttributes()

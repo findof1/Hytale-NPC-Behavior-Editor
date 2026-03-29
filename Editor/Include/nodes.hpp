@@ -13,6 +13,12 @@ class RootNode : public NodeItem
 {
 public:
   QString nodeType() const override { return "Root"; }
+  nlohmann::json serializeNode() const override
+  {
+    return {};
+  }
+  void deserializeNode(const nlohmann::json &j) override {}
+
   RootNode(NodeScene *scene);
 };
 
@@ -20,6 +26,9 @@ class InstructionNode : public NodeItem
 {
 public:
   QString nodeType() const override { return "Instruction"; }
+  nlohmann::json serializeNode() const override;
+  void deserializeNode(const nlohmann::json &j) override;
+
   QLineEdit *nameEdit;
   QCheckBox *enabledBox;
   QCheckBox *continueBox;
@@ -36,6 +45,8 @@ class CommentNode : public NodeItem
 {
 public:
   QString nodeType() const override { return "Comment"; }
+  nlohmann::json serializeNode() const override;
+  void deserializeNode(const nlohmann::json &j) override;
   QLineEdit *nameEdit;
 
   CommentNode(NodeScene *scene);
@@ -47,6 +58,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "AdjustPosition"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -63,6 +76,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Age"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *ageMin;
@@ -77,6 +92,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Alarm"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -92,6 +109,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "And"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *autoUnlockTargetSlotEdit;
@@ -105,6 +124,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Animation"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QComboBox *slotCombo;
@@ -119,6 +140,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Any"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -131,6 +154,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Beacon"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *messageEdit;
@@ -147,6 +172,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "BlockChange"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -164,6 +191,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "BlockType"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *blockSetEdit;
@@ -177,6 +206,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "CanInteract"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *viewSectorSpin;
@@ -191,6 +222,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "CanPlaceBlock"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QComboBox *directionCombo;
@@ -207,6 +240,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "CombatActionEvaluator"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *targetInRangeBox;
@@ -221,6 +256,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Count"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QSpinBox *countMin;
@@ -239,6 +276,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Damage"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *combatBox;
@@ -257,6 +296,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "DroppedItem"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -274,6 +315,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "EntityEvent"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -292,6 +335,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Flag"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -306,6 +351,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "FlockCombatDamage"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *leaderOnlyBox;
@@ -319,6 +366,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "FlockLeader"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -331,6 +380,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "HasHostileTargetMemory"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -343,6 +394,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "HasInteracted"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -355,6 +408,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "HasTask"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *taskByIdEdit;
@@ -368,6 +423,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "InAir"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -380,6 +437,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "InWater"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -392,6 +451,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "InflictedDamage"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QComboBox *targetCombo;
@@ -406,6 +467,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "InteractionContext"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *contextEdit;
@@ -419,6 +482,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "IsBackingAway"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -431,6 +496,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "IsBusy"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -443,6 +510,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Kill"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *targetSlotEdit;
@@ -456,6 +525,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Leash"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *rangeSpin;
@@ -469,6 +540,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Light"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *lightMin, *lightMax;
@@ -488,6 +561,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Mob"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *minRangeSpin;
@@ -511,6 +586,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Nav"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QListWidget *navStatesList;
@@ -526,6 +603,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Not"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *useTargetSlotEdit;
@@ -540,6 +619,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "OnGround"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -552,6 +633,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Or"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *autoUnlockTargetSlotEdit;
@@ -565,6 +648,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Path"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *pathEdit;
@@ -580,6 +665,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Player"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *minRangeSpin;
@@ -600,6 +687,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Random"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *trueDurMin;
@@ -616,6 +705,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "ReadPosition"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *slotEdit;
@@ -632,6 +723,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "SearchRay"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -651,6 +744,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Self"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -663,6 +758,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "State"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *stateEdit;
@@ -677,6 +774,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Switch"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *switchCheckBox;
@@ -690,6 +789,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Target"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *targetSlotEdit;
@@ -705,6 +806,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Time"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QDoubleSpinBox *periodMin;
@@ -722,6 +825,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Timer"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *nameEdit;
@@ -738,6 +843,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "ValueProviderWrapper"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QCheckBox *passValuesBox;
@@ -751,6 +858,8 @@ namespace SensorNodes
   {
   public:
     QString nodeType() const override { return "Weather"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
     QLineEdit *weathersEdit;
@@ -768,6 +877,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "WeightedAction"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QDoubleSpinBox *weightSpin;
 
     WeightedActionNode(NodeScene *scene);
@@ -786,6 +897,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "AddToHostileTargetMemory"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     AddToHostileTargetMemoryNode(NodeScene *scene);
@@ -797,6 +910,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Appearance"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *appearanceEdit;
 
@@ -809,6 +924,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ApplyEntityEffect"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *entityEffectEdit;
     QCheckBox *useTargetBox;
@@ -822,6 +939,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "CombatAbility"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     CombatAbilityNode(NodeScene *scene);
@@ -833,6 +952,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "CompleteTask"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QComboBox *slotCombo;
     QLineEdit *animationEdit;
@@ -847,6 +968,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Crouch"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *crouchBox;
 
@@ -859,6 +982,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "DelayDespawn"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *timeSpin;
     QCheckBox *shortenBox;
@@ -872,6 +997,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Despawn"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *forceBox;
 
@@ -884,6 +1011,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Die"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     DieNode(NodeScene *scene);
@@ -895,6 +1024,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "DisplayName"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *displayNameEdit;
 
@@ -907,6 +1038,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "DropItem"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *delayMinSpin;
     QDoubleSpinBox *delayMaxSpin;
@@ -928,6 +1061,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "FlockState"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *stateEdit;
 
@@ -940,6 +1075,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "FlockTarget"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *clearBox;
     QLineEdit *targetSlotEdit;
@@ -953,6 +1090,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "IgnoreForAvoidance"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -965,6 +1104,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Inventory"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QComboBox *operationCombo;
     QSpinBox *countSpin;
@@ -981,6 +1122,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "JoinFlock"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *forceJoinBox;
 
@@ -993,6 +1136,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "LeaveFlock"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     LeaveFlockNode(NodeScene *scene);
@@ -1004,6 +1149,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "LockOnInteractionTarget"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -1016,6 +1163,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Log"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *messageEdit;
 
@@ -1028,6 +1177,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ModelAttachment"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *slotEdit;
     QLineEdit *attachmentEdit;
@@ -1041,6 +1192,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Mount"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *anchorXSpin;
     QDoubleSpinBox *anchorYSpin;
@@ -1056,6 +1209,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Nothing"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     NothingNode(NodeScene *scene);
 
     General::Action::Nothing serialize();
@@ -1065,6 +1220,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Notify"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *messageEdit;
     QLineEdit *slotEdit;
@@ -1078,6 +1235,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "OpenBarterShop"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *shopEdit;
 
@@ -1090,6 +1249,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "OpenShop"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *shopEdit;
 
@@ -1102,6 +1263,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "OverrideAltitude"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *altitudeMinSpin;
     QDoubleSpinBox *altitudeMaxSpin;
@@ -1115,6 +1278,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "OverrideAttitude"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QComboBox *attitudeCombo;
     QDoubleSpinBox *durationSpin;
@@ -1128,6 +1293,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ParentState"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *stateEdit;
 
@@ -1140,6 +1307,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "PickUpItem"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *delayMinSpin;
     QDoubleSpinBox *delayMaxSpin;
@@ -1156,6 +1325,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "PlaceBlock"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *rangeSpin;
     QCheckBox *allowEmptyMaterialsBox;
@@ -1169,6 +1340,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "PlaySound"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *soundEventIdEdit;
 
@@ -1181,6 +1354,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Random"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     RandomNode(NodeScene *scene);
@@ -1200,6 +1375,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "RecomputePath"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     RecomputePathNode(NodeScene *scene);
@@ -1211,6 +1388,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ReleaseTarget"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -1223,6 +1402,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Remove"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *useTargetBox;
 
@@ -1235,6 +1416,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ResetBlockSensors"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *blockSetsEdit;
 
@@ -1247,6 +1430,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ResetInstructions"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *instructionsEdit;
 
@@ -1259,6 +1444,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ResetPath"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
 
     ResetPathNode(NodeScene *scene);
@@ -1270,6 +1457,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ResetSearchRays"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *namesEdit;
 
@@ -1282,6 +1471,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Role"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *roleEdit;
     QCheckBox *changeAppearanceBox;
@@ -1296,6 +1487,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Sequence"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *blockingBox;
     QCheckBox *atomicBox;
@@ -1323,6 +1516,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetAlarm"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QDoubleSpinBox *durationMinEdit;
@@ -1337,6 +1532,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetBlockToPlace"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *blockEdit;
 
@@ -1349,6 +1546,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetFlag"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QCheckBox *setToBox;
@@ -1362,6 +1561,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetInteractable"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *interactableBox;
     QLineEdit *hintEdit;
@@ -1377,6 +1578,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetLeashPosition"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *toCurrentBox;
     QCheckBox *toTargetBox;
@@ -1391,6 +1594,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetMarkedTarget"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *targetSlotEdit;
 
@@ -1403,6 +1608,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "SetStat"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *statEdit;
     QDoubleSpinBox *valueSpin;
@@ -1417,6 +1624,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "StartObjective"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *objectiveEdit;
 
@@ -1429,6 +1638,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "State"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *stateEdit;
     QCheckBox *clearStateBox;
@@ -1442,6 +1653,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "StorePosition"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *slotEdit;
 
@@ -1454,6 +1667,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "Timeout"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QDoubleSpinBox *delayMinSpin;
     QDoubleSpinBox *delayMaxSpin;
@@ -1482,6 +1697,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TimerContinue"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -1494,6 +1711,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TimerModify"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QDoubleSpinBox *addValueSpin;
@@ -1512,6 +1731,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TimerPause"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -1524,6 +1745,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TimerRestart"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -1536,6 +1759,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TimerStart"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
     QDoubleSpinBox *startValueMinSpin;
@@ -1554,6 +1779,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TimerStop"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *nameEdit;
 
@@ -1566,6 +1793,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "ToggleStateEvaluator"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QCheckBox *enabledBox;
 
@@ -1578,6 +1807,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TriggerSpawnBeacon"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *beaconSpawnEdit;
     QSpinBox *rangeSpin;
@@ -1592,6 +1823,8 @@ namespace ActionNodes
   {
   public:
     QString nodeType() const override { return "TriggerSpawners"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
     QCheckBox *onceBox;
     QLineEdit *spawnMarkerEdit;
     QSpinBox *rangeSpin;

@@ -18,9 +18,12 @@
 #include <optional>
 #include <iostream>
 
+#include <nlohmann/json.hpp>
+
 class VectorEditor : public QWidget
 {
 public:
+  QListWidget *list;
   using ItemFactory = std::function<QWidget *()>;
 
   VectorEditor(ItemFactory factory, QWidget *parent = nullptr);
@@ -31,14 +34,16 @@ public:
 
   void clear();
 
-private slots:
+public slots:
   void addItem();
 
   void removeItem();
 
 private:
-  QListWidget *list;
   QPushButton *addBtn;
   QPushButton *removeBtn;
   ItemFactory factory;
 };
+
+nlohmann::json serializeVectorEditor(VectorEditor *editor);
+void deserializeVectorEditor(VectorEditor *editor, const nlohmann::json &arr);

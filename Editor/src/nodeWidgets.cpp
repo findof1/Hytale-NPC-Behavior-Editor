@@ -1,4 +1,6 @@
 #include "nodeWidgets.hpp"
+#include "nodes.hpp"
+#include <fstream>
 
 void EdgeItem::updatePath(QPointF start, QPointF end)
 {
@@ -314,6 +316,19 @@ void NodeScene::keyPressEvent(QKeyEvent *event)
   QGraphicsScene::keyPressEvent(event);
 }
 
+std::shared_ptr<NodeItem> NodeScene::spawnNode(const QString &type, QPointF pos)
+{
+  auto node = nodeFactory[type](this);
+
+  node->id = generateId();
+  node->setPos(pos);
+
+  addItem(node.get());
+  nodes.emplace_back(node);
+
+  return node;
+}
+
 void NodeScene::removeNode(NodeItem *node)
 {
   if (!node || !node->deletable)
@@ -380,4 +395,172 @@ void NodeScene::removeEdge(EdgeItem *edge)
     edge->scene()->removeItem(edge);
 
   delete edge;
+}
+
+nlohmann::json NodeScene::serializeScene()
+{
+  nlohmann::json j;
+
+  for (auto &node : nodes)
+  {
+    j["nodes"].push_back({{"id", node->id},
+                          {"type", node->nodeType().toStdString()},
+                          {"x", node->pos().x()},
+                          {"y", node->pos().y()},
+                          {"data", node->serializeNode()}});
+  }
+
+  for (auto &link : links)
+  {
+    NodeItem *fromNode = dynamic_cast<NodeItem *>(link.startNode->parentItem());
+    NodeItem *toNode = dynamic_cast<NodeItem *>(link.endNode->parentItem());
+
+    if (!fromNode || !toNode)
+      continue;
+
+    j["links"].push_back({{"fromNode", fromNode->id},
+                          {"fromSocket", link.startNode->getName().toStdString()},
+                          {"toNode", toNode->id},
+                          {"toSocket", link.endNode->getName().toStdString()}});
+  }
+
+  return j;
+}
+
+RootNode *NodeScene::deserializeScene(const nlohmann::json &j)
+{
+  clear();
+  nodes.clear();
+  links.clear();
+  std::unordered_map<int, std::shared_ptr<NodeItem>> idMap;
+  RootNode *rootNode;
+  int maxId = 0;
+
+  if (j.contains("nodes"))
+  {
+    for (const auto &n : j["nodes"])
+    {
+      int id = n["id"];
+      QString type = QString::fromStdString(n["type"]);
+
+      auto it = nodeFactory.end();
+
+      // Kinda a bad fix for converting from node type to the one in node factory, should fix at some point
+      for (auto iter = nodeFactory.begin(); iter != nodeFactory.end(); ++iter)
+      {
+        QString key = iter.key();
+
+        QString namePart;
+        int slashIndex = key.indexOf('/');
+        if (slashIndex != -1)
+          namePart = key.mid(slashIndex + 1);
+        else
+          namePart = key;
+
+        QString normalized = namePart;
+        normalized.remove(' ');
+
+        if (normalized == type)
+        {
+          it = iter;
+          break;
+        }
+      }
+
+      //
+
+      if (it == nodeFactory.end())
+      {
+        if (type == "Root") // root node isn't in nodeFactory because nodeFactory gets converted into UI and root cannot be spawned in via the UI
+        {
+          rootNode = new RootNode(this);
+          rootNode->id = id;
+          rootNode->setPos(n["x"], n["y"]);
+          addItem(rootNode);
+          nodes.emplace_back(rootNode);
+
+          idMap[id] = nodes.back(); // this returns the correct type for the rootNode, same item, different type
+          maxId = std::max(maxId, id);
+        }
+        continue;
+      }
+
+      auto node = it.value()(this);
+
+      node->id = id;
+      node->setPos(n["x"], n["y"]);
+
+      if (n.contains("data"))
+        node->deserializeNode(n["data"]);
+
+      addItem(node.get());
+      nodes.emplace_back(node);
+
+      idMap[id] = node;
+      maxId = std::max(maxId, id);
+    }
+  }
+
+  nextId = maxId + 1;
+
+  if (j.contains("links"))
+  {
+    for (const auto &l : j["links"])
+    {
+      int fromId = l["fromNode"];
+      int toId = l["toNode"];
+
+      if (!idMap.count(fromId) || !idMap.count(toId))
+        continue;
+
+      auto fromNode = idMap[fromId];
+      auto toNode = idMap[toId];
+
+      std::string fromSocketName = l["fromSocket"];
+      std::string toSocketName = l["toSocket"];
+
+      SocketItem *outSocket = nullptr;
+      SocketItem *inSocket = nullptr;
+
+      for (auto &s : fromNode->outputs)
+      {
+        if (s->getName().toStdString() == fromSocketName)
+        {
+          outSocket = s.get();
+          break;
+        }
+      }
+
+      for (auto &s : toNode->inputs)
+      {
+        if (s->getName().toStdString() == toSocketName)
+        {
+          inSocket = s.get();
+          break;
+        }
+      }
+
+      if (!outSocket || !inSocket)
+        continue;
+
+      auto edge = new EdgeItem(outSocket->scenePos(), inSocket->scenePos());
+      addItem(edge);
+
+      links.push_back({outSocket, inSocket, edge});
+    }
+  }
+
+  if (!rootNode)
+  {
+    rootNode = new RootNode(this);
+    rootNode->id = generateId();
+    rootNode->setPos(0, 0);
+
+    addItem(rootNode);
+    nodes.emplace_back(rootNode);
+  }
+
+  updateLinks();
+
+  return rootNode;
 }

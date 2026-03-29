@@ -23,6 +23,9 @@
 #include "vectorEditorWidget.hpp"
 #include "optionalWidget.hpp"
 
+#include <nlohmann/json.hpp>
+
+// WIP
 class StateTransitionEditor : public QWidget
 {
 public:
@@ -31,6 +34,9 @@ public:
   General::StateTransition value() const;
 
   void setValue(const General::StateTransition &t);
+
+  nlohmann::json serialize();
+  void deserialize(const nlohmann::json &j);
 
 private:
   QSpinBox *prioritySpin;

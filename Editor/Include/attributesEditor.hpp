@@ -41,6 +41,12 @@ public:
   void loadAttributes(const General::Attributes &attr);
 
   QMenu *buildAddMenu(NodeScene *scene, QWidget *parent);
+  void serializeEditorToDisk();
+
+  // returns true if successfully deserialized, returns false if failed to find scene.json file
+  bool deserializeEditorFromDisk();
+
+  void setupScene();
 
   General::Attributes getAttributes();
 

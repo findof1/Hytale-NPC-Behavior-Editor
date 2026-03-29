@@ -60,7 +60,6 @@ InstructionNode::InstructionNode(NodeScene *scene)
   label = form->labelForField(weightSpin);
   label->setStyleSheet("color: gray;");
 }
-
 General::Instruction InstructionNode::serialize()
 {
   General::Instruction data;
@@ -5680,4 +5679,2439 @@ General::Action::TriggerSpawners ActionNodes::TriggerSpawnersNode::serialize()
   if (countSpin->value() != 0)
     data.count = countSpin->value();
   return data;
+}
+
+nlohmann::json InstructionNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["name"] = nameEdit->text().toStdString();
+  j["enabled"] = enabledBox->isChecked();
+  j["continue"] = continueBox->isChecked();
+  j["blocking"] = blockingBox->isChecked();
+  j["atomic"] = atomicBox->isChecked();
+  j["weight"] = weightSpin->value();
+
+  return j;
+}
+
+void InstructionNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"]));
+
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+
+  if (j.contains("continue"))
+    continueBox->setChecked(j["continue"]);
+
+  if (j.contains("blocking"))
+    blockingBox->setChecked(j["blocking"]);
+
+  if (j.contains("atomic"))
+    atomicBox->setChecked(j["atomic"]);
+
+  if (j.contains("weight"))
+    weightSpin->setValue(j["weight"]);
+}
+
+nlohmann::json CommentNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["comment"] = nameEdit->text().toStdString();
+  return j;
+}
+
+void CommentNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("comment"))
+    nameEdit->setText(QString::fromStdString(j["comment"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::AdjustPositionNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["offsetX"] = offsetX->value();
+  j["offsetY"] = offsetY->value();
+  j["offsetZ"] = offsetZ->value();
+  return j;
+}
+
+void SensorNodes::AdjustPositionNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("offsetX"))
+    offsetX->setValue(j["offsetX"].get<double>());
+  if (j.contains("offsetY"))
+    offsetY->setValue(j["offsetY"].get<double>());
+  if (j.contains("offsetZ"))
+    offsetZ->setValue(j["offsetZ"].get<double>());
+}
+
+nlohmann::json SensorNodes::AgeNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["ageMin"] = ageMin->value();
+  j["ageMax"] = ageMax->value();
+  return j;
+}
+
+void SensorNodes::AgeNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("ageMin"))
+    ageMin->setValue(j["ageMin"].get<double>());
+  if (j.contains("ageMax"))
+    ageMax->setValue(j["ageMax"].get<double>());
+}
+
+nlohmann::json SensorNodes::AlarmNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["state"] = stateCombo->currentIndex();
+  j["clear"] = clearBox->isChecked();
+  return j;
+}
+
+void SensorNodes::AlarmNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("state"))
+    stateCombo->setCurrentIndex(j["state"].get<int>());
+  if (j.contains("clear"))
+    clearBox->setChecked(j["clear"]);
+}
+
+nlohmann::json SensorNodes::AndNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["autoUnlockTargetSlot"] = autoUnlockTargetSlotEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::AndNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("autoUnlockTargetSlot"))
+    autoUnlockTargetSlotEdit->setText(QString::fromStdString(j["autoUnlockTargetSlot"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::AnimationNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["slot"] = slotCombo->currentIndex();
+  j["animation"] = animationEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::AnimationNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("slot"))
+    slotCombo->setCurrentIndex(j["slot"].get<int>());
+  if (j.contains("animation"))
+    animationEdit->setText(QString::fromStdString(j["animation"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::AnyNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::AnyNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::BeaconNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["message"] = messageEdit->text().toStdString();
+  j["range"] = rangeSpin->value();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  j["consumeMessage"] = consumeMessageBox->isChecked();
+  return j;
+}
+
+void SensorNodes::BeaconNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("message"))
+    messageEdit->setText(QString::fromStdString(j["message"].get<std::string>()));
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+  if (j.contains("consumeMessage"))
+    consumeMessageBox->setChecked(j["consumeMessage"]);
+}
+
+nlohmann::json SensorNodes::BlockChangeNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["range"] = rangeSpin->value();
+  j["searchType"] = searchTypeCombo->currentIndex();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  j["blockSet"] = blockSetEdit->text().toStdString();
+  j["eventType"] = eventTypeCombo->currentIndex();
+  return j;
+}
+
+void SensorNodes::BlockChangeNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("searchType"))
+    searchTypeCombo->setCurrentIndex(j["searchType"].get<int>());
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+  if (j.contains("blockSet"))
+    blockSetEdit->setText(QString::fromStdString(j["blockSet"].get<std::string>()));
+  if (j.contains("eventType"))
+    eventTypeCombo->setCurrentIndex(j["eventType"].get<int>());
+}
+
+nlohmann::json SensorNodes::BlockTypeNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["blockSet"] = blockSetEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::BlockTypeNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("blockSet"))
+    blockSetEdit->setText(QString::fromStdString(j["blockSet"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::CanInteractNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["viewSector"] = viewSectorSpin->value();
+  {
+    nlohmann::json arr = nlohmann::json::array();
+    for (int i = 0; i < attitudesList->count(); ++i)
+    {
+      auto *item = attitudesList->item(i);
+      if (item && item->isSelected())
+        arr.push_back(item->text().toStdString());
+    }
+    j["attitudes"] = arr;
+  }
+  return j;
+}
+
+void SensorNodes::CanInteractNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("viewSector"))
+    viewSectorSpin->setValue(j["viewSector"].get<double>());
+  if (j.contains("attitudes"))
+  {
+    attitudesList->clearSelection();
+    for (const auto &val : j["attitudes"])
+    {
+      QString qval = QString::fromStdString(val.get<std::string>());
+      for (int i = 0; i < attitudesList->count(); ++i)
+      {
+        if (attitudesList->item(i)->text() == qval)
+          attitudesList->item(i)->setSelected(true);
+      }
+    }
+  }
+}
+
+nlohmann::json SensorNodes::CanPlaceBlockNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["direction"] = directionCombo->currentIndex();
+  j["offset"] = offsetCombo->currentIndex();
+  j["retryDelay"] = retryDelaySpin->value();
+  j["allowEmptyMaterials"] = allowEmptyMaterialsBox->isChecked();
+  return j;
+}
+
+void SensorNodes::CanPlaceBlockNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("direction"))
+    directionCombo->setCurrentIndex(j["direction"].get<int>());
+  if (j.contains("offset"))
+    offsetCombo->setCurrentIndex(j["offset"].get<int>());
+  if (j.contains("retryDelay"))
+    retryDelaySpin->setValue(j["retryDelay"].get<double>());
+  if (j.contains("allowEmptyMaterials"))
+    allowEmptyMaterialsBox->setChecked(j["allowEmptyMaterials"]);
+}
+
+nlohmann::json SensorNodes::CombatActionEvaluatorNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["targetInRange"] = targetInRangeBox->isChecked();
+  j["allowableDeviation"] = allowableDeviationSpin->value();
+  return j;
+}
+
+void SensorNodes::CombatActionEvaluatorNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("targetInRange"))
+    targetInRangeBox->setChecked(j["targetInRange"]);
+  if (j.contains("allowableDeviation"))
+    allowableDeviationSpin->setValue(j["allowableDeviation"].get<double>());
+}
+
+nlohmann::json SensorNodes::CountNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["countMin"] = countMin->value();
+  j["countMax"] = countMax->value();
+  j["rangeMin"] = rangeMin->value();
+  j["rangeMax"] = rangeMax->value();
+  j["includeGroups"] = includeGroupsEdit->text().toStdString();
+  j["excludeGroups"] = excludeGroupsEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::CountNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("countMin"))
+    countMin->setValue(j["countMin"].get<int>());
+  if (j.contains("countMax"))
+    countMax->setValue(j["countMax"].get<int>());
+  if (j.contains("rangeMin"))
+    rangeMin->setValue(j["rangeMin"].get<double>());
+  if (j.contains("rangeMax"))
+    rangeMax->setValue(j["rangeMax"].get<double>());
+  if (j.contains("includeGroups"))
+    includeGroupsEdit->setText(QString::fromStdString(j["includeGroups"].get<std::string>()));
+  if (j.contains("excludeGroups"))
+    excludeGroupsEdit->setText(QString::fromStdString(j["excludeGroups"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::DamageNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["combat"] = combatBox->isChecked();
+  j["friendly"] = friendlyBox->isChecked();
+  j["drowning"] = drowningBox->isChecked();
+  j["environment"] = environmentBox->isChecked();
+  j["other"] = otherBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::DamageNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("combat"))
+    combatBox->setChecked(j["combat"]);
+  if (j.contains("friendly"))
+    friendlyBox->setChecked(j["friendly"]);
+  if (j.contains("drowning"))
+    drowningBox->setChecked(j["drowning"]);
+  if (j.contains("environment"))
+    environmentBox->setChecked(j["environment"]);
+  if (j.contains("other"))
+    otherBox->setChecked(j["other"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::DroppedItemNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["range"] = rangeSpin->value();
+  j["viewSector"] = viewSectorSpin->value();
+  j["lineOfSight"] = lineOfSightBox->isChecked();
+  j["items"] = itemsEdit->text().toStdString();
+  {
+    nlohmann::json arr = nlohmann::json::array();
+    for (int i = 0; i < attitudesList->count(); ++i)
+    {
+      auto *item = attitudesList->item(i);
+      if (item && item->isSelected())
+        arr.push_back(item->text().toStdString());
+    }
+    j["attitudes"] = arr;
+  }
+  return j;
+}
+
+void SensorNodes::DroppedItemNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("viewSector"))
+    viewSectorSpin->setValue(j["viewSector"].get<double>());
+  if (j.contains("lineOfSight"))
+    lineOfSightBox->setChecked(j["lineOfSight"]);
+  if (j.contains("items"))
+    itemsEdit->setText(QString::fromStdString(j["items"].get<std::string>()));
+  if (j.contains("attitudes"))
+  {
+    attitudesList->clearSelection();
+    for (const auto &val : j["attitudes"])
+    {
+      QString qval = QString::fromStdString(val.get<std::string>());
+      for (int i = 0; i < attitudesList->count(); ++i)
+      {
+        if (attitudesList->item(i)->text() == qval)
+          attitudesList->item(i)->setSelected(true);
+      }
+    }
+  }
+}
+
+nlohmann::json SensorNodes::EntityEventNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["range"] = rangeSpin->value();
+  j["searchType"] = searchTypeCombo->currentIndex();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  j["npcGroup"] = npcGroupEdit->text().toStdString();
+  j["eventType"] = eventTypeCombo->currentIndex();
+  j["flockOnly"] = flockOnlyBox->isChecked();
+  return j;
+}
+
+void SensorNodes::EntityEventNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("searchType"))
+    searchTypeCombo->setCurrentIndex(j["searchType"].get<int>());
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+  if (j.contains("npcGroup"))
+    npcGroupEdit->setText(QString::fromStdString(j["npcGroup"].get<std::string>()));
+  if (j.contains("eventType"))
+    eventTypeCombo->setCurrentIndex(j["eventType"].get<int>());
+  if (j.contains("flockOnly"))
+    flockOnlyBox->setChecked(j["flockOnly"]);
+}
+
+nlohmann::json SensorNodes::FlagNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["set"] = setBox->isChecked();
+  return j;
+}
+
+void SensorNodes::FlagNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("set"))
+    setBox->setChecked(j["set"]);
+}
+
+nlohmann::json SensorNodes::FlockCombatDamageNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["leaderOnly"] = leaderOnlyBox->isChecked();
+  return j;
+}
+
+void SensorNodes::FlockCombatDamageNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("leaderOnly"))
+    leaderOnlyBox->setChecked(j["leaderOnly"]);
+}
+
+nlohmann::json SensorNodes::FlockLeaderNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::FlockLeaderNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::HasHostileTargetMemoryNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::HasHostileTargetMemoryNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::HasInteractedNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::HasInteractedNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::HasTaskNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["taskById"] = taskByIdEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::HasTaskNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("taskById"))
+    taskByIdEdit->setText(QString::fromStdString(j["taskById"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::InAirNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::InAirNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::InWaterNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::InWaterNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::InflictedDamageNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["target"] = targetCombo->currentIndex();
+  j["friendlyFire"] = friendlyFireBox->isChecked();
+  return j;
+}
+
+void SensorNodes::InflictedDamageNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("target"))
+    targetCombo->setCurrentIndex(j["target"].get<int>());
+  if (j.contains("friendlyFire"))
+    friendlyFireBox->setChecked(j["friendlyFire"]);
+}
+
+nlohmann::json SensorNodes::InteractionContextNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["context"] = contextEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::InteractionContextNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("context"))
+    contextEdit->setText(QString::fromStdString(j["context"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::IsBackingAwayNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::IsBackingAwayNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::IsBusyNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::IsBusyNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::KillNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::KillNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::LeashNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["range"] = rangeSpin->value();
+  return j;
+}
+
+void SensorNodes::LeashNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+}
+
+nlohmann::json SensorNodes::LightNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["lightMin"] = lightMin->value();
+  j["lightMax"] = lightMax->value();
+  j["skyLightMin"] = skyLightMin->value();
+  j["skyLightMax"] = skyLightMax->value();
+  j["sunlightMin"] = sunlightMin->value();
+  j["sunlightMax"] = sunlightMax->value();
+  j["redMin"] = redMin->value();
+  j["redMax"] = redMax->value();
+  j["greenMin"] = greenMin->value();
+  j["greenMax"] = greenMax->value();
+  j["blueMin"] = blueMin->value();
+  j["blueMax"] = blueMax->value();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::LightNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("lightMin"))
+    lightMin->setValue(j["lightMin"].get<double>());
+  if (j.contains("lightMax"))
+    lightMax->setValue(j["lightMax"].get<double>());
+  if (j.contains("skyLightMin"))
+    skyLightMin->setValue(j["skyLightMin"].get<double>());
+  if (j.contains("skyLightMax"))
+    skyLightMax->setValue(j["skyLightMax"].get<double>());
+  if (j.contains("sunlightMin"))
+    sunlightMin->setValue(j["sunlightMin"].get<double>());
+  if (j.contains("sunlightMax"))
+    sunlightMax->setValue(j["sunlightMax"].get<double>());
+  if (j.contains("redMin"))
+    redMin->setValue(j["redMin"].get<double>());
+  if (j.contains("redMax"))
+    redMax->setValue(j["redMax"].get<double>());
+  if (j.contains("greenMin"))
+    greenMin->setValue(j["greenMin"].get<double>());
+  if (j.contains("greenMax"))
+    greenMax->setValue(j["greenMax"].get<double>());
+  if (j.contains("blueMin"))
+    blueMin->setValue(j["blueMin"].get<double>());
+  if (j.contains("blueMax"))
+    blueMax->setValue(j["blueMax"].get<double>());
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::MobNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["minRange"] = minRangeSpin->value();
+  j["range"] = rangeSpin->value();
+  j["lockedOnTarget"] = lockedOnTargetBox->isChecked();
+  j["lockedTargetSlot"] = lockedTargetSlotEdit->text().toStdString();
+  j["autoUnlockTarget"] = autoUnlockTargetBox->isChecked();
+  j["onlyLockedTarget"] = onlyLockedTargetBox->isChecked();
+  j["ignoredTargetSlot"] = ignoredTargetSlotEdit->text().toStdString();
+  j["useProjectedDistance"] = useProjectedDistanceBox->isChecked();
+  j["getPlayers"] = getPlayersBox->isChecked();
+  j["getNPCs"] = getNPCsBox->isChecked();
+  j["excludeOwnType"] = excludeOwnTypeBox->isChecked();
+  return j;
+}
+
+void SensorNodes::MobNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("minRange"))
+    minRangeSpin->setValue(j["minRange"].get<double>());
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("lockedOnTarget"))
+    lockedOnTargetBox->setChecked(j["lockedOnTarget"]);
+  if (j.contains("lockedTargetSlot"))
+    lockedTargetSlotEdit->setText(QString::fromStdString(j["lockedTargetSlot"].get<std::string>()));
+  if (j.contains("autoUnlockTarget"))
+    autoUnlockTargetBox->setChecked(j["autoUnlockTarget"]);
+  if (j.contains("onlyLockedTarget"))
+    onlyLockedTargetBox->setChecked(j["onlyLockedTarget"]);
+  if (j.contains("ignoredTargetSlot"))
+    ignoredTargetSlotEdit->setText(QString::fromStdString(j["ignoredTargetSlot"].get<std::string>()));
+  if (j.contains("useProjectedDistance"))
+    useProjectedDistanceBox->setChecked(j["useProjectedDistance"]);
+  if (j.contains("getPlayers"))
+    getPlayersBox->setChecked(j["getPlayers"]);
+  if (j.contains("getNPCs"))
+    getNPCsBox->setChecked(j["getNPCs"]);
+  if (j.contains("excludeOwnType"))
+    excludeOwnTypeBox->setChecked(j["excludeOwnType"]);
+}
+
+nlohmann::json SensorNodes::NavNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  {
+    nlohmann::json arr = nlohmann::json::array();
+    for (int i = 0; i < navStatesList->count(); ++i)
+    {
+      auto *item = navStatesList->item(i);
+      if (item && item->isSelected())
+        arr.push_back(item->text().toStdString());
+    }
+    j["navStates"] = arr;
+  }
+  j["throttleDuration"] = throttleDurationSpin->value();
+  j["targetDelta"] = targetDeltaSpin->value();
+  return j;
+}
+
+void SensorNodes::NavNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("navStates"))
+  {
+    navStatesList->clearSelection();
+    for (const auto &val : j["navStates"])
+    {
+      QString qval = QString::fromStdString(val.get<std::string>());
+      for (int i = 0; i < navStatesList->count(); ++i)
+      {
+        if (navStatesList->item(i)->text() == qval)
+          navStatesList->item(i)->setSelected(true);
+      }
+    }
+  }
+  if (j.contains("throttleDuration"))
+    throttleDurationSpin->setValue(j["throttleDuration"].get<double>());
+  if (j.contains("targetDelta"))
+    targetDeltaSpin->setValue(j["targetDelta"].get<double>());
+}
+
+nlohmann::json SensorNodes::NotNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["useTargetSlot"] = useTargetSlotEdit->text().toStdString();
+  j["autoUnlockTargetSlot"] = autoUnlockTargetSlotEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::NotNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("useTargetSlot"))
+    useTargetSlotEdit->setText(QString::fromStdString(j["useTargetSlot"].get<std::string>()));
+  if (j.contains("autoUnlockTargetSlot"))
+    autoUnlockTargetSlotEdit->setText(QString::fromStdString(j["autoUnlockTargetSlot"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::OnGroundNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::OnGroundNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::OrNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["autoUnlockTargetSlot"] = autoUnlockTargetSlotEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::OrNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("autoUnlockTargetSlot"))
+    autoUnlockTargetSlotEdit->setText(QString::fromStdString(j["autoUnlockTargetSlot"].get<std::string>()));
+}
+
+nlohmann::json SensorNodes::PathNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["path"] = pathEdit->text().toStdString();
+  j["range"] = rangeSpin->value();
+  j["pathType"] = pathTypeCombo->currentIndex();
+  return j;
+}
+
+void SensorNodes::PathNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("path"))
+    pathEdit->setText(QString::fromStdString(j["path"].get<std::string>()));
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("pathType"))
+    pathTypeCombo->setCurrentIndex(j["pathType"].get<int>());
+}
+
+nlohmann::json SensorNodes::PlayerNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["minRange"] = minRangeSpin->value();
+  j["range"] = rangeSpin->value();
+  j["lockedOnTarget"] = lockedOnTargetBox->isChecked();
+  j["lockedTargetSlot"] = lockedTargetSlotEdit->text().toStdString();
+  j["autoUnlockTarget"] = autoUnlockTargetBox->isChecked();
+  j["onlyLockedTarget"] = onlyLockedTargetBox->isChecked();
+  j["ignoredTargetSlot"] = ignoredTargetSlotEdit->text().toStdString();
+  j["useProjectedDistance"] = useProjectedDistanceBox->isChecked();
+  return j;
+}
+
+void SensorNodes::PlayerNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("minRange"))
+    minRangeSpin->setValue(j["minRange"].get<double>());
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("lockedOnTarget"))
+    lockedOnTargetBox->setChecked(j["lockedOnTarget"]);
+  if (j.contains("lockedTargetSlot"))
+    lockedTargetSlotEdit->setText(QString::fromStdString(j["lockedTargetSlot"].get<std::string>()));
+  if (j.contains("autoUnlockTarget"))
+    autoUnlockTargetBox->setChecked(j["autoUnlockTarget"]);
+  if (j.contains("onlyLockedTarget"))
+    onlyLockedTargetBox->setChecked(j["onlyLockedTarget"]);
+  if (j.contains("ignoredTargetSlot"))
+    ignoredTargetSlotEdit->setText(QString::fromStdString(j["ignoredTargetSlot"].get<std::string>()));
+  if (j.contains("useProjectedDistance"))
+    useProjectedDistanceBox->setChecked(j["useProjectedDistance"]);
+}
+
+nlohmann::json SensorNodes::RandomNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["trueDurMin"] = trueDurMin->value();
+  j["trueDurMax"] = trueDurMax->value();
+  j["falseDurMin"] = falseDurMin->value();
+  j["falseDurMax"] = falseDurMax->value();
+  return j;
+}
+
+void SensorNodes::RandomNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("trueDurMin"))
+    trueDurMin->setValue(j["trueDurMin"].get<double>());
+  if (j.contains("trueDurMax"))
+    trueDurMax->setValue(j["trueDurMax"].get<double>());
+  if (j.contains("falseDurMin"))
+    falseDurMin->setValue(j["falseDurMin"].get<double>());
+  if (j.contains("falseDurMax"))
+    falseDurMax->setValue(j["falseDurMax"].get<double>());
+}
+
+nlohmann::json SensorNodes::ReadPositionNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["slot"] = slotEdit->text().toStdString();
+  j["minRange"] = minRangeSpin->value();
+  j["range"] = rangeSpin->value();
+  j["useMarkedTarget"] = useMarkedTargetBox->isChecked();
+  return j;
+}
+
+void SensorNodes::ReadPositionNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("slot"))
+    slotEdit->setText(QString::fromStdString(j["slot"].get<std::string>()));
+  if (j.contains("minRange"))
+    minRangeSpin->setValue(j["minRange"].get<double>());
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("useMarkedTarget"))
+    useMarkedTargetBox->setChecked(j["useMarkedTarget"]);
+}
+
+nlohmann::json SensorNodes::SearchRayNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["angle"] = angleSpin->value();
+  j["range"] = rangeSpin->value();
+  j["blocks"] = blocksEdit->text().toStdString();
+  j["minRetestAngle"] = minRetestAngleSpin->value();
+  j["minRetestMove"] = minRetestMoveSpin->value();
+  j["throttleTime"] = throttleTimeSpin->value();
+  return j;
+}
+
+void SensorNodes::SearchRayNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("angle"))
+    angleSpin->setValue(j["angle"].get<double>());
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("blocks"))
+    blocksEdit->setText(QString::fromStdString(j["blocks"].get<std::string>()));
+  if (j.contains("minRetestAngle"))
+    minRetestAngleSpin->setValue(j["minRetestAngle"].get<double>());
+  if (j.contains("minRetestMove"))
+    minRetestMoveSpin->setValue(j["minRetestMove"].get<double>());
+  if (j.contains("throttleTime"))
+    throttleTimeSpin->setValue(j["throttleTime"].get<double>());
+}
+
+nlohmann::json SensorNodes::SelfNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void SensorNodes::SelfNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json SensorNodes::StateNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["state"] = stateEdit->text().toStdString();
+  j["ignoreMissingSetState"] = ignoreMissingSetStateBox->isChecked();
+  return j;
+}
+
+void SensorNodes::StateNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("state"))
+    stateEdit->setText(QString::fromStdString(j["state"].get<std::string>()));
+  if (j.contains("ignoreMissingSetState"))
+    ignoreMissingSetStateBox->setChecked(j["ignoreMissingSetState"]);
+}
+
+nlohmann::json SensorNodes::SwitchNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["switch"] = switchCheckBox->isChecked();
+  return j;
+}
+
+void SensorNodes::SwitchNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("switch"))
+    switchCheckBox->setChecked(j["switch"]);
+}
+
+nlohmann::json SensorNodes::TargetNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  j["range"] = rangeSpin->value();
+  j["autoUnlockTarget"] = autoUnlockTargetBox->isChecked();
+  return j;
+}
+
+void SensorNodes::TargetNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("autoUnlockTarget"))
+    autoUnlockTargetBox->setChecked(j["autoUnlockTarget"]);
+}
+
+nlohmann::json SensorNodes::TimeNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["periodMin"] = periodMin->value();
+  j["periodMax"] = periodMax->value();
+  j["checkDay"] = checkDayBox->isChecked();
+  j["checkYear"] = checkYearBox->isChecked();
+  j["scaleDayTimeRange"] = scaleDayTimeRangeBox->isChecked();
+  return j;
+}
+
+void SensorNodes::TimeNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("periodMin"))
+    periodMin->setValue(j["periodMin"].get<double>());
+  if (j.contains("periodMax"))
+    periodMax->setValue(j["periodMax"].get<double>());
+  if (j.contains("checkDay"))
+    checkDayBox->setChecked(j["checkDay"]);
+  if (j.contains("checkYear"))
+    checkYearBox->setChecked(j["checkYear"]);
+  if (j.contains("scaleDayTimeRange"))
+    scaleDayTimeRangeBox->setChecked(j["scaleDayTimeRange"]);
+}
+
+nlohmann::json SensorNodes::TimerNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["state"] = stateCombo->currentIndex();
+  j["timeRemainingMin"] = timeRemainingMin->value();
+  j["timeRemainingMax"] = timeRemainingMax->value();
+  return j;
+}
+
+void SensorNodes::TimerNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("state"))
+    stateCombo->setCurrentIndex(j["state"].get<int>());
+  if (j.contains("timeRemainingMin"))
+    timeRemainingMin->setValue(j["timeRemainingMin"].get<double>());
+  if (j.contains("timeRemainingMax"))
+    timeRemainingMax->setValue(j["timeRemainingMax"].get<double>());
+}
+
+nlohmann::json SensorNodes::ValueProviderWrapperNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["passValues"] = passValuesBox->isChecked();
+  return j;
+}
+
+void SensorNodes::ValueProviderWrapperNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("passValues"))
+    passValuesBox->setChecked(j["passValues"]);
+}
+
+nlohmann::json SensorNodes::WeatherNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["weathers"] = weathersEdit->text().toStdString();
+  return j;
+}
+
+void SensorNodes::WeatherNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("weathers"))
+    weathersEdit->setText(QString::fromStdString(j["weathers"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::WeightedActionNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["weight"] = weightSpin->value();
+  return j;
+}
+
+void ActionNodes::WeightedActionNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("weight"))
+    weightSpin->setValue(j["weight"].get<double>());
+}
+
+nlohmann::json ActionNodes::AddToHostileTargetMemoryNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::AddToHostileTargetMemoryNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::AppearanceNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["appearance"] = appearanceEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::AppearanceNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("appearance"))
+    appearanceEdit->setText(QString::fromStdString(j["appearance"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::ApplyEntityEffectNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["entityEffect"] = entityEffectEdit->text().toStdString();
+  j["useTarget"] = useTargetBox->isChecked();
+  return j;
+}
+
+void ActionNodes::ApplyEntityEffectNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("entityEffect"))
+    entityEffectEdit->setText(QString::fromStdString(j["entityEffect"].get<std::string>()));
+  if (j.contains("useTarget"))
+    useTargetBox->setChecked(j["useTarget"]);
+}
+
+nlohmann::json ActionNodes::CombatAbilityNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::CombatAbilityNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::CompleteTaskNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["slot"] = slotCombo->currentIndex();
+  j["animation"] = animationEdit->text().toStdString();
+  j["playAnimation"] = playAnimationBox->isChecked();
+  return j;
+}
+
+void ActionNodes::CompleteTaskNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("slot"))
+    slotCombo->setCurrentIndex(j["slot"].get<int>());
+  if (j.contains("animation"))
+    animationEdit->setText(QString::fromStdString(j["animation"].get<std::string>()));
+  if (j.contains("playAnimation"))
+    playAnimationBox->setChecked(j["playAnimation"]);
+}
+
+nlohmann::json ActionNodes::CrouchNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["crouch"] = crouchBox->isChecked();
+  return j;
+}
+
+void ActionNodes::CrouchNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("crouch"))
+    crouchBox->setChecked(j["crouch"]);
+}
+
+nlohmann::json ActionNodes::DelayDespawnNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["time"] = timeSpin->value();
+  j["shorten"] = shortenBox->isChecked();
+  return j;
+}
+
+void ActionNodes::DelayDespawnNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("time"))
+    timeSpin->setValue(j["time"].get<double>());
+  if (j.contains("shorten"))
+    shortenBox->setChecked(j["shorten"]);
+}
+
+nlohmann::json ActionNodes::DespawnNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["force"] = forceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::DespawnNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("force"))
+    forceBox->setChecked(j["force"]);
+}
+
+nlohmann::json ActionNodes::DieNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::DieNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::DisplayNameNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["displayName"] = displayNameEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::DisplayNameNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("displayName"))
+    displayNameEdit->setText(QString::fromStdString(j["displayName"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::DropItemNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["delayMin"] = delayMinSpin->value();
+  j["delayMax"] = delayMaxSpin->value();
+  j["item"] = itemEdit->text().toStdString();
+  j["dropList"] = dropListEdit->text().toStdString();
+  j["throwSpeed"] = throwSpeedSpin->value();
+  j["distanceMin"] = distanceMinSpin->value();
+  j["distanceMax"] = distanceMaxSpin->value();
+  j["dropSectorMin"] = dropSectorMinSpin->value();
+  j["dropSectorMax"] = dropSectorMaxSpin->value();
+  j["pitchHigh"] = pitchHighBox->isChecked();
+  return j;
+}
+
+void ActionNodes::DropItemNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("delayMin"))
+    delayMinSpin->setValue(j["delayMin"].get<double>());
+  if (j.contains("delayMax"))
+    delayMaxSpin->setValue(j["delayMax"].get<double>());
+  if (j.contains("item"))
+    itemEdit->setText(QString::fromStdString(j["item"].get<std::string>()));
+  if (j.contains("dropList"))
+    dropListEdit->setText(QString::fromStdString(j["dropList"].get<std::string>()));
+  if (j.contains("throwSpeed"))
+    throwSpeedSpin->setValue(j["throwSpeed"].get<double>());
+  if (j.contains("distanceMin"))
+    distanceMinSpin->setValue(j["distanceMin"].get<double>());
+  if (j.contains("distanceMax"))
+    distanceMaxSpin->setValue(j["distanceMax"].get<double>());
+  if (j.contains("dropSectorMin"))
+    dropSectorMinSpin->setValue(j["dropSectorMin"].get<double>());
+  if (j.contains("dropSectorMax"))
+    dropSectorMaxSpin->setValue(j["dropSectorMax"].get<double>());
+  if (j.contains("pitchHigh"))
+    pitchHighBox->setChecked(j["pitchHigh"]);
+}
+
+nlohmann::json ActionNodes::FlockStateNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["state"] = stateEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::FlockStateNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("state"))
+    stateEdit->setText(QString::fromStdString(j["state"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::FlockTargetNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["clear"] = clearBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::FlockTargetNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("clear"))
+    clearBox->setChecked(j["clear"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::IgnoreForAvoidanceNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::IgnoreForAvoidanceNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::InventoryNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["operation"] = operationCombo->currentIndex();
+  j["count"] = countSpin->value();
+  j["item"] = itemEdit->text().toStdString();
+  j["useTarget"] = useTargetBox->isChecked();
+  j["slot"] = slotSpin->value();
+  return j;
+}
+
+void ActionNodes::InventoryNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("operation"))
+    operationCombo->setCurrentIndex(j["operation"].get<int>());
+  if (j.contains("count"))
+    countSpin->setValue(j["count"].get<int>());
+  if (j.contains("item"))
+    itemEdit->setText(QString::fromStdString(j["item"].get<std::string>()));
+  if (j.contains("useTarget"))
+    useTargetBox->setChecked(j["useTarget"]);
+  if (j.contains("slot"))
+    slotSpin->setValue(j["slot"].get<int>());
+}
+
+nlohmann::json ActionNodes::JoinFlockNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["forceJoin"] = forceJoinBox->isChecked();
+  return j;
+}
+
+void ActionNodes::JoinFlockNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("forceJoin"))
+    forceJoinBox->setChecked(j["forceJoin"]);
+}
+
+nlohmann::json ActionNodes::LeaveFlockNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::LeaveFlockNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::LockOnInteractionTargetNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::LockOnInteractionTargetNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::LogNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["message"] = messageEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::LogNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("message"))
+    messageEdit->setText(QString::fromStdString(j["message"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::ModelAttachmentNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["slot"] = slotEdit->text().toStdString();
+  j["attachment"] = attachmentEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::ModelAttachmentNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("slot"))
+    slotEdit->setText(QString::fromStdString(j["slot"].get<std::string>()));
+  if (j.contains("attachment"))
+    attachmentEdit->setText(QString::fromStdString(j["attachment"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::MountNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["anchorX"] = anchorXSpin->value();
+  j["anchorY"] = anchorYSpin->value();
+  j["anchorZ"] = anchorZSpin->value();
+  j["movementConfig"] = movementConfigEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::MountNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("anchorX"))
+    anchorXSpin->setValue(j["anchorX"].get<double>());
+  if (j.contains("anchorY"))
+    anchorYSpin->setValue(j["anchorY"].get<double>());
+  if (j.contains("anchorZ"))
+    anchorZSpin->setValue(j["anchorZ"].get<double>());
+  if (j.contains("movementConfig"))
+    movementConfigEdit->setText(QString::fromStdString(j["movementConfig"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::NothingNode::serializeNode() const
+{
+  nlohmann::json j;
+  return j;
+}
+
+void ActionNodes::NothingNode::deserializeNode(const nlohmann::json &j)
+{
+}
+
+nlohmann::json ActionNodes::NotifyNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["message"] = messageEdit->text().toStdString();
+  j["slot"] = slotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::NotifyNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("message"))
+    messageEdit->setText(QString::fromStdString(j["message"].get<std::string>()));
+  if (j.contains("slot"))
+    slotEdit->setText(QString::fromStdString(j["slot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::OpenBarterShopNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["shop"] = shopEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::OpenBarterShopNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("shop"))
+    shopEdit->setText(QString::fromStdString(j["shop"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::OpenShopNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["shop"] = shopEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::OpenShopNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("shop"))
+    shopEdit->setText(QString::fromStdString(j["shop"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::OverrideAltitudeNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["altitudeMin"] = altitudeMinSpin->value();
+  j["altitudeMax"] = altitudeMaxSpin->value();
+  return j;
+}
+
+void ActionNodes::OverrideAltitudeNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("altitudeMin"))
+    altitudeMinSpin->setValue(j["altitudeMin"].get<double>());
+  if (j.contains("altitudeMax"))
+    altitudeMaxSpin->setValue(j["altitudeMax"].get<double>());
+}
+
+nlohmann::json ActionNodes::OverrideAttitudeNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["attitude"] = attitudeCombo->currentIndex();
+  j["duration"] = durationSpin->value();
+  return j;
+}
+
+void ActionNodes::OverrideAttitudeNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("attitude"))
+    attitudeCombo->setCurrentIndex(j["attitude"].get<int>());
+  if (j.contains("duration"))
+    durationSpin->setValue(j["duration"].get<double>());
+}
+
+nlohmann::json ActionNodes::ParentStateNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["state"] = stateEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::ParentStateNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("state"))
+    stateEdit->setText(QString::fromStdString(j["state"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::PickUpItemNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["delayMin"] = delayMinSpin->value();
+  j["delayMax"] = delayMaxSpin->value();
+  j["range"] = rangeSpin->value();
+  j["hoover"] = hooverBox->isChecked();
+  j["items"] = itemsEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::PickUpItemNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("delayMin"))
+    delayMinSpin->setValue(j["delayMin"].get<double>());
+  if (j.contains("delayMax"))
+    delayMaxSpin->setValue(j["delayMax"].get<double>());
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("hoover"))
+    hooverBox->setChecked(j["hoover"]);
+  if (j.contains("items"))
+    itemsEdit->setText(QString::fromStdString(j["items"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::PlaceBlockNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["range"] = rangeSpin->value();
+  j["allowEmptyMaterials"] = allowEmptyMaterialsBox->isChecked();
+  return j;
+}
+
+void ActionNodes::PlaceBlockNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("allowEmptyMaterials"))
+    allowEmptyMaterialsBox->setChecked(j["allowEmptyMaterials"]);
+}
+
+nlohmann::json ActionNodes::PlaySoundNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["soundEventId"] = soundEventIdEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::PlaySoundNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("soundEventId"))
+    soundEventIdEdit->setText(QString::fromStdString(j["soundEventId"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::RandomNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::RandomNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::RecomputePathNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::RecomputePathNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::ReleaseTargetNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::ReleaseTargetNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::RemoveNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["useTarget"] = useTargetBox->isChecked();
+  return j;
+}
+
+void ActionNodes::RemoveNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("useTarget"))
+    useTargetBox->setChecked(j["useTarget"]);
+}
+
+nlohmann::json ActionNodes::ResetBlockSensorsNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["blockSets"] = blockSetsEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::ResetBlockSensorsNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("blockSets"))
+    blockSetsEdit->setText(QString::fromStdString(j["blockSets"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::ResetInstructionsNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["instructions"] = instructionsEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::ResetInstructionsNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("instructions"))
+    instructionsEdit->setText(QString::fromStdString(j["instructions"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::ResetPathNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  return j;
+}
+
+void ActionNodes::ResetPathNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+}
+
+nlohmann::json ActionNodes::ResetSearchRaysNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["names"] = namesEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::ResetSearchRaysNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("names"))
+    namesEdit->setText(QString::fromStdString(j["names"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::RoleNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["role"] = roleEdit->text().toStdString();
+  j["changeAppearance"] = changeAppearanceBox->isChecked();
+  j["state"] = stateEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::RoleNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("role"))
+    roleEdit->setText(QString::fromStdString(j["role"].get<std::string>()));
+  if (j.contains("changeAppearance"))
+    changeAppearanceBox->setChecked(j["changeAppearance"]);
+  if (j.contains("state"))
+    stateEdit->setText(QString::fromStdString(j["state"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::SequenceNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["blocking"] = blockingBox->isChecked();
+  j["atomic"] = atomicBox->isChecked();
+  return j;
+}
+
+void ActionNodes::SequenceNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("blocking"))
+    blockingBox->setChecked(j["blocking"]);
+  if (j.contains("atomic"))
+    atomicBox->setChecked(j["atomic"]);
+}
+
+nlohmann::json ActionNodes::SetAlarmNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["durationMin"] = durationMinEdit->value();
+  j["durationMax"] = durationMaxEdit->value();
+  return j;
+}
+
+void ActionNodes::SetAlarmNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("durationMin"))
+    durationMinEdit->setValue(j["durationMin"].get<double>());
+  if (j.contains("durationMax"))
+    durationMaxEdit->setValue(j["durationMax"].get<double>());
+}
+
+nlohmann::json ActionNodes::SetBlockToPlaceNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["block"] = blockEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::SetBlockToPlaceNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("block"))
+    blockEdit->setText(QString::fromStdString(j["block"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::SetFlagNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["setTo"] = setToBox->isChecked();
+  return j;
+}
+
+void ActionNodes::SetFlagNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("setTo"))
+    setToBox->setChecked(j["setTo"]);
+}
+
+nlohmann::json ActionNodes::SetInteractableNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["interactable"] = interactableBox->isChecked();
+  j["hint"] = hintEdit->text().toStdString();
+  j["showPrompt"] = showPromptBox->isChecked();
+  return j;
+}
+
+void ActionNodes::SetInteractableNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("interactable"))
+    interactableBox->setChecked(j["interactable"]);
+  if (j.contains("hint"))
+    hintEdit->setText(QString::fromStdString(j["hint"].get<std::string>()));
+  if (j.contains("showPrompt"))
+    showPromptBox->setChecked(j["showPrompt"]);
+}
+
+nlohmann::json ActionNodes::SetLeashPositionNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["toCurrent"] = toCurrentBox->isChecked();
+  j["toTarget"] = toTargetBox->isChecked();
+  return j;
+}
+
+void ActionNodes::SetLeashPositionNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("toCurrent"))
+    toCurrentBox->setChecked(j["toCurrent"]);
+  if (j.contains("toTarget"))
+    toTargetBox->setChecked(j["toTarget"]);
+}
+
+nlohmann::json ActionNodes::SetMarkedTargetNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::SetMarkedTargetNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::SetStatNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["stat"] = statEdit->text().toStdString();
+  j["value"] = valueSpin->value();
+  j["add"] = addBox->isChecked();
+  return j;
+}
+
+void ActionNodes::SetStatNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("stat"))
+    statEdit->setText(QString::fromStdString(j["stat"].get<std::string>()));
+  if (j.contains("value"))
+    valueSpin->setValue(j["value"].get<double>());
+  if (j.contains("add"))
+    addBox->setChecked(j["add"]);
+}
+
+nlohmann::json ActionNodes::StartObjectiveNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["objective"] = objectiveEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::StartObjectiveNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("objective"))
+    objectiveEdit->setText(QString::fromStdString(j["objective"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::StateNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["state"] = stateEdit->text().toStdString();
+  j["clearState"] = clearStateBox->isChecked();
+  return j;
+}
+
+void ActionNodes::StateNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("state"))
+    stateEdit->setText(QString::fromStdString(j["state"].get<std::string>()));
+  if (j.contains("clearState"))
+    clearStateBox->setChecked(j["clearState"]);
+}
+
+nlohmann::json ActionNodes::StorePositionNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["slot"] = slotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::StorePositionNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("slot"))
+    slotEdit->setText(QString::fromStdString(j["slot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::TimeoutNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["delayMin"] = delayMinSpin->value();
+  j["delayMax"] = delayMaxSpin->value();
+  j["delayAfter"] = delayAfterBox->isChecked();
+  return j;
+}
+
+void ActionNodes::TimeoutNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("delayMin"))
+    delayMinSpin->setValue(j["delayMin"].get<double>());
+  if (j.contains("delayMax"))
+    delayMaxSpin->setValue(j["delayMax"].get<double>());
+  if (j.contains("delayAfter"))
+    delayAfterBox->setChecked(j["delayAfter"]);
+}
+
+nlohmann::json ActionNodes::TimerContinueNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::TimerContinueNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::TimerModifyNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["addValue"] = addValueSpin->value();
+  j["maxValueMin"] = maxValueMinSpin->value();
+  j["maxValueMax"] = maxValueMaxSpin->value();
+  j["rate"] = rateSpin->value();
+  j["setValue"] = setValueSpin->value();
+  j["repeating"] = repeatingBox->isChecked();
+  return j;
+}
+
+void ActionNodes::TimerModifyNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("addValue"))
+    addValueSpin->setValue(j["addValue"].get<double>());
+  if (j.contains("maxValueMin"))
+    maxValueMinSpin->setValue(j["maxValueMin"].get<double>());
+  if (j.contains("maxValueMax"))
+    maxValueMaxSpin->setValue(j["maxValueMax"].get<double>());
+  if (j.contains("rate"))
+    rateSpin->setValue(j["rate"].get<double>());
+  if (j.contains("setValue"))
+    setValueSpin->setValue(j["setValue"].get<double>());
+  if (j.contains("repeating"))
+    repeatingBox->setChecked(j["repeating"]);
+}
+
+nlohmann::json ActionNodes::TimerPauseNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::TimerPauseNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::TimerRestartNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::TimerRestartNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::TimerStartNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  j["startValueMin"] = startValueMinSpin->value();
+  j["startValueMax"] = startValueMaxSpin->value();
+  j["restartValueMin"] = restartValueMinSpin->value();
+  j["restartValueMax"] = restartValueMaxSpin->value();
+  j["rate"] = rateSpin->value();
+  j["repeating"] = repeatingBox->isChecked();
+  return j;
+}
+
+void ActionNodes::TimerStartNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+  if (j.contains("startValueMin"))
+    startValueMinSpin->setValue(j["startValueMin"].get<double>());
+  if (j.contains("startValueMax"))
+    startValueMaxSpin->setValue(j["startValueMax"].get<double>());
+  if (j.contains("restartValueMin"))
+    restartValueMinSpin->setValue(j["restartValueMin"].get<double>());
+  if (j.contains("restartValueMax"))
+    restartValueMaxSpin->setValue(j["restartValueMax"].get<double>());
+  if (j.contains("rate"))
+    rateSpin->setValue(j["rate"].get<double>());
+  if (j.contains("repeating"))
+    repeatingBox->setChecked(j["repeating"]);
+}
+
+nlohmann::json ActionNodes::TimerStopNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["name"] = nameEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::TimerStopNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("name"))
+    nameEdit->setText(QString::fromStdString(j["name"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::ToggleStateEvaluatorNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  return j;
+}
+
+void ActionNodes::ToggleStateEvaluatorNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+}
+
+nlohmann::json ActionNodes::TriggerSpawnBeaconNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["beaconSpawn"] = beaconSpawnEdit->text().toStdString();
+  j["range"] = rangeSpin->value();
+  j["targetSlot"] = targetSlotEdit->text().toStdString();
+  return j;
+}
+
+void ActionNodes::TriggerSpawnBeaconNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("beaconSpawn"))
+    beaconSpawnEdit->setText(QString::fromStdString(j["beaconSpawn"].get<std::string>()));
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<int>());
+  if (j.contains("targetSlot"))
+    targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
+}
+
+nlohmann::json ActionNodes::TriggerSpawnersNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["spawnMarker"] = spawnMarkerEdit->text().toStdString();
+  j["range"] = rangeSpin->value();
+  j["count"] = countSpin->value();
+  return j;
+}
+
+void ActionNodes::TriggerSpawnersNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("spawnMarker"))
+    spawnMarkerEdit->setText(QString::fromStdString(j["spawnMarker"].get<std::string>()));
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<int>());
+  if (j.contains("count"))
+    countSpin->setValue(j["count"].get<int>());
 }

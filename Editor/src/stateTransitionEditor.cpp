@@ -52,3 +52,19 @@ void StateTransitionEditor::setValue(const General::StateTransition &t)
     enabledOptional->setEnabled(false);
   }
 }
+
+nlohmann::json StateTransitionEditor::serialize()
+{
+  // nlohmann::json j;
+  //   j = nlohmann::json{
+  //       {"priority", priority},
+  //       {"from", from},
+  //       {"to", to}
+  //   };
+  //
+  // if (enabled.has_value())
+  //      j["enabled"] = enabled.value();
+  //
+  //  return j;
+  return {};
+}

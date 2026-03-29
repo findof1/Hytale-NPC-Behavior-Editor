@@ -12,6 +12,8 @@
 #include <QGraphicsProxyWidget>
 #include <QVBoxLayout>
 
+#include <nlohmann/json.hpp>
+
 class NodeView;
 class NodeItem;
 class SocketItem;
@@ -121,10 +123,13 @@ public:
   int baseHeight = 60;
   int baseWidth = 200;
   int fieldsHeight = 60;
+  int id = -1;
   std::vector<std::unique_ptr<SocketItem>> inputs;
   std::vector<std::unique_ptr<SocketItem>> outputs;
 
   virtual QString nodeType() const = 0;
+  virtual nlohmann::json serializeNode() const = 0;          // for serializing the scene, not the final NPCRole json
+  virtual void deserializeNode(const nlohmann::json &j) = 0; // for serializing the scene, not the final NPCRole json
 
   NodeItem(QString title, bool hasFields = false, int baseWidth = 200) : title(title), hasFields(hasFields), baseWidth(baseWidth)
   {
@@ -230,12 +235,18 @@ struct Link
   }
 };
 
+class RootNode;
 class NodeScene : public QGraphicsScene
 {
   Q_OBJECT
 public:
   std::vector<Link> links;
   std::vector<std::shared_ptr<NodeItem>> nodes;
+
+  inline int generateId()
+  {
+    return nextId++;
+  }
 
   using NodeFactoryFn = std::function<std::shared_ptr<NodeItem>(NodeScene *)>;
   QMap<QString, NodeFactoryFn> nodeFactory; // for creating ui out of all of the node types systematicially
@@ -246,12 +257,18 @@ public:
 
   void keyPressEvent(QKeyEvent *event) override;
 
+  std::shared_ptr<NodeItem> spawnNode(const QString &type, QPointF pos);
+
   void removeNode(NodeItem *node);
 
   void removeEdge(EdgeItem *edge);
 
+  nlohmann::json serializeScene();
+  RootNode *deserializeScene(const nlohmann::json &j); // returns root node for attributes editor to store until serialziation
+
 public slots:
-  void startDrag(SocketItem *socket);
+  void
+  startDrag(SocketItem *socket);
 
   void updateDrag(QPointF pos);
 
@@ -263,4 +280,5 @@ protected:
 private:
   EdgeItem *tempEdge;
   SocketItem *draggingSocket;
+  int nextId = 0;
 };
