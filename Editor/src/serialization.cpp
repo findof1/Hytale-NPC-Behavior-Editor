@@ -1,4 +1,5 @@
 #include "serialization.hpp"
+#include <iostream>
 
 SerializerValues::SerializerValues()
 {
@@ -650,7 +651,7 @@ std::vector<General::Instruction> serializeInstructions(SerializerValues *serial
 {
   std::vector<General::Instruction> result;
 
-  if (!startNode)
+  if (!startNode || startNode == nullptr)
     return result;
 
   auto rootNode = dynamic_cast<RootNode *>(startNode);

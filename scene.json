@@ -1,0 +1,123 @@
+{
+    "appearance": "Deer_Stag",
+    "busyStates": [],
+    "collisionDistance": 0.0,
+    "collisionDistanceOptional": false,
+    "combatConfig": "",
+    "combatConfigOptional": false,
+    "corpseStaysInFlock": false,
+    "corpseStaysInFlockOptional": false,
+    "deathInteraction": "",
+    "deathInteractionOptional": false,
+    "defaultOffhandSlot": 0,
+    "defaultOffhandSlotOptional": false,
+    "defaultSubState": "",
+    "defaultSubStateOptional": false,
+    "displayNames": [],
+    "displayNamesOptional": false,
+    "dropList": "",
+    "dropListOptional": false,
+    "hotbarSize": 0,
+    "hotbarSizeOptional": false,
+    "inventory": 5,
+    "inventoryOptional": false,
+    "invulnerable": false,
+    "invulnerableOptional": false,
+    "isMemory": false,
+    "isMemoryOptional": false,
+    "knockbackScale": 0,
+    "knockbackScaleOptional": false,
+    "maxHealth": 111,
+    "memoriesCategory": "",
+    "memoriesCategoryOptional": false,
+    "memoriesNameOverride": "",
+    "memoriesNameOverrideOptional": false,
+    "motion": "walk",
+    "motionController": [],
+    "motionOptional": false,
+    "nameKey": "server.npcRoles.Template.name",
+    "npcAttitude": "Neutral",
+    "npcAttitudeOptional": false,
+    "offhandItems": [],
+    "offhandItemsOptional": false,
+    "offhandSlots": 0,
+    "offhandSlotsOptional": false,
+    "opaqueBlockSet": "",
+    "opaqueBlockSetOptional": false,
+    "pickupDropOnDeath": false,
+    "pickupDropOnDeathOptional": false,
+    "playerAttitude": "Neutral",
+    "playerAttitudeOptional": false,
+    "possibleInventoryItems": "",
+    "possibleInventoryItemsOptional": false,
+    "scene": {
+        "links": [
+            {
+                "fromNode": 0,
+                "fromSocket": "Instructions",
+                "toNode": 1,
+                "toSocket": "In"
+            },
+            {
+                "fromNode": 1,
+                "fromSocket": "Sensor",
+                "toNode": 2,
+                "toSocket": "In"
+            },
+            {
+                "fromNode": 1,
+                "fromSocket": "Actions",
+                "toNode": 3,
+                "toSocket": "In"
+            }
+        ],
+        "nodes": [
+            {
+                "data": null,
+                "id": 0,
+                "type": "Root",
+                "x": -240.0,
+                "y": -85.0
+            },
+            {
+                "data": {
+                    "atomic": false,
+                    "blocking": false,
+                    "continue": false,
+                    "enabled": false,
+                    "name": "asdasdasd",
+                    "weight": 0
+                },
+                "id": 1,
+                "type": "Instruction",
+                "x": -19.0,
+                "y": -122.0
+            },
+            {
+                "data": {
+                    "enabled": false,
+                    "once": false
+                },
+                "id": 2,
+                "type": "InAir",
+                "x": 419.0,
+                "y": -169.0
+            },
+            {
+                "data": {
+                    "once": false
+                },
+                "id": 3,
+                "type": "Die",
+                "x": 405.0,
+                "y": 27.0
+            }
+        ]
+    },
+    "serializationVersion": "1",
+    "spawnLockTime": 0.0,
+    "spawnLockTimeOptional": false,
+    "startState": "",
+    "startStateOptional": false,
+    "stateTransitionsOptional": false
+}

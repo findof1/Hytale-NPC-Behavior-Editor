@@ -1114,7 +1114,7 @@ bool AttributesEditor::deserializeEditorFromDisk()
   file.close();
 
   if (j.contains("scene"))
-    scene->deserializeScene(j["scene"]);
+    rootNode = scene->deserializeScene(j["scene"]);
 
   if (j.contains("maxHealth"))
     maxHealthSpin->setValue(j["maxHealth"]);
@@ -1331,7 +1331,6 @@ General::Attributes AttributesEditor::getAttributes()
   //
 
   attr.instructions = serializeInstructions(&serializer, scene, rootNode);
-
   if (motionComboOptional->isEnabled())
   {
     attr.initialMotionController = motionCombo->currentText().toStdString();
