@@ -66,6 +66,8 @@ public:
     setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
   }
 
+  void drawBackground(QPainter *painter, const QRectF &rect) override;
+
 protected:
   void wheelEvent(QWheelEvent *event) override;
 
@@ -252,6 +254,8 @@ public:
   QMap<QString, NodeFactoryFn> nodeFactory; // for creating ui out of all of the node types systematicially
 
   NodeScene(QObject *parent = nullptr) : QGraphicsScene(parent), tempEdge(nullptr), draggingSocket(nullptr) {}
+
+  void initNodeFactory(); // defined in nodeFactory.cpp
 
   void updateLinks();
 

@@ -64,6 +64,50 @@ void NodeView::mouseMoveEvent(QMouseEvent *event)
   QGraphicsView::mouseMoveEvent(event);
 }
 
+void NodeView::drawBackground(QPainter *painter, const QRectF &rect)
+{
+  QGraphicsView::drawBackground(painter, rect);
+
+  const int gridSize = 20;
+  const int boldGridSize = gridSize * 5;
+
+  QPalette p = palette();
+
+  QColor base = p.color(QPalette::Base);
+  QColor accent = p.color(QPalette::Accent);
+
+  QColor lightColor = base.darker(110);
+  QColor darkColor = accent;
+
+  int left = int(std::floor(rect.left()));
+  int right = int(std::ceil(rect.right()));
+  int top = int(std::floor(rect.top()));
+  int bottom = int(std::ceil(rect.bottom()));
+
+  int firstLeft = left - (left % gridSize);
+  int firstTop = top - (top % gridSize);
+
+  for (int x = firstLeft; x < right; x += gridSize)
+  {
+    if (x % boldGridSize == 0)
+      painter->setPen(darkColor);
+    else
+      painter->setPen(lightColor);
+
+    painter->drawLine(x, top, x, bottom);
+  }
+
+  for (int y = firstTop; y < bottom; y += gridSize)
+  {
+    if (y % boldGridSize == 0)
+      painter->setPen(darkColor);
+    else
+      painter->setPen(lightColor);
+
+    painter->drawLine(left, y, right, y);
+  }
+}
+
 QRectF SocketItem::boundingRect() const
 {
   return QRectF(-5, -5, 80, 10);

@@ -7,7 +7,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
 
     StyleManager styles;
-    styles.setDefaultStyle(&app);
+    styles.setDarkStyle(&app);
 
     AttributesEditor editor;
     editor.show();

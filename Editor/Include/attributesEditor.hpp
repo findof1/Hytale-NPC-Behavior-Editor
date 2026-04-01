@@ -54,10 +54,15 @@ public:
 
 private:
   void printValues();
+  void initRequiredTab();
+  void initOptionalsTab();
+  void initStatesTab();
+  void initBehaviorsTab();
 
   NodeScene *scene;
   RootNode *rootNode;
 
+  QTabWidget *tabs;
   QSpinBox *maxHealthSpin;
   QLineEdit *appearanceEdit;
   QLineEdit *nameKeyEdit;
