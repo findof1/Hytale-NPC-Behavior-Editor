@@ -34,6 +34,12 @@ struct StyleData
 
   QColor brightText;
   QColor accent;
+
+  QColor nodeBackground;
+  QColor nodeDivider;
+  QColor nodeHeader;
+  QColor nodeText;
+  QColor nodeTextOptional;
 };
 
 class StyleManager
@@ -41,6 +47,11 @@ class StyleManager
 public:
   StyleManager()
   {
+  }
+
+  void init(QApplication *appRef)
+  {
+    app = appRef;
   }
 
   StyleData getDarkStyleData()
@@ -78,6 +89,12 @@ public:
 
     s.brightText = QColor("#ff5555");
     s.accent = QColor("#3a82f7");
+
+    s.nodeBackground = QColor("#19191c");
+    s.nodeDivider = QColor("#232326");
+    s.nodeHeader = QColor("#46464b");
+    s.nodeText = QColor("#ffffff");
+    s.nodeTextOptional = QColor("#777777");
 
     return s;
   }
@@ -118,11 +135,23 @@ public:
     s.brightText = QColor("#ff0000");
     s.accent = QColor("#3a82f7");
 
+    s.nodeBackground = QColor("#c4c4c4"); // match base
+    s.nodeDivider = QColor("#3a82f7");    // slightly darker than base
+    s.nodeHeader = QColor("#acacac");     // slightly lighter for header
+    s.nodeText = QColor("#000000");       // primary text color
+    s.nodeTextOptional = QColor("#777777");
+
     return s;
   }
 
-  void applyStyle(QApplication *app, const StyleData &s)
+  void applyStyle(const StyleData &s)
   {
+    if (app == nullptr)
+    {
+      return;
+    }
+
+    currentStyle = s;
     app->setStyle("Fusion");
 
     QPalette palette;
@@ -186,15 +215,24 @@ public:
     app->setStyleSheet(R"()");
   }
 
-  void setDarkStyle(QApplication *app)
+  void setDarkStyle()
   {
     StyleData style = getDarkStyleData();
-    applyStyle(app, style);
+    applyStyle(style);
   }
 
-  void setLightStyle(QApplication *app)
+  void setLightStyle()
   {
     StyleData style = getLightStyleData();
-    applyStyle(app, style);
+    applyStyle(style);
   }
+
+  StyleData getCurrentStyle()
+  {
+    return currentStyle;
+  }
+
+private:
+  StyleData currentStyle;
+  QApplication *app;
 };

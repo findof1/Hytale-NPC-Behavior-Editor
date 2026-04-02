@@ -1,15 +1,20 @@
 #include <QApplication>
 #include "attributesEditor.hpp"
-#include "styleManager.hpp"
+#include "styleGlobals.hpp"
+#include "projectSelector.hpp"
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
+    gStyleManager.init(&app);
+    gStyleManager.setDarkStyle();
 
-    StyleManager styles;
-    styles.setDarkStyle(&app);
+    ProjectSelector selector;
 
-    AttributesEditor editor;
+    if (selector.exec() != QDialog::Accepted)
+        return 0;
+
+    AttributesEditor editor(selector.selectedPath);
     editor.show();
 
     editor.setupScene();

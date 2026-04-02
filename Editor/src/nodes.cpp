@@ -1,5 +1,6 @@
 #include "nodes.hpp"
 #include <QComboBox>
+#include "styleGlobals.hpp"
 
 RootNode::RootNode(NodeScene *scene)
     : NodeItem("Root")
@@ -27,30 +28,35 @@ InstructionNode::InstructionNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   continueBox = new QCheckBox;
   continueBox->setStyleSheet("color: gray;");
   form->addRow("Continue:", continueBox);
   label = form->labelForField(continueBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   blockingBox = new QCheckBox;
   blockingBox->setStyleSheet("color: gray;");
   form->addRow("Actions Blocking:", blockingBox);
   label = form->labelForField(blockingBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   atomicBox = new QCheckBox;
   atomicBox->setStyleSheet("color: gray;");
   form->addRow("Actions Atomic:", atomicBox);
   label = form->labelForField(atomicBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   weightSpin = new QSpinBox;
   weightSpin->setMinimum(0);
@@ -58,7 +64,8 @@ InstructionNode::InstructionNode(NodeScene *scene)
   weightSpin->setStyleSheet("color: gray;");
   form->addRow("Weight:", weightSpin);
   label = form->labelForField(weightSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 General::Instruction InstructionNode::serialize()
 {
@@ -95,7 +102,8 @@ CommentNode::CommentNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Comment:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 SensorNodes::AdjustPositionNode::AdjustPositionNode(NodeScene *scene)
@@ -123,12 +131,14 @@ SensorNodes::AdjustPositionNode::AdjustPositionNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::AdjustPosition SensorNodes::AdjustPositionNode::serialize()
@@ -169,12 +179,14 @@ SensorNodes::AgeNode::AgeNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Age SensorNodes::AgeNode::serialize()
@@ -207,7 +219,8 @@ SensorNodes::AlarmNode::AlarmNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   stateCombo = new QComboBox;
   stateCombo->addItems({"Set", "Unset", "Passed"});
@@ -216,17 +229,20 @@ SensorNodes::AlarmNode::AlarmNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   clearBox = new QCheckBox;
   form->addRow("Clear:", clearBox);
   label = form->labelForField(clearBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Alarm SensorNodes::AlarmNode::serialize()
@@ -275,17 +291,20 @@ SensorNodes::AndNode::AndNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   autoUnlockTargetSlotEdit = new QLineEdit;
   form->addRow("Auto Unlock Target Slot:", autoUnlockTargetSlotEdit);
   label = form->labelForField(autoUnlockTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::And SensorNodes::AndNode::serialize()
@@ -326,12 +345,14 @@ SensorNodes::AnimationNode::AnimationNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Animation SensorNodes::AnimationNode::serialize()
@@ -376,12 +397,14 @@ SensorNodes::AnyNode::AnyNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Any SensorNodes::AnyNode::serialize()
@@ -414,28 +437,33 @@ SensorNodes::BeaconNode::BeaconNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   rangeSpin = new QDoubleSpinBox;
   rangeSpin->setRange(0, 1e6);
   form->addRow("Range:", rangeSpin);
   label = form->labelForField(rangeSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   consumeMessageBox = new QCheckBox;
   form->addRow("Consume Message:", consumeMessageBox);
   label = form->labelForField(consumeMessageBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Beacon SensorNodes::BeaconNode::serialize()
@@ -488,23 +516,27 @@ SensorNodes::BlockChangeNode::BlockChangeNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   eventTypeCombo = new QComboBox;
   eventTypeCombo->addItems({"(None)", "Destruction", "Interaction", "Damage"});
   form->addRow("Event Type:", eventTypeCombo);
   label = form->labelForField(eventTypeCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::BlockChange SensorNodes::BlockChangeNode::serialize()
@@ -579,12 +611,14 @@ SensorNodes::BlockTypeNode::BlockTypeNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::BlockType SensorNodes::BlockTypeNode::serialize()
@@ -626,12 +660,14 @@ SensorNodes::CanInteractNode::CanInteractNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::CanInteract SensorNodes::CanInteractNode::serialize()
@@ -699,29 +735,34 @@ SensorNodes::CanPlaceBlockNode::CanPlaceBlockNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   offsetCombo = new QComboBox;
   offsetCombo->addItems({"", "BodyPosition", "FootPosition", "HeadPosition"});
   form->addRow("Offset:", offsetCombo);
   label = form->labelForField(offsetCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   retryDelaySpin = new QDoubleSpinBox;
   retryDelaySpin->setRange(0, 1e6);
   form->addRow("Retry Delay:", retryDelaySpin);
   label = form->labelForField(retryDelaySpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   allowEmptyMaterialsBox = new QCheckBox;
   form->addRow("Allow Empty Materials:", allowEmptyMaterialsBox);
   label = form->labelForField(allowEmptyMaterialsBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::CanPlaceBlock SensorNodes::CanPlaceBlockNode::serialize()
@@ -797,18 +838,21 @@ SensorNodes::CombatActionEvaluatorNode::CombatActionEvaluatorNode(NodeScene *sce
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   allowableDeviationSpin = new QDoubleSpinBox;
   allowableDeviationSpin->setRange(0, 1e6);
   form->addRow("Allowable Deviation:", allowableDeviationSpin);
   label = form->labelForField(allowableDeviationSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::CombatActionEvaluator SensorNodes::CombatActionEvaluatorNode::serialize()
@@ -859,24 +903,28 @@ SensorNodes::CountNode::CountNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   includeGroupsEdit = new QLineEdit;
   includeGroupsEdit->setPlaceholderText("comma-separated assets");
   form->addRow("Include Groups:", includeGroupsEdit);
   label = form->labelForField(includeGroupsEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   excludeGroupsEdit = new QLineEdit;
   excludeGroupsEdit->setPlaceholderText("comma-separated assets");
   form->addRow("Exclude Groups:", excludeGroupsEdit);
   label = form->labelForField(excludeGroupsEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Count SensorNodes::CountNode::serialize()
@@ -937,42 +985,50 @@ SensorNodes::DamageNode::DamageNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   combatBox = new QCheckBox;
   form->addRow("Combat:", combatBox);
   label = form->labelForField(combatBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   friendlyBox = new QCheckBox;
   form->addRow("Friendly:", friendlyBox);
   label = form->labelForField(friendlyBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   drowningBox = new QCheckBox;
   form->addRow("Drowning:", drowningBox);
   label = form->labelForField(drowningBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   environmentBox = new QCheckBox;
   form->addRow("Environment:", environmentBox);
   label = form->labelForField(environmentBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   otherBox = new QCheckBox;
   form->addRow("Other:", otherBox);
   label = form->labelForField(otherBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Damage SensorNodes::DamageNode::serialize()
@@ -1031,30 +1087,35 @@ SensorNodes::DroppedItemNode::DroppedItemNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   lineOfSightBox = new QCheckBox;
   form->addRow("Line Of Sight:", lineOfSightBox);
   label = form->labelForField(lineOfSightBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   itemsEdit = new QLineEdit;
   itemsEdit->setPlaceholderText("comma-separated assets");
   form->addRow("Items:", itemsEdit);
   label = form->labelForField(itemsEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   attitudesList = new QListWidget;
   attitudesList->setSelectionMode(QAbstractItemView::MultiSelection);
   attitudesList->addItems({"Neutral", "Ignore", "Like", "Love", "Dislike"});
   form->addRow("Attitudes:", attitudesList);
   label = form->labelForField(attitudesList);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::DroppedItem SensorNodes::DroppedItemNode::serialize()
@@ -1147,28 +1208,33 @@ SensorNodes::EntityEventNode::EntityEventNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   searchTypeCombo = new QComboBox;
   searchTypeCombo->addItems({"", "NpcOnly", "PlayerFirst", "PlayerOnly", "NpcFirst"});
   form->addRow("Search Type:", searchTypeCombo);
   label = form->labelForField(searchTypeCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   flockOnlyBox = new QCheckBox;
   form->addRow("Flock Only:", flockOnlyBox);
   label = form->labelForField(flockOnlyBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::EntityEvent SensorNodes::EntityEventNode::serialize()
@@ -1247,22 +1313,26 @@ SensorNodes::FlagNode::FlagNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   setBox = new QCheckBox;
   form->addRow("Set:", setBox);
   label = form->labelForField(setBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Flag SensorNodes::FlagNode::serialize()
@@ -1298,17 +1368,20 @@ SensorNodes::FlockCombatDamageNode::FlockCombatDamageNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   leaderOnlyBox = new QCheckBox;
   form->addRow("Leader Only:", leaderOnlyBox);
   label = form->labelForField(leaderOnlyBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::FlockCombatDamage SensorNodes::FlockCombatDamageNode::serialize()
@@ -1341,12 +1414,14 @@ SensorNodes::FlockLeaderNode::FlockLeaderNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::FlockLeader SensorNodes::FlockLeaderNode::serialize()
@@ -1376,12 +1451,14 @@ SensorNodes::HasHostileTargetMemoryNode::HasHostileTargetMemoryNode(NodeScene *s
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::HasHostileTargetMemory SensorNodes::HasHostileTargetMemoryNode::serialize()
@@ -1411,12 +1488,14 @@ SensorNodes::HasInteractedNode::HasInteractedNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::HasInteracted SensorNodes::HasInteractedNode::serialize()
@@ -1450,12 +1529,14 @@ SensorNodes::HasTaskNode::HasTaskNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::HasTask SensorNodes::HasTaskNode::serialize()
@@ -1494,12 +1575,14 @@ SensorNodes::InAirNode::InAirNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::InAir SensorNodes::InAirNode::serialize()
@@ -1529,12 +1612,14 @@ SensorNodes::InWaterNode::InWaterNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::InWater SensorNodes::InWaterNode::serialize()
@@ -1564,23 +1649,27 @@ SensorNodes::InflictedDamageNode::InflictedDamageNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetCombo = new QComboBox;
   targetCombo->addItems({"", "FlockLeader", "Self", "Flock"});
   form->addRow("Target:", targetCombo);
   label = form->labelForField(targetCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   friendlyFireBox = new QCheckBox;
   form->addRow("Friendly Fire:", friendlyFireBox);
   label = form->labelForField(friendlyFireBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::InflictedDamage SensorNodes::InflictedDamageNode::serialize()
@@ -1633,12 +1722,14 @@ SensorNodes::InteractionContextNode::InteractionContextNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::InteractionContext SensorNodes::InteractionContextNode::serialize()
@@ -1671,12 +1762,14 @@ SensorNodes::IsBackingAwayNode::IsBackingAwayNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::IsBackingAway SensorNodes::IsBackingAwayNode::serialize()
@@ -1706,12 +1799,14 @@ SensorNodes::IsBusyNode::IsBusyNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::IsBusy SensorNodes::IsBusyNode::serialize()
@@ -1741,17 +1836,20 @@ SensorNodes::KillNode::KillNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Kill SensorNodes::KillNode::serialize()
@@ -1791,12 +1889,14 @@ SensorNodes::LeashNode::LeashNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Leash SensorNodes::LeashNode::serialize()
@@ -1828,12 +1928,14 @@ SensorNodes::LightNode::LightNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   // Might change this because it doesn't line up with how the rest of the nodes handle ranges
   auto makeRangePair = [&](const QString &label, QDoubleSpinBox *&minS, QDoubleSpinBox *&maxS)
@@ -1861,7 +1963,8 @@ SensorNodes::LightNode::LightNode(NodeScene *scene)
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Light SensorNodes::LightNode::serialize()
@@ -1938,63 +2041,75 @@ SensorNodes::MobNode::MobNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   minRangeSpin = new QDoubleSpinBox;
   minRangeSpin->setRange(0, 1e6);
   form->addRow("Min Range:", minRangeSpin);
   label = form->labelForField(minRangeSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   lockedOnTargetBox = new QCheckBox;
   form->addRow("Locked On Target:", lockedOnTargetBox);
   label = form->labelForField(lockedOnTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   lockedTargetSlotEdit = new QLineEdit;
   form->addRow("Locked Target Slot:", lockedTargetSlotEdit);
   label = form->labelForField(lockedTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   autoUnlockTargetBox = new QCheckBox;
   form->addRow("Auto Unlock Target:", autoUnlockTargetBox);
   label = form->labelForField(autoUnlockTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onlyLockedTargetBox = new QCheckBox;
   form->addRow("Only Locked Target:", onlyLockedTargetBox);
   label = form->labelForField(onlyLockedTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   ignoredTargetSlotEdit = new QLineEdit;
   form->addRow("Ignored Target Slot:", ignoredTargetSlotEdit);
   label = form->labelForField(ignoredTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useProjectedDistanceBox = new QCheckBox;
   form->addRow("Use Projected Distance:", useProjectedDistanceBox);
   label = form->labelForField(useProjectedDistanceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   getPlayersBox = new QCheckBox;
   form->addRow("Get Players:", getPlayersBox);
   label = form->labelForField(getPlayersBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   getNPCsBox = new QCheckBox;
   form->addRow("Get NPCs:", getNPCsBox);
   label = form->labelForField(getNPCsBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   excludeOwnTypeBox = new QCheckBox;
   form->addRow("Exclude Own Type:", excludeOwnTypeBox);
   label = form->labelForField(excludeOwnTypeBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Mob SensorNodes::MobNode::serialize()
@@ -2060,31 +2175,36 @@ SensorNodes::NavNode::NavNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   navStatesList = new QListWidget;
   navStatesList->setSelectionMode(QAbstractItemView::MultiSelection);
   navStatesList->addItems({"Progressing", "Init", "At_Goal", "Blocked", "Aborted", "Defer"});
   form->addRow("Nav States:", navStatesList);
   label = form->labelForField(navStatesList);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   throttleDurationSpin = new QDoubleSpinBox;
   throttleDurationSpin->setRange(0, 1e6);
   form->addRow("Throttle Duration:", throttleDurationSpin);
   label = form->labelForField(throttleDurationSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetDeltaSpin = new QDoubleSpinBox;
   targetDeltaSpin->setRange(0, 1e6);
   form->addRow("Target Delta:", targetDeltaSpin);
   label = form->labelForField(targetDeltaSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Nav SensorNodes::NavNode::serialize()
@@ -2162,22 +2282,26 @@ SensorNodes::NotNode::NotNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useTargetSlotEdit = new QLineEdit;
   form->addRow("Use Target Slot:", useTargetSlotEdit);
   label = form->labelForField(useTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   autoUnlockTargetSlotEdit = new QLineEdit;
   form->addRow("Auto Unlock Target Slot:", autoUnlockTargetSlotEdit);
   label = form->labelForField(autoUnlockTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Not SensorNodes::NotNode::serialize()
@@ -2215,12 +2339,14 @@ SensorNodes::OnGroundNode::OnGroundNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::OnGround SensorNodes::OnGroundNode::serialize()
@@ -2251,17 +2377,20 @@ SensorNodes::OrNode::OrNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   autoUnlockTargetSlotEdit = new QLineEdit;
   form->addRow("Auto Unlock Target Slot:", autoUnlockTargetSlotEdit);
   label = form->labelForField(autoUnlockTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Or SensorNodes::OrNode::serialize()
@@ -2295,29 +2424,34 @@ SensorNodes::PathNode::PathNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   pathEdit = new QLineEdit;
   form->addRow("Path:", pathEdit);
   label = form->labelForField(pathEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   rangeSpin = new QDoubleSpinBox;
   rangeSpin->setRange(0, 1e6);
   form->addRow("Range:", rangeSpin);
   label = form->labelForField(rangeSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   pathTypeCombo = new QComboBox;
   pathTypeCombo->addItems({"", "CurrentPrefabPath", "TransientPath", "AnyPrefabPath", "WorldPath"});
   form->addRow("Path Type:", pathTypeCombo);
   label = form->labelForField(pathTypeCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Path SensorNodes::PathNode::serialize()
@@ -2384,48 +2518,57 @@ SensorNodes::PlayerNode::PlayerNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   minRangeSpin = new QDoubleSpinBox;
   minRangeSpin->setRange(0, 1e6);
   form->addRow("Min Range:", minRangeSpin);
   label = form->labelForField(minRangeSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   lockedOnTargetBox = new QCheckBox;
   form->addRow("Locked On Target:", lockedOnTargetBox);
   label = form->labelForField(lockedOnTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   lockedTargetSlotEdit = new QLineEdit;
   form->addRow("Locked Target Slot:", lockedTargetSlotEdit);
   label = form->labelForField(lockedTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   autoUnlockTargetBox = new QCheckBox;
   form->addRow("Auto Unlock Target:", autoUnlockTargetBox);
   label = form->labelForField(autoUnlockTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onlyLockedTargetBox = new QCheckBox;
   form->addRow("Only Locked Target:", onlyLockedTargetBox);
   label = form->labelForField(onlyLockedTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   ignoredTargetSlotEdit = new QLineEdit;
   form->addRow("Ignored Target Slot:", ignoredTargetSlotEdit);
   label = form->labelForField(ignoredTargetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useProjectedDistanceBox = new QCheckBox;
   form->addRow("Use Projected Distance:", useProjectedDistanceBox);
   label = form->labelForField(useProjectedDistanceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Player SensorNodes::PlayerNode::serialize()
@@ -2496,12 +2639,14 @@ SensorNodes::RandomNode::RandomNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Random SensorNodes::RandomNode::serialize()
@@ -2544,23 +2689,27 @@ SensorNodes::ReadPositionNode::ReadPositionNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   minRangeSpin = new QDoubleSpinBox;
   minRangeSpin->setRange(0, 1e6);
   form->addRow("Min Range:", minRangeSpin);
   label = form->labelForField(minRangeSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useMarkedTargetBox = new QCheckBox;
   form->addRow("Use Marked Target:", useMarkedTargetBox);
   label = form->labelForField(useMarkedTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::ReadPosition SensorNodes::ReadPositionNode::serialize()
@@ -2603,7 +2752,8 @@ SensorNodes::SearchRayNode::SearchRayNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   angleSpin = new QDoubleSpinBox;
   angleSpin->setRange(-360, 360);
@@ -2619,30 +2769,35 @@ SensorNodes::SearchRayNode::SearchRayNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   minRetestAngleSpin = new QDoubleSpinBox;
   minRetestAngleSpin->setRange(0, 360);
   form->addRow("Min Retest Angle:", minRetestAngleSpin);
   label = form->labelForField(minRetestAngleSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   minRetestMoveSpin = new QDoubleSpinBox;
   minRetestMoveSpin->setRange(0, 1e6);
   form->addRow("Min Retest Move:", minRetestMoveSpin);
   label = form->labelForField(minRetestMoveSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   throttleTimeSpin = new QDoubleSpinBox;
   throttleTimeSpin->setRange(0, 1e6);
   form->addRow("Throttle Time:", throttleTimeSpin);
   label = form->labelForField(throttleTimeSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::SearchRay SensorNodes::SearchRayNode::serialize()
@@ -2697,12 +2852,14 @@ SensorNodes::SelfNode::SelfNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Self SensorNodes::SelfNode::serialize()
@@ -2735,17 +2892,20 @@ SensorNodes::StateNode::StateNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   ignoreMissingSetStateBox = new QCheckBox;
   form->addRow("Ignore Missing Set State:", ignoreMissingSetStateBox);
   label = form->labelForField(ignoreMissingSetStateBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::State SensorNodes::StateNode::serialize()
@@ -2784,12 +2944,14 @@ SensorNodes::SwitchNode::SwitchNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Switch SensorNodes::SwitchNode::serialize()
@@ -2826,22 +2988,26 @@ SensorNodes::TargetNode::TargetNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   autoUnlockTargetBox = new QCheckBox;
   form->addRow("Auto Unlock Target:", autoUnlockTargetBox);
   label = form->labelForField(autoUnlockTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Target SensorNodes::TargetNode::serialize()
@@ -2887,27 +3053,32 @@ SensorNodes::TimeNode::TimeNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   checkDayBox = new QCheckBox;
   form->addRow("Check Day:", checkDayBox);
   label = form->labelForField(checkDayBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   checkYearBox = new QCheckBox;
   form->addRow("Check Year:", checkYearBox);
   label = form->labelForField(checkYearBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   scaleDayTimeRangeBox = new QCheckBox;
   form->addRow("Scale Day Time Range:", scaleDayTimeRangeBox);
   label = form->labelForField(scaleDayTimeRangeBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Time SensorNodes::TimeNode::serialize()
@@ -2949,23 +3120,27 @@ SensorNodes::TimerNode::TimerNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   stateCombo = new QComboBox;
   stateCombo->addItems({"", "Paused", "Running", "Stopped", "Any"});
   form->addRow("State:", stateCombo);
   label = form->labelForField(stateCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   timeRemainingMin = new QDoubleSpinBox;
   timeRemainingMin->setRange(0, 1e9);
@@ -2973,10 +3148,12 @@ SensorNodes::TimerNode::TimerNode(NodeScene *scene)
   timeRemainingMax->setRange(0, 1e9);
   form->addRow("Time Remaining Min:", timeRemainingMin);
   label = form->labelForField(timeRemainingMin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
   form->addRow("Time Remaining Max:", timeRemainingMax);
   label = form->labelForField(timeRemainingMax);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Timer SensorNodes::TimerNode::serialize()
@@ -3037,17 +3214,20 @@ SensorNodes::ValueProviderWrapperNode::ValueProviderWrapperNode(NodeScene *scene
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   passValuesBox = new QCheckBox;
   form->addRow("Pass Values:", passValuesBox);
   label = form->labelForField(passValuesBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::ValueProviderWrapper SensorNodes::ValueProviderWrapperNode::serialize()
@@ -3084,12 +3264,14 @@ SensorNodes::WeatherNode::WeatherNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Sensor::Weather SensorNodes::WeatherNode::serialize()
@@ -3147,7 +3329,8 @@ ActionNodes::AddToHostileTargetMemoryNode::AddToHostileTargetMemoryNode(NodeScen
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::AddToHostileTargetMemory ActionNodes::AddToHostileTargetMemoryNode::serialize()
@@ -3177,7 +3360,8 @@ ActionNodes::AppearanceNode::AppearanceNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Appearance ActionNodes::AppearanceNode::serialize()
@@ -3210,12 +3394,14 @@ ActionNodes::ApplyEntityEffectNode::ApplyEntityEffectNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useTargetBox = new QCheckBox;
   form->addRow("Use Target:", useTargetBox);
   label = form->labelForField(useTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ApplyEntityEffect ActionNodes::ApplyEntityEffectNode::serialize()
@@ -3248,7 +3434,8 @@ ActionNodes::CombatAbilityNode::CombatAbilityNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::CombatAbility ActionNodes::CombatAbilityNode::serialize()
@@ -3279,17 +3466,20 @@ ActionNodes::CompleteTaskNode::CompleteTaskNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   animationEdit = new QLineEdit;
   form->addRow("Animation:", animationEdit);
   label = form->labelForField(animationEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   playAnimationBox = new QCheckBox;
   form->addRow("Play Animation:", playAnimationBox);
   label = form->labelForField(playAnimationBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::CompleteTask ActionNodes::CompleteTaskNode::serialize()
@@ -3337,12 +3527,14 @@ ActionNodes::CrouchNode::CrouchNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   crouchBox = new QCheckBox;
   form->addRow("Crouch:", crouchBox);
   label = form->labelForField(crouchBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Crouch ActionNodes::CrouchNode::serialize()
@@ -3378,12 +3570,14 @@ ActionNodes::DelayDespawnNode::DelayDespawnNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   shortenBox = new QCheckBox;
   form->addRow("Shorten:", shortenBox);
   label = form->labelForField(shortenBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::DelayDespawn ActionNodes::DelayDespawnNode::serialize()
@@ -3415,12 +3609,14 @@ ActionNodes::DespawnNode::DespawnNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   forceBox = new QCheckBox;
   form->addRow("Force:", forceBox);
   label = form->labelForField(forceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Despawn ActionNodes::DespawnNode::serialize()
@@ -3450,7 +3646,8 @@ ActionNodes::DieNode::DieNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Die ActionNodes::DieNode::serialize()
@@ -3477,12 +3674,14 @@ ActionNodes::DisplayNameNode::DisplayNameNode(NodeScene *scene)
   displayNameEdit = new QLineEdit;
   form->addRow("Display Name:", displayNameEdit);
   QWidget *label = form->labelForField(displayNameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::DisplayName ActionNodes::DisplayNameNode::serialize()
@@ -3512,7 +3711,8 @@ ActionNodes::DropItemNode::DropItemNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *delayWidget = new QWidget;
   auto *delayLayout = new QHBoxLayout(delayWidget);
@@ -3523,23 +3723,27 @@ ActionNodes::DropItemNode::DropItemNode(NodeScene *scene)
   delayLayout->addWidget(delayMaxSpin);
   form->addRow("Delay:", delayWidget);
   label = form->labelForField(delayWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   itemEdit = new QLineEdit;
   form->addRow("Item:", itemEdit);
   label = form->labelForField(itemEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   dropListEdit = new QLineEdit;
   form->addRow("Drop List:", dropListEdit);
   label = form->labelForField(dropListEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   throwSpeedSpin = new QDoubleSpinBox;
   throwSpeedSpin->setMaximum(999999);
   form->addRow("Throw Speed:", throwSpeedSpin);
   label = form->labelForField(throwSpeedSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *distanceWidget = new QWidget;
   auto *distanceLayout = new QHBoxLayout(distanceWidget);
@@ -3550,7 +3754,8 @@ ActionNodes::DropItemNode::DropItemNode(NodeScene *scene)
   distanceLayout->addWidget(distanceMaxSpin);
   form->addRow("Distance:", distanceWidget);
   label = form->labelForField(distanceWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *dropSectorWidget = new QWidget;
   auto *dropSectorLayout = new QHBoxLayout(dropSectorWidget);
@@ -3561,12 +3766,14 @@ ActionNodes::DropItemNode::DropItemNode(NodeScene *scene)
   dropSectorLayout->addWidget(dropSectorMaxSpin);
   form->addRow("Drop Sector:", dropSectorWidget);
   label = form->labelForField(dropSectorWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   pitchHighBox = new QCheckBox;
   form->addRow("Pitch High:", pitchHighBox);
   label = form->labelForField(pitchHighBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::DropItem ActionNodes::DropItemNode::serialize()
@@ -3632,7 +3839,8 @@ ActionNodes::FlockStateNode::FlockStateNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::FlockState ActionNodes::FlockStateNode::serialize()
@@ -3662,17 +3870,20 @@ ActionNodes::FlockTargetNode::FlockTargetNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   clearBox = new QCheckBox;
   form->addRow("Clear:", clearBox);
   label = form->labelForField(clearBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::FlockTarget ActionNodes::FlockTargetNode::serialize()
@@ -3708,7 +3919,8 @@ ActionNodes::IgnoreForAvoidanceNode::IgnoreForAvoidanceNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::IgnoreForAvoidance ActionNodes::IgnoreForAvoidanceNode::serialize()
@@ -3738,37 +3950,43 @@ ActionNodes::InventoryNode::InventoryNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   operationCombo = new QComboBox;
   operationCombo->addItems({"", "Add", "RemoveHeldItem", "SetHotbar", "Equip", "ClearHeldItem", "EquipOffHand", "Remove", "EquipHotbar", "SetOffHand"});
   form->addRow("Operation:", operationCombo);
   label = form->labelForField(operationCombo);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   countSpin = new QSpinBox;
   countSpin->setMinimum(0);
   countSpin->setMaximum(999999);
   form->addRow("Count:", countSpin);
   label = form->labelForField(countSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   itemEdit = new QLineEdit;
   form->addRow("Item:", itemEdit);
   label = form->labelForField(itemEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useTargetBox = new QCheckBox;
   form->addRow("Use Target:", useTargetBox);
   label = form->labelForField(useTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   slotSpin = new QSpinBox;
   slotSpin->setMinimum(0);
   slotSpin->setMaximum(999);
   form->addRow("Slot:", slotSpin);
   label = form->labelForField(slotSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Inventory ActionNodes::InventoryNode::serialize()
@@ -3850,12 +4068,14 @@ ActionNodes::JoinFlockNode::JoinFlockNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   forceJoinBox = new QCheckBox;
   form->addRow("Force Join:", forceJoinBox);
   label = form->labelForField(forceJoinBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::JoinFlock ActionNodes::JoinFlockNode::serialize()
@@ -3885,7 +4105,8 @@ ActionNodes::LeaveFlockNode::LeaveFlockNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::LeaveFlock ActionNodes::LeaveFlockNode::serialize()
@@ -3915,7 +4136,8 @@ ActionNodes::LockOnInteractionTargetNode::LockOnInteractionTargetNode(NodeScene 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::LockOnInteractionTarget ActionNodes::LockOnInteractionTargetNode::serialize()
@@ -3948,7 +4170,8 @@ ActionNodes::LogNode::LogNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Log ActionNodes::LogNode::serialize()
@@ -3984,7 +4207,8 @@ ActionNodes::ModelAttachmentNode::ModelAttachmentNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ModelAttachment ActionNodes::ModelAttachmentNode::serialize()
@@ -4032,7 +4256,8 @@ ActionNodes::MountNode::MountNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Mount ActionNodes::MountNode::serialize()
@@ -4084,7 +4309,8 @@ ActionNodes::NotifyNode::NotifyNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Notify ActionNodes::NotifyNode::serialize()
@@ -4120,7 +4346,8 @@ ActionNodes::OpenBarterShopNode::OpenBarterShopNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::OpenBarterShop ActionNodes::OpenBarterShopNode::serialize()
@@ -4153,7 +4380,8 @@ ActionNodes::OpenShopNode::OpenShopNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::OpenShop ActionNodes::OpenShopNode::serialize()
@@ -4194,7 +4422,8 @@ ActionNodes::OverrideAltitudeNode::OverrideAltitudeNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::OverrideAltitude ActionNodes::OverrideAltitudeNode::serialize()
@@ -4232,7 +4461,8 @@ ActionNodes::OverrideAttitudeNode::OverrideAttitudeNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::OverrideAttitude ActionNodes::OverrideAttitudeNode::serialize()
@@ -4278,7 +4508,8 @@ ActionNodes::ParentStateNode::ParentStateNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ParentState ActionNodes::ParentStateNode::serialize()
@@ -4316,7 +4547,8 @@ ActionNodes::PickUpItemNode::PickUpItemNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *delayWidget = new QWidget;
   auto *delayLayout = new QHBoxLayout(delayWidget);
@@ -4327,12 +4559,14 @@ ActionNodes::PickUpItemNode::PickUpItemNode(NodeScene *scene)
   delayLayout->addWidget(delayMaxSpin);
   form->addRow("Delay:", delayWidget);
   label = form->labelForField(delayWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   hooverBox = new QCheckBox;
   form->addRow("Hoover:", hooverBox);
   label = form->labelForField(hooverBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::PickUpItem ActionNodes::PickUpItemNode::serialize()
@@ -4383,12 +4617,14 @@ ActionNodes::PlaceBlockNode::PlaceBlockNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   allowEmptyMaterialsBox = new QCheckBox;
   form->addRow("Allow Empty Materials:", allowEmptyMaterialsBox);
   label = form->labelForField(allowEmptyMaterialsBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::PlaceBlock ActionNodes::PlaceBlockNode::serialize()
@@ -4423,7 +4659,8 @@ ActionNodes::PlaySoundNode::PlaySoundNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::PlaySound ActionNodes::PlaySoundNode::serialize()
@@ -4454,7 +4691,8 @@ ActionNodes::RandomNode::RandomNode(NodeScene *scene) // TODO: Add serialization
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 ActionNodes::RecomputePathNode::RecomputePathNode(NodeScene *scene)
@@ -4471,7 +4709,8 @@ ActionNodes::RecomputePathNode::RecomputePathNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::RecomputePath ActionNodes::RecomputePathNode::serialize()
@@ -4501,7 +4740,8 @@ ActionNodes::ReleaseTargetNode::ReleaseTargetNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ReleaseTarget ActionNodes::ReleaseTargetNode::serialize()
@@ -4531,12 +4771,14 @@ ActionNodes::RemoveNode::RemoveNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   useTargetBox = new QCheckBox;
   form->addRow("Use Target:", useTargetBox);
   label = form->labelForField(useTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Remove ActionNodes::RemoveNode::serialize()
@@ -4570,7 +4812,8 @@ ActionNodes::ResetBlockSensorsNode::ResetBlockSensorsNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ResetBlockSensors ActionNodes::ResetBlockSensorsNode::serialize()
@@ -4606,13 +4849,15 @@ ActionNodes::ResetInstructionsNode::ResetInstructionsNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   instructionsEdit = new QLineEdit;
   instructionsEdit->setPlaceholderText("Comma-separated names");
   form->addRow("Instructions:", instructionsEdit);
   label = form->labelForField(instructionsEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ResetInstructions ActionNodes::ResetInstructionsNode::serialize()
@@ -4651,7 +4896,8 @@ ActionNodes::ResetPathNode::ResetPathNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ResetPath ActionNodes::ResetPathNode::serialize()
@@ -4682,7 +4928,8 @@ ActionNodes::ResetSearchRaysNode::ResetSearchRaysNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ResetSearchRays ActionNodes::ResetSearchRaysNode::serialize()
@@ -4721,17 +4968,20 @@ ActionNodes::RoleNode::RoleNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   changeAppearanceBox = new QCheckBox;
   form->addRow("Change Appearance:", changeAppearanceBox);
   label = form->labelForField(changeAppearanceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   stateEdit = new QLineEdit;
   form->addRow("State:", stateEdit);
   label = form->labelForField(stateEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::Role ActionNodes::RoleNode::serialize()
@@ -4769,17 +5019,20 @@ ActionNodes::SequenceNode::SequenceNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   blockingBox = new QCheckBox;
   form->addRow("Blocking:", blockingBox);
   label = form->labelForField(blockingBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   atomicBox = new QCheckBox;
   form->addRow("Atomic:", atomicBox);
   label = form->labelForField(atomicBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 ActionNodes::SetAlarmNode::SetAlarmNode(NodeScene *scene)
@@ -4796,7 +5049,8 @@ ActionNodes::SetAlarmNode::SetAlarmNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *durationWidget = new QWidget;
   auto *durationLayout = new QHBoxLayout(durationWidget);
@@ -4810,7 +5064,8 @@ ActionNodes::SetAlarmNode::SetAlarmNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetAlarm ActionNodes::SetAlarmNode::serialize()
@@ -4846,7 +5101,8 @@ ActionNodes::SetBlockToPlaceNode::SetBlockToPlaceNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetBlockToPlace ActionNodes::SetBlockToPlaceNode::serialize()
@@ -4876,17 +5132,20 @@ ActionNodes::SetFlagNode::SetFlagNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   QWidget *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   setToBox = new QCheckBox;
   form->addRow("Set To:", setToBox);
   label = form->labelForField(setToBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetFlag ActionNodes::SetFlagNode::serialize()
@@ -4919,22 +5178,26 @@ ActionNodes::SetInteractableNode::SetInteractableNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   interactableBox = new QCheckBox;
   form->addRow("Interactable:", interactableBox);
   label = form->labelForField(interactableBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   hintEdit = new QLineEdit;
   form->addRow("Hint:", hintEdit);
   label = form->labelForField(hintEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   showPromptBox = new QCheckBox;
   form->addRow("Show Prompt:", showPromptBox);
   label = form->labelForField(showPromptBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetInteractable ActionNodes::SetInteractableNode::serialize()
@@ -4971,17 +5234,20 @@ ActionNodes::SetLeashPositionNode::SetLeashPositionNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   toCurrentBox = new QCheckBox;
   form->addRow("To Current:", toCurrentBox);
   label = form->labelForField(toCurrentBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   toTargetBox = new QCheckBox;
   form->addRow("To Target:", toTargetBox);
   label = form->labelForField(toTargetBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetLeashPosition ActionNodes::SetLeashPositionNode::serialize()
@@ -5017,7 +5283,8 @@ ActionNodes::SetMarkedTargetNode::SetMarkedTargetNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetMarkedTarget ActionNodes::SetMarkedTargetNode::serialize()
@@ -5054,12 +5321,14 @@ ActionNodes::SetStatNode::SetStatNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   addBox = new QCheckBox;
   form->addRow("Add:", addBox);
   label = form->labelForField(addBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::SetStat ActionNodes::SetStatNode::serialize()
@@ -5097,7 +5366,8 @@ ActionNodes::StartObjectiveNode::StartObjectiveNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::StartObjective ActionNodes::StartObjectiveNode::serialize()
@@ -5130,12 +5400,14 @@ ActionNodes::StateNode::StateNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   clearStateBox = new QCheckBox;
   form->addRow("Clear State:", clearStateBox);
   label = form->labelForField(clearStateBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::State ActionNodes::StateNode::serialize()
@@ -5171,7 +5443,8 @@ ActionNodes::StorePositionNode::StorePositionNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::StorePosition ActionNodes::StorePositionNode::serialize()
@@ -5211,13 +5484,15 @@ ActionNodes::TimeoutNode::TimeoutNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   delayAfterBox = new QCheckBox;
   delayAfterBox->setStyleSheet("color: gray;");
   form->addRow("Delay After:", delayAfterBox);
   label = form->labelForField(delayAfterBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 ActionNodes::TimerContinueNode::TimerContinueNode(NodeScene *scene)
@@ -5234,12 +5509,14 @@ ActionNodes::TimerContinueNode::TimerContinueNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   auto *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TimerContinue ActionNodes::TimerContinueNode::serialize()
@@ -5269,19 +5546,22 @@ ActionNodes::TimerModifyNode::TimerModifyNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   auto *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   addValueSpin = new QDoubleSpinBox;
   addValueSpin->setRange(-999999, 999999);
   addValueSpin->setStyleSheet("color: gray;");
   form->addRow("Add Value:", addValueSpin);
   label = form->labelForField(addValueSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *maxValueWidget = new QWidget;
   auto *maxValueLayout = new QHBoxLayout(maxValueWidget);
@@ -5294,27 +5574,31 @@ ActionNodes::TimerModifyNode::TimerModifyNode(NodeScene *scene)
   maxValueLayout->addWidget(maxValueMaxSpin);
   form->addRow("Max Value:", maxValueWidget);
   label = form->labelForField(maxValueWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   rateSpin = new QDoubleSpinBox;
   rateSpin->setRange(-999999, 999999);
   rateSpin->setStyleSheet("color: gray;");
   form->addRow("Rate:", rateSpin);
   label = form->labelForField(rateSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   setValueSpin = new QDoubleSpinBox;
   setValueSpin->setRange(-999999, 999999);
   setValueSpin->setStyleSheet("color: gray;");
   form->addRow("Set Value:", setValueSpin);
   label = form->labelForField(setValueSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   repeatingBox = new QCheckBox;
   repeatingBox->setStyleSheet("color: gray;");
   form->addRow("Repeating:", repeatingBox);
   label = form->labelForField(repeatingBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TimerModify ActionNodes::TimerModifyNode::serialize()
@@ -5362,12 +5646,14 @@ ActionNodes::TimerPauseNode::TimerPauseNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   auto *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TimerPause ActionNodes::TimerPauseNode::serialize()
@@ -5397,12 +5683,14 @@ ActionNodes::TimerRestartNode::TimerRestartNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   auto *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TimerRestart ActionNodes::TimerRestartNode::serialize()
@@ -5432,12 +5720,14 @@ ActionNodes::TimerStartNode::TimerStartNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   auto *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *startWidget = new QWidget;
   auto *startLayout = new QHBoxLayout(startWidget);
@@ -5450,7 +5740,8 @@ ActionNodes::TimerStartNode::TimerStartNode(NodeScene *scene)
   startLayout->addWidget(startValueMaxSpin);
   form->addRow("Start Value:", startWidget);
   label = form->labelForField(startWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   auto *restartWidget = new QWidget;
   auto *restartLayout = new QHBoxLayout(restartWidget);
@@ -5463,20 +5754,23 @@ ActionNodes::TimerStartNode::TimerStartNode(NodeScene *scene)
   restartLayout->addWidget(restartValueMaxSpin);
   form->addRow("Restart Value:", restartWidget);
   label = form->labelForField(restartWidget);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   rateSpin = new QDoubleSpinBox;
   rateSpin->setRange(-999999, 999999);
   rateSpin->setStyleSheet("color: gray;");
   form->addRow("Rate:", rateSpin);
   label = form->labelForField(rateSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   repeatingBox = new QCheckBox;
   repeatingBox->setStyleSheet("color: gray;");
   form->addRow("Repeating:", repeatingBox);
   label = form->labelForField(repeatingBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TimerStart ActionNodes::TimerStartNode::serialize()
@@ -5524,12 +5818,14 @@ ActionNodes::TimerStopNode::TimerStopNode(NodeScene *scene)
   nameEdit = new QLineEdit;
   form->addRow("Name:", nameEdit);
   auto *label = form->labelForField(nameEdit);
-  label->setStyleSheet("color: white;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TimerStop ActionNodes::TimerStopNode::serialize()
@@ -5559,12 +5855,14 @@ ActionNodes::ToggleStateEvaluatorNode::ToggleStateEvaluatorNode(NodeScene *scene
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
   form->addRow("Enabled:", enabledBox);
   label = form->labelForField(enabledBox);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::ToggleStateEvaluator ActionNodes::ToggleStateEvaluatorNode::serialize()
@@ -5601,13 +5899,15 @@ ActionNodes::TriggerSpawnBeaconNode::TriggerSpawnBeaconNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   targetSlotEdit = new QLineEdit;
   targetSlotEdit->setStyleSheet("color: gray;");
   form->addRow("Target Slot:", targetSlotEdit);
   label = form->labelForField(targetSlotEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TriggerSpawnBeacon ActionNodes::TriggerSpawnBeaconNode::serialize()
@@ -5647,20 +5947,23 @@ ActionNodes::TriggerSpawnersNode::TriggerSpawnersNode(NodeScene *scene)
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
   auto *label = form->labelForField(onceBox);
-  label->setStyleSheet("color: gray;");
+  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   spawnMarkerEdit = new QLineEdit;
   spawnMarkerEdit->setStyleSheet("color: gray;");
   form->addRow("Spawn Marker:", spawnMarkerEdit);
   label = form->labelForField(spawnMarkerEdit);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   countSpin = new QSpinBox;
   countSpin->setRange(0, 999999);
   countSpin->setStyleSheet("color: gray;");
   form->addRow("Count:", countSpin);
   label = form->labelForField(countSpin);
-  label->setStyleSheet("color: gray;");
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 }
 
 General::Action::TriggerSpawners ActionNodes::TriggerSpawnersNode::serialize()

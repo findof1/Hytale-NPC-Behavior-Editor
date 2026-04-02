@@ -1,6 +1,7 @@
 #include "nodeWidgets.hpp"
 #include "nodes.hpp"
 #include <fstream>
+#include "styleGlobals.hpp"
 
 void EdgeItem::updatePath(QPointF start, QPointF end)
 {
@@ -121,8 +122,10 @@ void SocketItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
   p->drawEllipse(QRectF(-5, -5, 10, 10));
 
   if (drawLabel)
+
   {
-    p->setPen(Qt::white);
+    QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+    p->setPen(textColor);
     if (!isOutput)
       p->drawText(10, 4, name);
     else
@@ -160,20 +163,21 @@ QRectF NodeItem::boundingRect() const
 
 void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
+  StyleData style = gStyleManager.getCurrentStyle();
   p->setRenderHint(QPainter::Antialiasing);
-  p->setBrush(QColor(25, 25, 28));
+  p->setBrush(style.nodeBackground);
   p->setPen(Qt::NoPen);
   p->drawRoundedRect(boundingRect(), 8, 8);
 
-  p->setBrush(QColor(70, 70, 75));
+  p->setBrush(style.nodeHeader);
   p->drawRoundedRect(0, 0, baseWidth, 24, 8, 8);
 
-  p->setPen(Qt::white);
+  p->setPen(style.nodeText);
   p->drawText(10, 17, title);
 
   if (hasFields)
   {
-    p->setBrush(QColor(35, 35, 38));
+    p->setBrush(style.nodeDivider);
     p->setPen(Qt::NoPen);
     p->drawRoundedRect(2, 60 + std::max(inputs.size(), outputs.size()) * 20, baseWidth - 4, 2, 1, 1);
 

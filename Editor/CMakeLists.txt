@@ -12,7 +12,8 @@ file(GLOB_RECURSE ENGINE_SRC "${CMAKE_SOURCE_DIR}/Editor/src/*.cpp")
 
 add_executable(Editor
     ${ENGINE_SRC}
-    "${CMAKE_SOURCE_DIR}/Editor/Include/nodeWidgets.hpp"
+    "${CMAKE_SOURCE_DIR}/Editor/Include/projectSelector.hpp" #for AUTOMOC
+    "${CMAKE_SOURCE_DIR}/Editor/Include/nodeWidgets.hpp" #for AUTOMOC
 )
 
 #target_compile_definitions(Editor PRIVATE NDEBUG)

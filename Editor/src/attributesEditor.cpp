@@ -1,5 +1,6 @@
 #include "attributesEditor.hpp"
 #include "jsonConverter.hpp"
+#include "styleGlobals.hpp"
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -9,11 +10,44 @@
 #include <QWheelEvent>
 #include <QMenu>
 #include <QFileDialog>
+#include <QLabel>
 #include <fstream>
 
-AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
+AttributesEditor::AttributesEditor(QString projectPath, QWidget *parent) : projectPath(projectPath), QWidget(parent)
 {
+  topBar = new QWidget;
+  topBar->setFixedHeight(30);
+
+  QColor windowColor = palette().color(QPalette::Window);
+  QColor darkColor = windowColor.darker(110);
+  QColor borderColor = windowColor.darker(130);
+
+  QHBoxLayout *rowLayout = new QHBoxLayout(topBar);
+  rowLayout->setContentsMargins(5, 0, 5, 0);
+  rowLayout->setSpacing(5);
+
+  settingsButton = new QPushButton("Settings");
+  exportButton = new QPushButton("Export");
+  settingsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+  exportButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+
+  rowLayout->addWidget(settingsButton);
+  rowLayout->addWidget(exportButton);
+  rowLayout->addStretch();
+
+  updateSpecialStyles();
+
   auto *layout = new QFormLayout(this);
+  layout->setContentsMargins(0, 0, 10, 0);
+  layout->setSpacing(0);
+
+  layout->addRow(topBar);
+
+  QWidget *spacer = new QWidget;
+  spacer->setFixedHeight(17);
+  spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  layout->addWidget(spacer);
+
   tabs = new QTabWidget;
   layout->addRow(tabs);
 
@@ -22,9 +56,74 @@ AttributesEditor::AttributesEditor(QWidget *parent) : QWidget(parent)
   initStatesTab();
   initBehaviorsTab();
 
-  auto *exportBtn = new QPushButton("Export NPC Role");
-  layout->addRow(exportBtn);
-  connect(exportBtn, &QPushButton::clicked, this, &AttributesEditor::printValues);
+  connect(settingsButton, &QPushButton::clicked, this, [this]()
+          {
+    QDialog *popup = new QDialog(this);
+    popup->setWindowTitle("Settings");
+    popup->setModal(true);
+    popup->setMinimumSize(300, 200);
+
+    QVBoxLayout *layout = new QVBoxLayout(popup);
+    layout->setContentsMargins(10, 10, 10, 10);
+    layout->setSpacing(10);
+
+    QLabel *themeLabel = new QLabel("Theme:", popup);
+    QComboBox *themeSelector = new QComboBox(popup);
+    themeSelector->addItem("Dark");
+    themeSelector->addItem("Light");
+
+    connect(themeSelector, &QComboBox::currentTextChanged, this, [this](const QString &text) {
+        if (text == "Dark")
+            gStyleManager.setDarkStyle();
+        else
+            gStyleManager.setLightStyle();
+
+      updateSpecialStyles();
+      qApp->processEvents();
+    });
+    
+  connect(exportButton, &QPushButton::clicked, this, &AttributesEditor::printValues);
+
+    layout->addWidget(themeLabel);
+    layout->addWidget(themeSelector);
+    layout->addStretch();
+
+    popup->show(); });
+}
+
+void AttributesEditor::updateSpecialStyles()
+{
+  QPalette appPal = qApp->palette();
+
+  QColor bg = appPal.color(QPalette::Window).darker(110);
+  QColor border = appPal.color(QPalette::Window).darker(130);
+  topBar->setStyleSheet(QString("background-color: %1; border-bottom: 1px solid %2;")
+                            .arg(bg.name())
+                            .arg(border.name()));
+
+  QColor textColor = appPal.color(QPalette::ButtonText);
+  QColor hoverColor = appPal.color(QPalette::Highlight);
+  QColor pressedColor = hoverColor.darker(120);
+
+  QString buttonStyle = QString(
+                            "QPushButton {"
+                            "  padding: 0px 10px;"
+                            "  border: none;"
+                            "  background-color: transparent;"
+                            "  color: %1;"
+                            "} "
+                            "QPushButton:hover {"
+                            "  background-color: %2;"
+                            "} "
+                            "QPushButton:pressed {"
+                            "  background-color: %3;"
+                            "}")
+                            .arg(textColor.name())
+                            .arg(hoverColor.name())
+                            .arg(pressedColor.name());
+
+  settingsButton->setStyleSheet(buttonStyle);
+  exportButton->setStyleSheet(buttonStyle);
 }
 
 void AttributesEditor::initRequiredTab()
@@ -480,7 +579,9 @@ void AttributesEditor::serializeEditorToDisk()
 
   j["spawnLockTime"] = spawnLockTime->value();
   j["spawnLockTimeOptional"] = spawnLockTimeOptional->isEnabled();
-  std::ofstream file("scene.json");
+
+  QString sceneFilePath = QDir(projectPath).filePath("scene.json");
+  std::ofstream file(sceneFilePath.toStdString());
   file << j.dump(4);
 }
 
@@ -488,7 +589,9 @@ void AttributesEditor::serializeEditorToDisk()
 bool AttributesEditor::deserializeEditorFromDisk()
 {
   nlohmann::json j;
-  std::ifstream file("scene.json");
+
+  QString sceneFilePath = QDir(projectPath).filePath("scene.json");
+  std::ifstream file(sceneFilePath.toStdString());
   if (!file.is_open())
   {
     return false;

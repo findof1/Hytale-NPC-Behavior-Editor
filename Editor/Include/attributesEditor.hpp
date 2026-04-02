@@ -36,7 +36,7 @@ class AttributesEditor : public QWidget
 public:
   SerializerValues serializer;
 
-  AttributesEditor(QWidget *parent = nullptr);
+  AttributesEditor(QString projectPath, QWidget *parent = nullptr);
 
   void loadAttributes(const General::Attributes &attr);
 
@@ -53,16 +53,23 @@ public:
   void spawnNodesDebug();
 
 private:
+  void updateSpecialStyles();
   void printValues();
   void initRequiredTab();
   void initOptionalsTab();
   void initStatesTab();
   void initBehaviorsTab();
 
+  QString projectPath;
+
   NodeScene *scene;
   RootNode *rootNode;
 
+  QWidget *topBar;
+  QPushButton *settingsButton;
+  QPushButton *exportButton;
   QTabWidget *tabs;
+
   QSpinBox *maxHealthSpin;
   QLineEdit *appearanceEdit;
   QLineEdit *nameKeyEdit;
