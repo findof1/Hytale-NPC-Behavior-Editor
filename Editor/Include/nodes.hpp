@@ -168,6 +168,25 @@ namespace SensorNodes
     General::Sensor::Beacon serialize();
   };
 
+  class BlockNode : public NodeItem
+  {
+  public:
+    QString nodeType() const override { return "Block"; }
+    nlohmann::json serializeNode() const override;
+    void deserializeNode(const nlohmann::json &j) override;
+    QCheckBox *onceBox;
+    QCheckBox *enabledBox;
+    QDoubleSpinBox *rangeSpin;
+    QDoubleSpinBox *maxHeightSpin;
+    QLineEdit *blocksEdit;
+    QCheckBox *randomBox;
+    QCheckBox *reserveBox;
+
+    BlockNode(NodeScene *scene);
+
+    General::Sensor::Block serialize();
+  };
+
   class BlockChangeNode : public NodeItem
   {
   public:

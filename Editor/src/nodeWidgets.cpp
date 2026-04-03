@@ -158,7 +158,9 @@ void SocketItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 QRectF NodeItem::boundingRect() const
 {
   int height = hasFields ? baseHeight + fieldsHeight : baseHeight;
-  return QRectF(0, 0, baseWidth, height + std::max(inputs.size(), outputs.size()) * 20);
+  int errorHeight = hasError ? errorMsg.size() * 25 + 25 : 0;
+
+  return QRectF(0, 0, baseWidth, height + std::max(inputs.size(), outputs.size()) * 20 + errorHeight);
 }
 
 void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
@@ -182,6 +184,46 @@ void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
     p->drawRoundedRect(2, 60 + std::max(inputs.size(), outputs.size()) * 20, baseWidth - 4, 2, 1, 1);
 
     proxy->setPos(2, 80 + std::max(inputs.size(), outputs.size()) * 20);
+  }
+
+  if (!hasError) // skip error display
+    return;
+
+  QPen pen(Qt::red);
+  pen.setWidth(2);
+  p->setPen(pen);
+  p->setBrush(Qt::NoBrush);
+  p->drawRoundedRect(boundingRect(), 8, 8);
+
+  if (!errorMsg.empty())
+  {
+    p->setPen(Qt::red);
+
+    QRectF rect = boundingRect();
+
+    int lineHeight = 25;
+    int totalHeight = errorMsg.size() * lineHeight + 25;
+
+    QFontMetrics fm(p->font());
+
+    int y = rect.height() - totalHeight - 5;
+
+    QRectF headerRect(10, y, baseWidth - 20, lineHeight);
+    p->drawText(headerRect, Qt::AlignLeft | Qt::TextWordWrap, "Errors:");
+    y += fm.height();
+
+    for (const auto &msg : errorMsg)
+    {
+      QString text = QString::fromStdString(msg);
+
+      QRectF msgRect = fm.boundingRect(0, 0, baseWidth - 20, 1000, Qt::AlignLeft | Qt::TextWordWrap, text);
+
+      msgRect.moveTop(y);
+
+      p->drawText(msgRect, Qt::AlignLeft | Qt::TextWordWrap, text);
+
+      y += msgRect.height();
+    }
   }
 }
 
@@ -611,4 +653,14 @@ RootNode *NodeScene::deserializeScene(const nlohmann::json &j)
   updateLinks();
 
   return rootNode;
+}
+
+void NodeScene::clearAllNodeErrors()
+{
+  for (auto &node : nodes)
+  {
+    node->hasError = false;
+    node->errorMsg.clear();
+    node->update();
+  }
 }

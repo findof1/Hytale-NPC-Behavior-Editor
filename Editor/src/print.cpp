@@ -647,6 +647,9 @@ void print(Sensor::Type v, std::ostream &os)
   case Sensor::Type::Beacon:
     os << "Beacon";
     break;
+  case Sensor::Type::Block:
+    os << "Block";
+    break;
   case Sensor::Type::BlockChange:
     os << "BlockChange";
     break;
@@ -982,6 +985,9 @@ void print(const Sensor::Sensor *v, std::ostream &os)
   case Sensor::Type::Beacon:
     print(static_cast<const Sensor::Beacon *>(v), os);
     break;
+  case Sensor::Type::Block:
+    print(static_cast<const Sensor::Block *>(v), os);
+    break;
   case Sensor::Type::BlockChange:
     print(static_cast<const Sensor::BlockChange *>(v), os);
     break;
@@ -1185,6 +1191,19 @@ void print(const Sensor::Beacon *v, std::ostream &os)
   printOpt("range", v->range, os);
   printOpt("targetSlot", v->targetSlot, os);
   printOpt("consumeMessage", v->consumeMessage, os);
+  os << "}\n";
+}
+
+void print(const Sensor::Block *v, std::ostream &os)
+{
+  os << "Sensor::Block {\n";
+  printOpt("once", v->once, os);
+  printOpt("enabled", v->enabled, os);
+  os << "  blocks: " << v->blocks << "\n";
+  os << "  range: " << v->range << "\n";
+  printOpt("max height", v->maxHeight, os);
+  printOpt("random", v->random, os);
+  printOpt("reserve", v->reserve, os);
   os << "}\n";
 }
 

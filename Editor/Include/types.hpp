@@ -336,6 +336,7 @@ namespace General
       Animation,
       Any,
       Beacon,
+      Block,
       BlockChange,
       BlockType,
       CanInteract,
@@ -462,6 +463,21 @@ namespace General
       std::optional<std::string> targetSlot;
       std::optional<bool> consumeMessage;
       Beacon() : Sensor(Type::Beacon) {}
+    };
+
+    // Block is currently experimental
+    //  Provides:
+    //  Vector position
+    struct Block : Sensor
+    {
+      std::optional<bool> once;
+      std::optional<bool> enabled;
+      double range; //(greater than 0)
+      std::optional<double> maxHeight;
+      std::string blocks; // asset
+      std::optional<bool> random;
+      std::optional<bool> reserve;
+      Block() : Sensor(Type::Block) {}
     };
 
     // Provides:

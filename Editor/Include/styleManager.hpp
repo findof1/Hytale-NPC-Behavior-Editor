@@ -40,6 +40,7 @@ struct StyleData
   QColor nodeHeader;
   QColor nodeText;
   QColor nodeTextOptional;
+  QColor nodeError = QColor("#e00000");
 };
 
 class StyleManager

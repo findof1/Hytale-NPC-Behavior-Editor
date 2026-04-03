@@ -48,6 +48,11 @@ void NodeScene::initNodeFactory()
     return std::make_shared<SensorNodes::BeaconNode>(s);
   };
 
+  nodeFactory["Sensors/Block"] = [](NodeScene *s)
+  {
+    return std::make_shared<SensorNodes::BlockNode>(s);
+  };
+
   nodeFactory["Sensors/Block Change"] = [](NodeScene *s)
   {
     return std::make_shared<SensorNodes::BlockChangeNode>(s);

@@ -231,6 +231,9 @@ namespace General
       case Type::Beacon:
         j = static_cast<const Beacon &>(s);
         break;
+      case Type::Block:
+        j = static_cast<const Block &>(s);
+        break;
       case Type::BlockChange:
         j = static_cast<const BlockChange &>(s);
         break;
@@ -427,6 +430,18 @@ namespace General
       opt_to_json(j, "range", v.range);
       opt_to_json(j, "targetSlot", v.targetSlot);
       opt_to_json(j, "consumeMessage", v.consumeMessage);
+    }
+
+    void to_json(nlohmann::json &j, const Block &v)
+    {
+      j["type"] = v.type;
+      opt_to_json(j, "once", v.once);
+      opt_to_json(j, "enabled", v.enabled);
+      j["blocks"] = v.blocks;
+      j["range"] = v.range;
+      opt_to_json(j, "maxHeight", v.maxHeight);
+      opt_to_json(j, "random", v.random);
+      opt_to_json(j, "reserve", v.reserve);
     }
 
     void to_json(nlohmann::json &j, const BlockChange &v)

@@ -446,7 +446,7 @@ SerializerValues::SerializerValues()
   };
 }
 
-std::unique_ptr<General::Action::Action> serializeAction(SerializerValues *serializer, NodeScene *scene, NodeItem *targetNode)
+std::unique_ptr<General::Action::Action> serializeAction(SerializerValues *serializer, NodeScene *scene, NodeItem *targetNode, bool debug)
 {
   if (!targetNode)
     return nullptr;
@@ -470,8 +470,24 @@ std::unique_ptr<General::Action::Action> serializeAction(SerializerValues *seria
         QString socketName = link.startNode->getName();
         if (socketName == "Actions")
         {
-          sequenceActionData->actions.actions.emplace_back(std::move(serializeAction(serializer, scene, targetNode2)));
+          sequenceActionData->actions.actions.emplace_back(std::move(serializeAction(serializer, scene, targetNode2, debug)));
+          if (debug)
+          {
+            if (!sequenceActionData->actions.actions.back())
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Action socket (wrong type)");
+              targetNode->update();
+            }
+          }
         }
+      }
+
+      if (debug && sequenceActionData->actions.actions.empty())
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Actions");
+        targetNode->update();
       }
     }
 
@@ -489,9 +505,25 @@ std::unique_ptr<General::Action::Action> serializeAction(SerializerValues *seria
         QString socketName = link.startNode->getName();
         if (socketName == "Action")
         {
-          timeoutActionData->action = serializeAction(serializer, scene, targetNode2);
+          timeoutActionData->action = serializeAction(serializer, scene, targetNode2, debug);
+          if (debug)
+          {
+            if (!timeoutActionData->action)
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Action socket (wrong type)");
+              targetNode->update();
+            }
+          }
           break;
         }
+      }
+
+      if (debug && !timeoutActionData->action)
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Action");
+        targetNode->update();
       }
     }
 
@@ -501,7 +533,7 @@ std::unique_ptr<General::Action::Action> serializeAction(SerializerValues *seria
   return nullptr;
 }
 
-std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *serializer, NodeScene *scene, NodeItem *targetNode)
+std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *serializer, NodeScene *scene, NodeItem *targetNode, bool debug)
 {
   if (!targetNode)
     return nullptr;
@@ -524,7 +556,25 @@ std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *seria
         NodeItem *targetNode2 = dynamic_cast<NodeItem *>(link.endNode->parentItem());
 
         if (link.startNode->getName() == "Sensors")
-          andSensorData->sensors.emplace_back(std::move(serializeSensor(serializer, scene, targetNode2)));
+        {
+          andSensorData->sensors.emplace_back(std::move(serializeSensor(serializer, scene, targetNode2, debug)));
+          if (debug)
+          {
+            if (!andSensorData->sensors.back())
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Sensor socket (wrong type)");
+              targetNode->update();
+            }
+          }
+        }
+      }
+
+      if (debug && andSensorData->sensors.empty())
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Sensors");
+        targetNode->update();
       }
     }
     else if (type == "Or")
@@ -539,7 +589,25 @@ std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *seria
         NodeItem *targetNode2 = dynamic_cast<NodeItem *>(link.endNode->parentItem());
 
         if (link.startNode->getName() == "Sensors")
-          orSensorData->sensors.emplace_back(std::move(serializeSensor(serializer, scene, targetNode2)));
+        {
+          orSensorData->sensors.emplace_back(std::move(serializeSensor(serializer, scene, targetNode2, debug)));
+          if (debug)
+          {
+            if (!orSensorData->sensors.back())
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Sensor socket (wrong type)");
+              targetNode->update();
+            }
+          }
+        }
+      }
+
+      if (debug && orSensorData->sensors.empty())
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Sensors");
+        targetNode->update();
       }
     }
     else if (type == "BlockType")
@@ -555,9 +623,25 @@ std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *seria
 
         if (link.startNode->getName() == "Sensor")
         {
-          blockTypeSensorData->sensor = serializeSensor(serializer, scene, targetNode2);
+          blockTypeSensorData->sensor = serializeSensor(serializer, scene, targetNode2, debug);
+          if (debug)
+          {
+            if (!blockTypeSensorData->sensor)
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Sensor socket (wrong type)");
+              targetNode->update();
+            }
+          }
           break;
         }
+      }
+
+      if (debug && !blockTypeSensorData->sensor)
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Sensor");
+        targetNode->update();
       }
     }
     else if (type == "Not")
@@ -573,9 +657,25 @@ std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *seria
 
         if (link.startNode->getName() == "Sensor")
         {
-          notSensorData->sensor = serializeSensor(serializer, scene, targetNode2);
+          notSensorData->sensor = serializeSensor(serializer, scene, targetNode2, debug);
+          if (debug)
+          {
+            if (!notSensorData->sensor)
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Sensor socket (wrong type)");
+              targetNode->update();
+            }
+          }
           break;
         }
+      }
+
+      if (debug && !notSensorData->sensor)
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Sensor");
+        targetNode->update();
       }
     }
     else if (type == "ValueProviderWrapper")
@@ -591,9 +691,25 @@ std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *seria
 
         if (link.startNode->getName() == "Sensor")
         {
-          valueProviderWrapperSensorData->sensor = serializeSensor(serializer, scene, targetNode2);
+          valueProviderWrapperSensorData->sensor = serializeSensor(serializer, scene, targetNode2, debug);
+          if (debug)
+          {
+            if (!valueProviderWrapperSensorData->sensor)
+            {
+              targetNode2->hasError = true;
+              targetNode2->errorMsg.push_back("Cannot be connected to Sensor socket (wrong type)");
+              targetNode->update();
+            }
+          }
           break;
         }
+      }
+
+      if (debug && !valueProviderWrapperSensorData->sensor)
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Needs valid node connected to Sensor");
+        targetNode->update();
       }
     }
 
@@ -603,7 +719,7 @@ std::unique_ptr<General::Sensor::Sensor> serializeSensor(SerializerValues *seria
   return nullptr;
 }
 
-General::Instruction serializeInstruction(SerializerValues *serializer, NodeScene *scene, InstructionNode *instructionNode)
+General::Instruction serializeInstruction(SerializerValues *serializer, NodeScene *scene, InstructionNode *instructionNode, bool debug)
 {
   General::Instruction instrData = instructionNode->serialize();
 
@@ -621,14 +737,31 @@ General::Instruction serializeInstruction(SerializerValues *serializer, NodeScen
     {
       auto instrNode = dynamic_cast<InstructionNode *>(targetNode);
       if (!instrNode)
+      {
+        if (debug)
+        {
+          targetNode->hasError = true;
+          targetNode->errorMsg.push_back("Cannot be connected to Instructions socket (wrong type)");
+          targetNode->update();
+        }
         continue;
+      }
 
-      instrData.instructions.emplace_back(std::move(serializeInstruction(serializer, scene, instrNode)));
+      instrData.instructions.emplace_back(std::move(serializeInstruction(serializer, scene, instrNode, debug)));
     }
 
     if (socketName == "Sensor")
     {
-      instrData.sensor = serializeSensor(serializer, scene, targetNode);
+      instrData.sensor = serializeSensor(serializer, scene, targetNode, debug);
+      if (debug)
+      {
+        if (!instrData.sensor)
+        {
+          targetNode->hasError = true;
+          targetNode->errorMsg.push_back("Cannot be connected to Sensor socket (wrong type)");
+          targetNode->update();
+        }
+      }
     }
     else if (socketName == "Body Motion")
     {
@@ -640,14 +773,34 @@ General::Instruction serializeInstruction(SerializerValues *serializer, NodeScen
     }
     else if (socketName == "Actions")
     {
-      instrData.actions.emplace_back(std::move(serializeAction(serializer, scene, targetNode)));
+      instrData.actions.emplace_back(std::move(serializeAction(serializer, scene, targetNode, debug)));
+      if (debug)
+      {
+        if (!instrData.actions.back())
+        {
+          targetNode->hasError = true;
+          targetNode->errorMsg.push_back("Cannot be connected to Actions socket (wrong type)");
+          targetNode->update();
+        }
+      }
     }
   }
-
+  if (debug && instrData.actions.empty())
+  {
+    instructionNode->hasError = true;
+    instructionNode->errorMsg.push_back("Needs valid node connected to Actions");
+    instructionNode->update();
+  }
+  if (debug && !instrData.sensor)
+  {
+    instructionNode->hasError = true;
+    instructionNode->errorMsg.push_back("Needs valid node connected to Sensor");
+    instructionNode->update();
+  }
   return instrData;
 }
 
-std::vector<General::Instruction> serializeInstructions(SerializerValues *serializer, NodeScene *scene, NodeItem *startNode)
+std::vector<General::Instruction> serializeInstructions(SerializerValues *serializer, NodeScene *scene, NodeItem *startNode, bool debug)
 {
   std::vector<General::Instruction> result;
 
@@ -660,14 +813,23 @@ std::vector<General::Instruction> serializeInstructions(SerializerValues *serial
 
   for (auto &rootLink : scene->links)
   {
-    if (rootLink.startNode->parentItem() != rootNode)
+    NodeItem *targetNode = dynamic_cast<NodeItem *>(rootLink.endNode->parentItem());
+    if (!targetNode || rootLink.startNode->parentItem() != rootNode)
       continue;
 
-    auto instrNode = dynamic_cast<InstructionNode *>(rootLink.endNode->parentItem());
+    auto instrNode = dynamic_cast<InstructionNode *>(targetNode);
     if (!instrNode)
+    {
+      if (debug)
+      {
+        targetNode->hasError = true;
+        targetNode->errorMsg.push_back("Cannot be connected to Instructions socket (wrong type)");
+        targetNode->update();
+      }
       continue;
+    }
 
-    result.push_back(std::move(serializeInstruction(serializer, scene, instrNode)));
+    result.push_back(std::move(serializeInstruction(serializer, scene, instrNode, debug)));
   }
 
   return result;

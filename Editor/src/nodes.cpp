@@ -6,7 +6,7 @@ RootNode::RootNode(NodeScene *scene)
     : NodeItem("Root")
 {
   deletable = false;
-  addOutputSocket("Instructions", scene);
+  addOutputSocket("Instructions", scene, true);
 }
 
 InstructionNode::InstructionNode(NodeScene *scene)
@@ -433,11 +433,14 @@ SensorNodes::BeaconNode::BeaconNode(NodeScene *scene)
 
   messageEdit = new QLineEdit;
   form->addRow("Message:", messageEdit);
+  auto *label = form->labelForField(messageEdit);
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   onceBox = new QCheckBox;
   form->addRow("Once:", onceBox);
-  auto *label = form->labelForField(onceBox);
-  QColor textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label = form->labelForField(onceBox);
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
   label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
 
   enabledBox = new QCheckBox;
@@ -487,6 +490,88 @@ General::Sensor::Beacon SensorNodes::BeaconNode::serialize()
 
   if (consumeMessageBox->isChecked())
     data.consumeMessage = true;
+
+  return data;
+}
+
+SensorNodes::BlockNode::BlockNode(NodeScene *scene)
+    : NodeItem("Block", true, 260)
+{
+  fieldsHeight = 260;
+  addInputSocket("In", scene);
+
+  auto layout = static_cast<QVBoxLayout *>(propertiesWidget()->layout());
+  auto *formContainer = new QWidget;
+  auto *form = new QFormLayout(formContainer);
+  layout->addWidget(formContainer);
+
+  blocksEdit = new QLineEdit;
+  form->addRow("Blocks:", blocksEdit);
+  auto *label = form->labelForField(blocksEdit);
+  QColor textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+
+  rangeSpin = new QDoubleSpinBox;
+  rangeSpin->setRange(0, 1e6);
+  form->addRow("Range:", rangeSpin);
+  label = form->labelForField(rangeSpin);
+  textColor = gStyleManager.getCurrentStyle().nodeText;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+
+  onceBox = new QCheckBox;
+  form->addRow("Once:", onceBox);
+  label = form->labelForField(onceBox);
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+
+  enabledBox = new QCheckBox;
+  form->addRow("Enabled:", enabledBox);
+  label = form->labelForField(enabledBox);
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+
+  maxHeightSpin = new QDoubleSpinBox;
+  maxHeightSpin->setRange(0, 1e6);
+  form->addRow("Max Height:", maxHeightSpin);
+  label = form->labelForField(maxHeightSpin);
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+
+  randomBox = new QCheckBox;
+  form->addRow("Random:", randomBox);
+  label = form->labelForField(randomBox);
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+
+  reserveBox = new QCheckBox;
+  form->addRow("Reserve:", reserveBox);
+  label = form->labelForField(reserveBox);
+  textColor = gStyleManager.getCurrentStyle().nodeTextOptional;
+  label->setStyleSheet(QString("color: %1;").arg(textColor.name()));
+}
+
+General::Sensor::Block SensorNodes::BlockNode::serialize()
+{
+  General::Sensor::Block data;
+
+  data.blocks = blocksEdit->text().toStdString();
+
+  data.range = rangeSpin->value();
+
+  if (maxHeightSpin->value() != 0)
+    data.maxHeight = maxHeightSpin->value();
+
+  if (onceBox->isChecked())
+    data.once = true;
+
+  if (enabledBox->isChecked())
+    data.enabled = true;
+
+  if (randomBox->isChecked())
+    data.random = true;
+
+  if (reserveBox->isChecked())
+    data.reserve = true;
 
   return data;
 }
@@ -6186,6 +6271,37 @@ void SensorNodes::BeaconNode::deserializeNode(const nlohmann::json &j)
     targetSlotEdit->setText(QString::fromStdString(j["targetSlot"].get<std::string>()));
   if (j.contains("consumeMessage"))
     consumeMessageBox->setChecked(j["consumeMessage"]);
+}
+
+nlohmann::json SensorNodes::BlockNode::serializeNode() const
+{
+  nlohmann::json j;
+  j["once"] = onceBox->isChecked();
+  j["enabled"] = enabledBox->isChecked();
+  j["blocks"] = blocksEdit->text().toStdString();
+  j["range"] = rangeSpin->value();
+  j["maxHeight"] = maxHeightSpin->value();
+  j["random"] = randomBox->isChecked();
+  j["reserve"] = reserveBox->isChecked();
+  return j;
+}
+
+void SensorNodes::BlockNode::deserializeNode(const nlohmann::json &j)
+{
+  if (j.contains("once"))
+    onceBox->setChecked(j["once"]);
+  if (j.contains("enabled"))
+    enabledBox->setChecked(j["enabled"]);
+  if (j.contains("blocks"))
+    blocksEdit->setText(QString::fromStdString(j["blocks"].get<std::string>()));
+  if (j.contains("range"))
+    rangeSpin->setValue(j["range"].get<double>());
+  if (j.contains("maxHeight"))
+    maxHeightSpin->setValue(j["maxHeight"].get<double>());
+  if (j.contains("random"))
+    randomBox->setChecked(j["random"]);
+  if (j.contains("reserve"))
+    reserveBox->setChecked(j["reserve"]);
 }
 
 nlohmann::json SensorNodes::BlockChangeNode::serializeNode() const

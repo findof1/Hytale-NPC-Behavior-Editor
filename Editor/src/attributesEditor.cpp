@@ -357,10 +357,18 @@ void AttributesEditor::initBehaviorsTab()
   addButton->setText("Add Node   ");
   addButton->setPopupMode(QToolButton::InstantPopup);
 
+  auto *verifyButton = new QToolButton;
+  verifyButton->setText("Verify Node Structure   ");
+  connect(verifyButton, &QToolButton::clicked, this, [this]()
+          { 
+            scene->clearAllNodeErrors();
+            serializeInstructions(&serializer, scene, rootNode, true); });
+
   QMenu *addMenu = buildAddMenu(scene, addButton);
   addButton->setMenu(addMenu);
 
   topBarLayout->addWidget(addButton);
+  topBarLayout->addWidget(verifyButton);
   topBarLayout->addStretch();
 
   instructionsTabLayout->addWidget(topBar);

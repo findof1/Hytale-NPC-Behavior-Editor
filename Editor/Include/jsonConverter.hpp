@@ -181,6 +181,7 @@ namespace General
                                                {Type::Animation, "Animation"},
                                                {Type::Any, "Any"},
                                                {Type::Beacon, "Beacon"},
+                                               {Type::Block, "Block"},
                                                {Type::BlockChange, "BlockChange"},
                                                {Type::BlockType, "BlockType"},
                                                {Type::CanInteract, "CanInteract"},
@@ -310,6 +311,8 @@ namespace General
         void to_json(nlohmann::json &j, const Any &v);
 
         void to_json(nlohmann::json &j, const Beacon &v);
+
+        void to_json(nlohmann::json &j, const Block &v);
 
         void to_json(nlohmann::json &j, const BlockChange &v);
 

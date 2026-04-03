@@ -16,6 +16,7 @@ add_executable(Editor
     "${CMAKE_SOURCE_DIR}/Editor/Include/nodeWidgets.hpp" #for AUTOMOC
 )
 
+set_target_properties(Editor PROPERTIES WIN32_EXECUTABLE ON)
 #target_compile_definitions(Editor PRIVATE NDEBUG)
 
 target_link_libraries(Editor PRIVATE

@@ -65,6 +65,7 @@ void print(const General::Sensor::And *v, std::ostream &os = std::cout);
 void print(const General::Sensor::Animation *v, std::ostream &os = std::cout);
 void print(const General::Sensor::Any *v, std::ostream &os = std::cout);
 void print(const General::Sensor::Beacon *v, std::ostream &os = std::cout);
+void print(const General::Sensor::Block *v, std::ostream &os = std::cout);
 void print(const General::Sensor::BlockChange *v, std::ostream &os = std::cout);
 void print(const General::Sensor::BlockType *v, std::ostream &os = std::cout);
 void print(const General::Sensor::CanInteract *v, std::ostream &os = std::cout);

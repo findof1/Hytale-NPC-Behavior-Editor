@@ -120,6 +120,9 @@ class NodeItem : public QGraphicsObject
 {
   Q_OBJECT
 public:
+  bool hasError = false;
+  std::vector<std::string> errorMsg;
+
   bool deletable = true;
   bool hasFields;
   int baseHeight = 60;
@@ -226,6 +229,8 @@ public:
 
   nlohmann::json serializeScene();
   RootNode *deserializeScene(const nlohmann::json &j); // returns root node for attributes editor to store until serialziation
+
+  void clearAllNodeErrors();
 
 public slots:
   void
