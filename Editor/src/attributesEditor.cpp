@@ -1,6 +1,7 @@
 #include "attributesEditor.hpp"
 #include "jsonConverter.hpp"
 #include "styleGlobals.hpp"
+#include "infoDialog.hpp"
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -28,11 +29,14 @@ AttributesEditor::AttributesEditor(QString projectPath, QWidget *parent) : proje
 
   settingsButton = new QPushButton("Settings");
   exportButton = new QPushButton("Export");
+  infoButton = new QPushButton("Info");
   settingsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   exportButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+  infoButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
 
   rowLayout->addWidget(settingsButton);
   rowLayout->addWidget(exportButton);
+  rowLayout->addWidget(infoButton);
   rowLayout->addStretch();
 
   updateSpecialStyles();
@@ -80,15 +84,20 @@ AttributesEditor::AttributesEditor(QString projectPath, QWidget *parent) : proje
 
       updateSpecialStyles();
       qApp->processEvents();
-    });
-    
+    }); 
+  
+  layout->addWidget(themeLabel);
+  layout->addWidget(themeSelector);
+  layout->addStretch();
+
+  popup->show(); });
+
+  connect(infoButton, &QPushButton::clicked, this, [this]()
+          {
+        InfoDialog info(this);
+        info.exec(); });
+
   connect(exportButton, &QPushButton::clicked, this, &AttributesEditor::printValues);
-
-    layout->addWidget(themeLabel);
-    layout->addWidget(themeSelector);
-    layout->addStretch();
-
-    popup->show(); });
 }
 
 void AttributesEditor::updateSpecialStyles()
@@ -124,6 +133,7 @@ void AttributesEditor::updateSpecialStyles()
 
   settingsButton->setStyleSheet(buttonStyle);
   exportButton->setStyleSheet(buttonStyle);
+  infoButton->setStyleSheet(buttonStyle);
 }
 
 void AttributesEditor::initRequiredTab()

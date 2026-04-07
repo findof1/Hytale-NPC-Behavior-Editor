@@ -68,6 +68,7 @@ private:
   QWidget *topBar;
   QPushButton *settingsButton;
   QPushButton *exportButton;
+  QPushButton *infoButton;
   QTabWidget *tabs;
 
   QSpinBox *maxHealthSpin;
